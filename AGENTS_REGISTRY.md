@@ -1,0 +1,498 @@
+# Agents Registry
+
+Central hub for all specialized Claude Code agents designed for this organization. This registry documents available agents, their capabilities, and how to use them.
+
+## Quick Reference
+
+| Agent ID | Name | Domain | Status | Use When |
+|----------|------|--------|--------|----------|
+| `agent-sap-businesspartner-integration` | SAP BusinessPartner Integration Process Author | SAP Integration | Production | Documenting BusinessPartner OData API integrations |
+| `agent-ansible-automation` | Ansible Automation Development Specialist | DevOps Automation | Production | Creating Ansible playbooks, roles, testing, and automation docs |
+
+---
+
+## Registered Agents
+
+### 1. agent-sap-businesspartner-integration
+
+**Status**: Production Ready (v1.0.0)
+
+**Category**: SAP Integration
+
+**Description**:
+Expert SAP S/4HANA Cloud consultant specializing in BusinessPartner master data integration through OData APIs. Creates comprehensive, accurate Markdown documentation for integration teams implementing robust BusinessPartner data flows.
+
+**Location**: `/agents/agent-sap-businesspartner-integration/`
+
+**Files**:
+- `agent.yml` - Agent configuration
+- `system-prompt.md` - Complete system prompt (~1500 words)
+- `README.md` - Trigger conditions and usage examples
+- `test-cases.md` - 6 validation test cases
+- `examples/` - Example outputs and usage patterns
+
+**Key Expertise**:
+- SAP S/4HANA Cloud OData APIs
+- BusinessPartner master data management
+- API integration patterns and best practices
+- Data sequencing and dependencies
+- Error handling and validation rules
+- Escalation procedures
+
+**Sub-Entities Covered**:
+- BusinessPartnerRole
+- BusinessPartnerAddress
+- AddressUsage
+- AddressPhoneNumber
+- AddressEmailAddress
+- BPContactToFuncAndDept
+- BusinessPartnerTaxNumber
+- BusinessPartnerBank
+- BuPaIdentification
+- BuPaIndustry
+
+**Trigger Conditions**:
+- User requests BusinessPartner OData API integration documentation
+- User asks for step-by-step procedures (create/update/patch)
+- User needs data sequencing and dependency guidance
+- User requires SAP S/4HANA Cloud BusinessPartner best practices
+- User asks about validation rules, error handling, escalation
+- User needs PATCH vs PUT operation clarification
+
+**Output Format**: Markdown documentation with:
+- Step-by-step procedures
+- Data dependency diagrams (textual)
+- Integration best practices
+- Error handling guidelines
+- Escalation procedures
+- Validation rules
+
+**Critical Constraints**:
+- Never fabricates SAP functionality
+- Acknowledges limitations explicitly
+- Uses accurate SAP terminology
+- Does not include proprietary content
+- Provides accurate entity names and endpoint patterns
+
+**Documentation Structure**:
+```
+# Title
+
+## Overview
+## Data Model & Dependencies
+## Step-by-Step Procedures
+## Integration Best Practices
+## Validation & Data Cleansing
+## Error Handling & Troubleshooting
+## Escalation Guidelines
+## Misuse Prevention
+## References
+```
+
+**Example Usage**:
+
+```bash
+# Complete integration guide
+@agent-sap-businesspartner-integration: Create comprehensive documentation
+for BusinessPartner creation flow with addresses and tax numbers
+
+# Specific operation
+@agent-sap-businesspartner-integration: Document how to update
+a BusinessPartner address using PATCH. Explain when to use PATCH vs PUT.
+
+# Best practices
+@agent-sap-businesspartner-integration: Document best practices
+for bulk BusinessPartner import including error handling and idempotency
+```
+
+**Quality Assurance**:
+- 6 comprehensive test cases provided
+- No fabricated functionality
+- Accurate SAP API naming
+- Transparent about uncertainties
+- Clean Markdown formatting
+- Actionable escalation paths
+
+**Maintenance**:
+- Quarterly accuracy verification
+- Update when SAP releases API changes
+- Incorporate team feedback
+- Version control generated documentation
+
+**Contact**: Agent Architecture Team
+
+---
+
+### 2. agent-ansible-automation
+
+**Status**: Production Ready (v1.0.0)
+
+**Category**: DevOps Automation
+
+**Description**:
+Expert DevOps automation specialist focusing exclusively on Ansible automation development. Creates production-ready Ansible playbooks, roles, tasks, and comprehensive documentation for teams implementing robust, secure, and maintainable infrastructure automation.
+
+**Location**: `/agents/agent-ansible-automation/`
+
+**Files**:
+- `.claude/agents/agent-ansible-automation.md` - Agent definition (Claude Code format)
+- `README.md` - Detailed usage guide and trigger conditions
+- `test-cases.md` - 12 comprehensive validation test cases
+- `examples/` - Complete role, playbook, and testing examples
+
+**Key Expertise**:
+- Ansible playbooks, roles, tasks, and handlers
+- Ansible Galaxy integration and role reusability
+- Inventory management (static INI/YAML, dynamic inventories)
+- Variable precedence, organization, and Jinja2 templating
+- Idempotency patterns and safe re-execution
+- Testing frameworks (ansible-lint, yamllint, molecule)
+- Security best practices (Ansible Vault, no_log, secrets management)
+- Performance optimization (fact caching, mitogen, execution strategies)
+- Cloud provider modules (AWS, Azure, GCP)
+- CI/CD pipeline integration
+
+**Core Capabilities**:
+- Production-ready playbook and role creation
+- Comprehensive error handling (block/rescue/always)
+- Multi-platform role development
+- Testing framework implementation
+- Security and secrets management
+- Performance optimization strategies
+- Cloud infrastructure automation
+- Variable hierarchy design
+- Troubleshooting and debugging guidance
+
+**Trigger Conditions**:
+- User needs production-ready Ansible playbooks or roles
+- User asks for Ansible role structure and best practices
+- User requires inventory management guidance
+- User needs testing strategies (ansible-lint, molecule, yamllint)
+- User asks for security best practices (Ansible Vault, secrets)
+- User requests performance optimization
+- User needs cloud provider integration (AWS, Azure, GCP)
+- User requires troubleshooting and debugging help
+
+**Output Format**:
+- Production-ready Ansible code (YAML, Jinja2 templates)
+- Comprehensive Markdown documentation
+- Testing framework configurations
+- Role directory structures
+- Variable documentation with types and examples
+
+**Critical Constraints**:
+- Never fabricates Ansible modules or parameters
+- Acknowledges limitations and uncertainties explicitly
+- Uses accurate Ansible terminology (playbook, role, handler)
+- References correct module names with FQCN (ansible.builtin.*)
+- Provides correct YAML syntax (2-space indentation)
+- Warns about deprecated modules and features
+- Does not assume undocumented module behavior
+
+**Documentation Structure**:
+```markdown
+# Title
+
+## Overview
+## Requirements
+## Role Variables
+## Dependencies
+## Usage Examples
+## Testing
+## Idempotency
+## Error Handling
+## Security Considerations
+## Troubleshooting
+## Performance Considerations
+## References
+```
+
+**Example Usage**:
+
+```bash
+# Complete role creation
+@agent-ansible-automation: Create a complete Ansible role for deploying
+a Django application with Nginx, Gunicorn, PostgreSQL, and SSL certificates
+
+# Security guidance
+@agent-ansible-automation: Document best practices for managing secrets
+in Ansible using Ansible Vault and integration with HashiCorp Vault
+
+# Testing framework
+@agent-ansible-automation: Create a molecule testing framework for
+testing an Ansible role across multiple OS distributions
+
+# Performance optimization
+@agent-ansible-automation: Provide optimization strategies for playbooks
+running against 200 servers including fact caching and parallel execution
+```
+
+**Quality Assurance**:
+- 12 comprehensive test cases including uncertainty acknowledgment
+- No fabricated Ansible functionality
+- Accurate module names and parameters
+- Transparent about limitations
+- Idempotency verification
+- Security best practices validation
+- Performance optimization guidance
+
+**Integration with Knowledge Base**:
+- Checks `.agent/system/` for infrastructure documentation
+- References `.agent/sops/` for standard automation procedures
+- Cross-references `.agent/tasks/` for related implementation plans
+- Documents new automation patterns discovered
+
+**Maintenance**:
+- Quarterly accuracy verification against Ansible documentation
+- Update when Ansible releases new major versions
+- Incorporate team feedback on best practices
+- Version control all agent configurations
+
+**Contact**: Agent Architecture Team
+
+---
+
+## Repository Structure
+
+```
+/.claude/agents/
+  agent-ansible-automation.md          # Ansible automation agent definition
+  agent-sap-businesspartner-integration.md  # SAP BP integration agent
+
+/agents/
+  /agent-sap-businesspartner-integration/
+    agent.yml                  # Agent configuration
+    system-prompt.md           # Complete system prompt
+    README.md                  # Usage guide and trigger conditions
+    test-cases.md             # 6 validation test cases
+    examples/                 # Example outputs
+      - example-create-flow.md
+      - example-patch-vs-put.md
+      - example-error-handling.md
+
+  /agent-ansible-automation/
+    README.md                  # Usage guide and trigger conditions
+    test-cases.md             # 12 validation test cases
+    examples/                 # Example implementations
+      - webserver-role-example.md
+      - playbook-example.md
+      - molecule-test-example.md
+
+/docs/sap-integration/businesspartner/
+  # Generated documentation by agents
+  - bp-create-flow.md
+  - bp-update-patterns.md
+  - bp-sub-entities.md
+  - bp-error-handling.md
+  - bp-best-practices.md
+
+AGENTS_REGISTRY.md             # This file - central registry
+AGENTS_REPOSITORY_GUIDE.md     # Guide for creating new agents
+```
+
+---
+
+## How to Use This Registry
+
+### 1. Finding the Right Agent
+
+Use the Quick Reference table or search by:
+- **Domain**: What area does the agent specialize in?
+- **Status**: Is the agent production-ready?
+- **Use Case**: What problem are you trying to solve?
+
+### 2. Invoking an Agent
+
+```bash
+# Syntax
+@agent-<id>: [Your request]
+
+# Example
+@agent-sap-businesspartner-integration: Document the create flow
+for BusinessPartner with address and tax numbers
+```
+
+### 3. Integration in CLAUDE.md
+
+Reference agents in your project's CLAUDE.md:
+
+```yaml
+agents:
+  - id: agent-sap-businesspartner-integration
+    trigger: "When documenting BusinessPartner OData API integrations"
+    scope: "Creating procedures, best practices, error handling guides"
+```
+
+### 4. Validation
+
+Before using agent outputs:
+- Review generated documentation for accuracy
+- Verify SAP API endpoints match your target version
+- Test procedures in a sandbox environment
+- Validate against SAP API Business Hub
+
+---
+
+## Agent Creation Workflow
+
+For creating new agents, follow this process:
+
+1. **Requirements Analysis**: Clarify domain, scope, and use cases
+2. **Specification Design**: Create comprehensive agent specification
+3. **System Prompt Development**: Write detailed system prompt
+4. **Configuration**: Create agent configuration files
+5. **Testing**: Implement and run validation test cases
+6. **Documentation**: Create README and usage guide
+7. **Registry Entry**: Add to AGENTS_REGISTRY.md
+8. **Deployment**: Move to production and update CLAUDE.md
+
+See `AGENTS_REPOSITORY_GUIDE.md` for detailed process.
+
+---
+
+## Agent Roadmap
+
+### Current (Q4 2025)
+- [x] `agent-sap-businesspartner-integration` (v1.0.0) - Production
+- [x] `agent-ansible-automation` (v1.0.0) - Production
+
+### Planned
+
+Potential future agents for this repository:
+
+- `agent-sap-code-reviewer` - Code review for SAP ABAP
+- `agent-sap-api-testing` - Test case generation for SAP OData APIs
+- `agent-sap-architecture-designer` - SAP integration architecture
+- `agent-data-pipeline-builder` - ETL/ELT pipeline documentation
+- `agent-security-auditor` - Security review for integrations
+- `agent-performance-analyzer` - Integration performance optimization
+
+---
+
+## Best Practices
+
+### For Agent Users
+
+✅ **Do**:
+- Read agent README before using
+- Verify outputs in sandbox before production use
+- Report inaccuracies to Agent Architecture Team
+- Use agents proactively when relevant to your task
+
+❌ **Don't**:
+- Assume agent outputs are production-ready without review
+- Ignore agent limitations and uncertainties
+- Use agents for purposes outside their defined scope
+- Bypass validation and testing
+
+### For Agent Maintainers
+
+✅ **Do**:
+- Keep system prompts accurate and up-to-date
+- Test agents quarterly
+- Document limitations transparently
+- Incorporate team feedback
+- Version control all agent files
+
+❌ **Don't**:
+- Fabricate functionality
+- Include proprietary content verbatim
+- Make unsupported claims about accuracy
+- Skip validation test cases
+- Leave uncertainties undocumented
+
+---
+
+## Quality Standards
+
+All agents in this registry meet these standards:
+
+| Criterion | Requirement | Validation |
+|-----------|-------------|-----------|
+| **Accuracy** | No fabricated functionality | Spec review + spot-checking |
+| **Transparency** | Clear limitations | System prompt review |
+| **Completeness** | Full scope coverage | Test case validation |
+| **Usability** | Actionable outputs | Team feedback |
+| **Professional** | Proper terminology | Domain expert review |
+| **Maintainable** | Clear documentation | Spec + README clarity |
+
+---
+
+## Support & Feedback
+
+### Reporting Issues
+
+Found an issue with an agent?
+
+1. **Verify** the issue is reproducible
+2. **Document** the specific request and unexpected behavior
+3. **Check** if it's agent behavior or expected limitation
+4. **Report** to Agent Architecture Team with details
+
+### Requesting New Agents
+
+Want an agent for a specific domain?
+
+1. **Describe** the problem you're trying to solve
+2. **Define** the scope and key capabilities needed
+3. **Identify** success criteria and expected outputs
+4. **Submit** request to Agent Architecture Team
+
+### Contributing
+
+Agents are maintained by the Agent Architecture Team. To contribute:
+
+1. Suggest improvements with specific examples
+2. Test agent outputs in your workflows
+3. Provide feedback on accuracy and usability
+4. Report issues or gaps discovered
+
+---
+
+## Administration
+
+### Version Control
+
+All agent files are version-controlled:
+- Agent configurations versioned with semantic versioning
+- System prompts updated when APIs/standards change
+- Test cases maintained alongside agent specs
+- AGENTS_REGISTRY.md updated with each new agent
+
+### Release Process
+
+1. Agent specification approved
+2. System prompt reviewed
+3. Test cases pass validation
+4. Documentation complete
+5. AGENTS_REGISTRY.md updated
+6. Deployment to production
+
+### Deprecation
+
+Agents may be deprecated if:
+- Core domain is no longer relevant
+- API or standard significantly changes
+- Replacement agent provides better functionality
+- Maintenance burden exceeds value
+
+Deprecation process:
+1. Announce 60-day deprecation window
+2. Document replacement strategy
+3. Update registry with migration guide
+4. Archive agent after deprecation window
+
+---
+
+## Related Documents
+
+- `AGENTS_REPOSITORY_GUIDE.md` - Step-by-step guide for creating new agents
+- `CLAUDE.md` - Project-specific agent configuration
+- `agents/agent-sap-businesspartner-integration/README.md` - Agent-specific guide
+
+---
+
+**Registry Version**: 1.0.0
+**Last Updated**: 2025-11-20
+**Maintained By**: Agent Architecture Team
+**Status**: Active

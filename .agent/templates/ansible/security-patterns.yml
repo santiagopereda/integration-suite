@@ -1,0 +1,389 @@
+# Ansible Security Best Practices
+
+# This file demonstrates security patterns for Ansible automation
+
+---
+# === ANSIBLE VAULT USAGE ===
+
+# Encrypt sensitive file
+ansible-vault encrypt vars/vault.yml
+
+# Decrypt file
+ansible-vault decrypt vars/vault.yml
+
+# Edit encrypted file
+ansible-vault edit vars/vault.yml
+
+# Rekey (change password)
+ansible-vault rekey vars/vault.yml
+
+# Encrypt string
+ansible-vault encrypt_string 'secret_password' --name 'vault_db_password'
+
+---
+# === VAULT VARIABLE PATTERN ===
+
+# vars/vault.yml (encrypted with ansible-vault)
+---
+vault_db_password: "super_secret_password"
+vault_api_key: "confidential_api_key_12345"
+vault_ssl_key_password: "ssl_password"
+vault_admin_password: "admin_secret"
+
+# vars/main.yml (unencrypted, references vault variables)
+---
+db_password: "{{ vault_db_password }}"
+api_key: "{{ vault_api_key }}"
+ssl_key_password: "{{ vault_ssl_key_password }}"
+admin_password: "{{ vault_admin_password }}"
+
+---
+# === NO_LOG FOR SENSITIVE TASKS ===
+
+# Prevent sensitive data from appearing in logs
+- name: Create user with password
+  ansible.builtin.user:
+    name: admin
+    password: "{{ admin_password | password_hash('sha512') }}"
+    state: present
+  no_log: true
+
+- name: Set API credentials
+  ansible.builtin.copy:
+    content: |
+      API_KEY={{ api_key }}
+      API_SECRET={{ api_secret }}
+    dest: /etc/app/credentials
+    mode: '0600'
+  no_log: true
+
+# Debug with no_log (be careful!)
+- name: Debug sensitive variable
+  ansible.builtin.debug:
+    msg: "Password set successfully"  # Don't print the actual password
+  no_log: true
+
+---
+# === FILE PERMISSIONS AND OWNERSHIP ===
+
+# Secure file permissions
+- name: Deploy SSH private key
+  ansible.builtin.copy:
+    src: id_rsa
+    dest: /home/deploy/.ssh/id_rsa
+    owner: deploy
+    group: deploy
+    mode: '0600'  # Read/write for owner only
+
+# Secure directory permissions
+- name: Create secure config directory
+  ansible.builtin.file:
+    path: /etc/app/secure
+    state: directory
+    owner: root
+    group: app
+    mode: '0750'  # rwxr-x---
+
+# Set multiple file permissions
+- name: Set permissions on configuration files
+  ansible.builtin.file:
+    path: "{{ item.path }}"
+    owner: "{{ item.owner }}"
+    group: "{{ item.group }}"
+    mode: "{{ item.mode }}"
+  loop:
+    - { path: '/etc/app/config.yml', owner: 'root', group: 'app', mode: '0640' }
+    - { path: '/etc/app/secrets.yml', owner: 'root', group: 'app', mode: '0600' }
+    - { path: '/var/log/app', owner: 'app', group: 'app', mode: '0750' }
+
+---
+# === SSH KEY MANAGEMENT ===
+
+# Generate SSH key pair
+- name: Generate SSH key for deployment
+  ansible.builtin.openssh_keypair:
+    path: /home/deploy/.ssh/id_rsa
+    type: rsa
+    size: 4096
+    owner: deploy
+    group: deploy
+    mode: '0600'
+
+# Deploy authorized keys securely
+- name: Add SSH authorized keys
+  ansible.builtin.authorized_key:
+    user: deploy
+    key: "{{ lookup('file', 'files/deploy_key.pub') }}"
+    state: present
+    exclusive: no
+
+# Remove SSH password authentication
+- name: Disable SSH password authentication
+  ansible.builtin.lineinfile:
+    path: /etc/ssh/sshd_config
+    regexp: '^#?PasswordAuthentication'
+    line: 'PasswordAuthentication no'
+    validate: '/usr/sbin/sshd -t -f %s'
+  notify: restart sshd
+
+---
+# === LEAST PRIVILEGE PRINCIPLE ===
+
+# Use become only when necessary
+- name: Read configuration file (no escalation needed)
+  ansible.builtin.slurp:
+    path: /etc/app/config.yml
+  register: config_content
+  # NO become: yes here
+
+- name: Install package (requires root)
+  ansible.builtin.package:
+    name: nginx
+    state: present
+  become: yes  # Only escalate for this task
+
+# Create service account with limited permissions
+- name: Create application service account
+  ansible.builtin.user:
+    name: appservice
+    system: yes
+    shell: /usr/sbin/nologin  # No shell access
+    home: /var/lib/appservice
+    createhome: yes
+  become: yes
+
+---
+# === SSL/TLS CERTIFICATE MANAGEMENT ===
+
+# Deploy SSL certificates securely
+- name: Deploy SSL certificate
+  ansible.builtin.copy:
+    content: "{{ vault_ssl_cert }}"
+    dest: /etc/ssl/certs/app.crt
+    owner: root
+    group: ssl-cert
+    mode: '0644'  # Public cert can be readable
+  no_log: true
+
+- name: Deploy SSL private key
+  ansible.builtin.copy:
+    content: "{{ vault_ssl_key }}"
+    dest: /etc/ssl/private/app.key
+    owner: root
+    group: ssl-cert
+    mode: '0640'  # Private key restricted
+  no_log: true
+
+# Validate SSL certificate
+- name: Validate SSL certificate
+  ansible.builtin.command: >
+    openssl x509 -in /etc/ssl/certs/app.crt -noout -checkend 86400
+  changed_when: false
+  check_mode: no
+
+---
+# === SECURE DEFAULTS AND HARDENING ===
+
+# Set secure umask
+- name: Set secure umask
+  ansible.builtin.lineinfile:
+    path: /etc/profile
+    regexp: '^umask'
+    line: 'umask 027'
+
+# Disable unnecessary services
+- name: Disable unnecessary services
+  ansible.builtin.service:
+    name: "{{ item }}"
+    state: stopped
+    enabled: no
+  loop:
+    - telnet
+    - ftp
+    - rsh
+  ignore_errors: yes  # Service might not exist
+
+# Configure firewall rules
+- name: Allow only required ports
+  ansible.builtin.firewalld:
+    port: "{{ item }}"
+    permanent: yes
+    state: enabled
+  loop:
+    - "22/tcp"   # SSH
+    - "80/tcp"   # HTTP
+    - "443/tcp"  # HTTPS
+  notify: reload firewalld
+
+---
+# === INPUT VALIDATION ===
+
+# Validate input variables
+- name: Validate required variables are defined
+  ansible.builtin.assert:
+    that:
+      - db_password is defined
+      - db_password | length > 8
+      - api_key is defined
+    fail_msg: "Required security variables are missing or invalid"
+
+# Sanitize user input
+- name: Ensure username is alphanumeric
+  ansible.builtin.assert:
+    that:
+      - username is match('^[a-zA-Z0-9_-]+$')
+    fail_msg: "Username contains invalid characters"
+
+---
+# === AUDIT LOGGING ===
+
+# Enable audit logging
+- name: Configure auditd rules
+  ansible.builtin.copy:
+    content: |
+      -w /etc/passwd -p wa -k identity
+      -w /etc/group -p wa -k identity
+      -w /etc/ssh/sshd_config -p wa -k sshd
+      -w /var/log/auth.log -p wa -k auth
+    dest: /etc/audit/rules.d/custom.rules
+    owner: root
+    group: root
+    mode: '0640'
+  notify: restart auditd
+
+# Log security-relevant actions
+- name: Log administrative action
+  ansible.builtin.syslog:
+    msg: "Administrative change performed by {{ ansible_user }}"
+    priority: warning
+    facility: authpriv
+
+---
+# === SECRETS FROM EXTERNAL SOURCES ===
+
+# HashiCorp Vault integration
+- name: Retrieve secret from Vault
+  ansible.builtin.set_fact:
+    db_password: "{{ lookup('hashi_vault', 'secret=secret/data/myapp/db:password') }}"
+  no_log: true
+
+# AWS Secrets Manager
+- name: Get secret from AWS Secrets Manager
+  ansible.builtin.set_fact:
+    api_key: "{{ lookup('aws_secret', 'myapp/api/key', region='us-east-1') }}"
+  no_log: true
+
+# Environment variable
+- name: Use environment variable for CI/CD
+  ansible.builtin.set_fact:
+    deploy_key: "{{ lookup('env', 'DEPLOY_KEY') }}"
+  no_log: true
+
+---
+# === SECURITY SCANNING AND COMPLIANCE ===
+
+# Check for known vulnerabilities
+- name: Run security audit
+  ansible.builtin.command: /usr/bin/lynis audit system
+  register: audit_result
+  changed_when: false
+
+# Ensure SELinux is enforcing
+- name: Verify SELinux is in enforcing mode
+  ansible.posix.selinux:
+    policy: targeted
+    state: enforcing
+
+# Check file integrity
+- name: Verify critical file integrity
+  ansible.builtin.stat:
+    path: /etc/passwd
+    checksum_algorithm: sha256
+  register: passwd_stat
+  failed_when: passwd_stat.stat.checksum != expected_checksum
+
+---
+# === NETWORK SECURITY ===
+
+# Restrict access by IP
+- name: Allow SSH only from specific IPs
+  ansible.builtin.iptables:
+    chain: INPUT
+    protocol: tcp
+    destination_port: 22
+    source: "{{ item }}"
+    jump: ACCEPT
+  loop: "{{ allowed_ssh_ips }}"
+
+- name: Drop all other SSH connections
+  ansible.builtin.iptables:
+    chain: INPUT
+    protocol: tcp
+    destination_port: 22
+    jump: DROP
+
+# Configure TCP wrappers
+- name: Configure hosts.allow
+  ansible.builtin.lineinfile:
+    path: /etc/hosts.allow
+    line: "sshd: {{ allowed_ssh_networks | join(' ') }}"
+
+- name: Configure hosts.deny
+  ansible.builtin.lineinfile:
+    path: /etc/hosts.deny
+    line: "sshd: ALL"
+
+---
+# === BEST PRACTICES SUMMARY ===
+
+# ✅ DO:
+# - Use Ansible Vault for all sensitive data
+# - Apply no_log to tasks handling secrets
+# - Set restrictive file permissions (0600, 0640, 0750)
+# - Use service accounts with minimal privileges
+# - Validate and sanitize all inputs
+# - Disable unnecessary services
+# - Use SSH keys instead of passwords
+# - Rotate credentials regularly
+# - Audit and log security-relevant actions
+# - Keep Ansible and dependencies updated
+# - Use become only when necessary
+# - Test security configurations
+# - Document security decisions
+
+# ❌ DON'T:
+# - Store credentials in plain text
+# - Commit vault passwords to git
+# - Use the same credentials across environments
+# - Grant excessive sudo privileges
+# - Skip input validation
+# - Expose sensitive data in logs
+# - Use deprecated cryptographic algorithms
+# - Share credentials between services
+# - Ignore security warnings
+# - Use default passwords
+# - Skip security updates
+# - Hardcode secrets in playbooks
+
+---
+# === RUNNING PLAYBOOKS SECURELY ===
+
+# Use vault password file
+ansible-playbook site.yml --vault-password-file ~/.vault_pass
+
+# Prompt for vault password
+ansible-playbook site.yml --ask-vault-pass
+
+# Multiple vault IDs
+ansible-playbook site.yml --vault-id prod@~/.vault_pass_prod
+
+# Validate before running
+ansible-playbook site.yml --check --diff
+
+# Run with become password
+ansible-playbook site.yml --ask-become-pass
+
+---
+# Template Version: 1.0.0
+# Last Updated: 2025-11-28
+# Maintained By: Agent Architecture Team

@@ -1,0 +1,395 @@
+# Ansible Testing Framework Configuration
+
+# This file demonstrates testing strategies for Ansible roles and playbooks
+
+---
+# === ANSIBLE-LINT CONFIGURATION ===
+
+# .ansible-lint
+---
+profile: production  # Use production profile for strict rules
+
+# Skip specific rules
+skip_list:
+  - meta-no-info  # Allow roles without galaxy_info
+  - no-changed-when  # Sometimes acceptable
+  - command-instead-of-module  # When module doesn't exist
+
+# Warn instead of error
+warn_list:
+  - experimental  # Warn about experimental features
+  - no-handler  # Warn about tasks that should be handlers
+
+# Exclude paths from linting
+exclude_paths:
+  - .cache/
+  - .git/
+  - molecule/
+  - .github/
+  - tests/output/
+
+# Enable specific rules
+enable_list:
+  - fqcn-builtins  # Enforce FQCN for builtins
+  - no-same-owner  # Avoid same owner/group
+
+# Custom rule configuration
+rules:
+  line-length:
+    max: 120
+  no-tabs:
+    enabled: true
+
+---
+# === YAMLLINT CONFIGURATION ===
+
+# .yamllint
+---
+extends: default
+
+rules:
+  line-length:
+    max: 120
+    level: warning
+  indentation:
+    spaces: 2
+    indent-sequences: true
+  comments:
+    min-spaces-from-content: 1
+  braces:
+    max-spaces-inside: 1
+  brackets:
+    max-spaces-inside: 1
+
+ignore: |
+  .cache/
+  .git/
+  molecule/
+
+---
+# === MOLECULE CONFIGURATION ===
+
+# molecule/default/molecule.yml
+---
+dependency:
+  name: galaxy
+  options:
+    requirements-file: requirements.yml
+
+driver:
+  name: docker  # or vagrant, ec2, azure, etc.
+
+platforms:
+  - name: instance-ubuntu-20
+    image: geerlingguy/docker-ubuntu2004-ansible:latest
+    command: ""
+    volumes:
+      - /sys/fs/cgroup:/sys/fs/cgroup:ro
+    privileged: true
+    pre_build_image: true
+
+  - name: instance-centos-8
+    image: geerlingguy/docker-centos8-ansible:latest
+    command: ""
+    volumes:
+      - /sys/fs/cgroup:/sys/fs/cgroup:ro
+    privileged: true
+    pre_build_image: true
+
+provisioner:
+  name: ansible
+  config_options:
+    defaults:
+      callbacks_enabled: profile_tasks,timer
+      stdout_callback: yaml
+    ssh_connection:
+      pipelining: true
+  inventory:
+    group_vars:
+      all:
+        test_mode: true
+  playbooks:
+    create: create.yml
+    converge: converge.yml
+    verify: verify.yml
+    destroy: destroy.yml
+
+verifier:
+  name: ansible  # or testinfra, goss
+
+scenario:
+  name: default
+  test_sequence:
+    - dependency
+    - lint
+    - cleanup
+    - destroy
+    - syntax
+    - create
+    - prepare
+    - converge
+    - idempotence
+    - side_effect
+    - verify
+    - cleanup
+    - destroy
+
+---
+# === MOLECULE CONVERGE PLAYBOOK ===
+
+# molecule/default/converge.yml
+---
+- name: Converge
+  hosts: all
+  become: yes
+  vars:
+    # Override role defaults for testing
+    app_name: test_app
+    app_port: 9000
+
+  pre_tasks:
+    - name: Update apt cache (Debian)
+      ansible.builtin.apt:
+        update_cache: yes
+      when: ansible_os_family == "Debian"
+
+  roles:
+    - role: my_role
+      app_environment: testing
+
+---
+# === MOLECULE VERIFY PLAYBOOK ===
+
+# molecule/default/verify.yml
+---
+- name: Verify
+  hosts: all
+  become: yes
+  tasks:
+    - name: Check if service is running
+      ansible.builtin.service:
+        name: my_app
+        state: started
+      check_mode: yes
+      register: service_status
+      failed_when: service_status.changed
+
+    - name: Verify application port is listening
+      ansible.builtin.wait_for:
+        port: 9000
+        timeout: 5
+
+    - name: Check configuration file exists
+      ansible.builtin.stat:
+        path: /etc/my_app/config.conf
+      register: config_file
+      failed_when: not config_file.stat.exists
+
+    - name: Verify application responds
+      ansible.builtin.uri:
+        url: http://localhost:9000/health
+        return_content: yes
+      register: health_check
+      failed_when: "'healthy' not in health_check.content"
+
+---
+# === TESTINFRA VERIFICATION ===
+
+# molecule/default/tests/test_default.py
+import os
+import testinfra.utils.ansible_runner
+
+testinfra_hosts = testinfra.utils.ansible_runner.AnsibleRunner(
+    os.environ['MOLECULE_INVENTORY_FILE']
+).get_hosts('all')
+
+
+def test_package_installed(host):
+    """Check if required packages are installed"""
+    pkg = host.package("my_app")
+    assert pkg.is_installed
+
+
+def test_service_running(host):
+    """Verify service is running and enabled"""
+    svc = host.service("my_app")
+    assert svc.is_running
+    assert svc.is_enabled
+
+
+def test_config_file(host):
+    """Check configuration file exists and has correct permissions"""
+    config = host.file("/etc/my_app/config.conf")
+    assert config.exists
+    assert config.mode == 0o644
+    assert config.user == "my_app"
+
+
+def test_port_listening(host):
+    """Verify application port is listening"""
+    assert host.socket("tcp://0.0.0.0:9000").is_listening
+
+
+def test_application_response(host):
+    """Test application HTTP response"""
+    cmd = host.run("curl -s http://localhost:9000/health")
+    assert cmd.rc == 0
+    assert "healthy" in cmd.stdout
+
+---
+# === TESTING WORKFLOW ===
+
+# Run all tests
+molecule test
+
+# Run specific scenario
+molecule test --scenario-name centos8
+
+# Develop and iterate
+molecule create          # Create test instances
+molecule converge        # Apply role
+molecule verify          # Run verification
+molecule login           # SSH into instance for debugging
+molecule destroy         # Tear down instances
+
+# Test sequence breakdown
+molecule lint            # Lint YAML and Ansible
+molecule syntax          # Check playbook syntax
+molecule create          # Provision test infrastructure
+molecule converge        # Run the playbook
+molecule idempotence     # Run again, should report 0 changes
+molecule verify          # Run verification tests
+molecule destroy         # Clean up
+
+---
+# === INTEGRATION TESTING ===
+
+# tests/integration/test.yml
+---
+- name: Integration Test
+  hosts: test_servers
+  become: yes
+
+  pre_tasks:
+    - name: Set up test environment
+      ansible.builtin.include_tasks: setup_test_env.yml
+
+  roles:
+    - role: my_role
+
+  post_tasks:
+    - name: Run integration tests
+      ansible.builtin.include_tasks: integration_tests.yml
+
+    - name: Cleanup test environment
+      ansible.builtin.include_tasks: cleanup_test_env.yml
+
+---
+# === SYNTAX AND VALIDATION ===
+
+# Check playbook syntax
+ansible-playbook playbook.yml --syntax-check
+
+# Dry run (check mode)
+ansible-playbook playbook.yml --check
+
+# Show differences that would be made
+ansible-playbook playbook.yml --check --diff
+
+# Lint playbook
+ansible-lint playbook.yml
+
+# Lint all files in directory
+ansible-lint .
+
+# Lint with specific rules
+ansible-lint --strict playbook.yml
+
+---
+# === CI/CD INTEGRATION ===
+
+# .github/workflows/test.yml (GitHub Actions)
+name: Test Ansible Role
+
+on: [push, pull_request]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        distro:
+          - ubuntu2004
+          - centos8
+          - debian10
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.9'
+
+      - name: Install dependencies
+        run: |
+          pip install molecule docker ansible-lint yamllint
+
+      - name: Run Molecule tests
+        run: molecule test
+        env:
+          PY_COLORS: '1'
+          ANSIBLE_FORCE_COLOR: '1'
+          MOLECULE_DISTRO: ${{ matrix.distro }}
+
+---
+# === BEST PRACTICES ===
+
+# ✅ DO:
+# - Test on multiple operating systems
+# - Verify idempotence (run twice, 0 changes second time)
+# - Test both success and failure scenarios
+# - Use linters (ansible-lint, yamllint)
+# - Automate tests in CI/CD pipeline
+# - Test with different variable combinations
+# - Verify service state and configuration
+# - Check file permissions and ownership
+# - Test network connectivity requirements
+
+# ❌ DON'T:
+# - Skip idempotence testing
+# - Only test happy path scenarios
+# - Ignore lint warnings
+# - Test only on one OS
+# - Forget to cleanup test resources
+# - Hardcode test values
+# - Skip syntax validation
+# - Test only with defaults
+
+---
+# === COMMON TESTING COMMANDS ===
+
+# Lint everything
+yamllint .
+ansible-lint .
+
+# Test syntax
+ansible-playbook site.yml --syntax-check
+
+# Run all molecule tests
+molecule test --all
+
+# Quick test iteration
+molecule converge && molecule verify
+
+# Debug failing tests
+molecule --debug test
+
+# Test specific platforms
+molecule test --platform-name=ubuntu2004
+
+---
+# Template Version: 1.0.0
+# Last Updated: 2025-11-28
+# Maintained By: Agent Architecture Team

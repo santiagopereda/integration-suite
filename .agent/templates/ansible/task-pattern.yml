@@ -1,0 +1,212 @@
+# Ansible Task Implementation Best Practices
+
+# This template provides patterns for writing idempotent, well-structured Ansible tasks
+
+---
+# Basic Task Pattern with All Recommended Elements
+- name: Clear, descriptive task name in imperative form (e.g., "Install nginx package")
+  ansible.builtin.module_name:
+    parameter: value
+    state: present  # Always explicit about desired state
+  register: result_variable
+  changed_when: result_variable.changed  # Explicit change detection
+  failed_when: >
+    result_variable.failed and
+    'acceptable_error' not in result_variable.msg  # Define what constitutes failure
+  tags:
+    - category  # Logical grouping
+    - feature  # Specific feature
+  notify: Handler name  # Trigger handler if changed
+
+# Task with Conditional Execution
+- name: Task that runs conditionally
+  ansible.builtin.module_name:
+    parameter: value
+  when: ansible_os_family == "RedHat"  # Condition for execution
+
+# Task with Loop
+- name: Task operating on multiple items
+  ansible.builtin.module_name:
+    name: "{{ item.name }}"
+    state: "{{ item.state }}"
+  loop:
+    - { name: "package1", state: "present" }
+    - { name: "package2", state: "present" }
+  loop_control:
+    label: "{{ item.name }}"  # Clean output
+
+# Task with Error Handling Block
+- name: Task with comprehensive error handling
+  block:
+    - name: Risky operation
+      ansible.builtin.command: /path/to/command
+      args:
+        creates: /path/to/creates  # Idempotency check
+      changed_when: false  # Command doesn't change state
+      register: command_result
+
+    - name: Follow-up task
+      ansible.builtin.copy:
+        content: "{{ command_result.stdout }}"
+        dest: /path/to/output
+
+  rescue:
+    - name: Handle error gracefully
+      ansible.builtin.debug:
+        msg: "Error occurred, performing recovery: {{ ansible_failed_result.msg }}"
+
+    - name: Cleanup or rollback action
+      ansible.builtin.file:
+        path: /tmp/tempfile
+        state: absent
+
+  always:
+    - name: Cleanup actions (always run)
+      ansible.builtin.file:
+        path: /tmp/lockfile
+        state: absent
+
+# Task with Delegation
+- name: Task that runs on different host
+  ansible.builtin.command: /usr/local/bin/api-call
+  delegate_to: api_server
+  run_once: true  # Run only once, not per host
+
+# Idempotent Command/Shell Task
+- name: Run command idempotently
+  ansible.builtin.command: /usr/local/bin/initialize-app
+  args:
+    creates: /var/lib/app/initialized  # Skip if file exists
+  changed_when: false  # Or define specific condition
+
+# Task with Retry Logic
+- name: Task that might fail temporarily
+  ansible.builtin.uri:
+    url: https://api.example.com/endpoint
+    method: GET
+    return_content: yes
+  register: api_result
+  until: api_result.status == 200
+  retries: 5
+  delay: 10  # Wait 10 seconds between retries
+
+# Task Handling Sensitive Data
+- name: Task with sensitive information
+  ansible.builtin.user:
+    name: appuser
+    password: "{{ vault_user_password | password_hash('sha512') }}"
+    state: present
+  no_log: true  # Prevents password exposure in logs
+
+# Task with Validation Before Application
+- name: Validate configuration before applying
+  ansible.builtin.command: /usr/bin/nginx -t
+  changed_when: false
+  check_mode: no  # Always run, even in check mode
+
+- name: Apply configuration only if validation passed
+  ansible.builtin.copy:
+    src: nginx.conf
+    dest: /etc/nginx/nginx.conf
+    validate: /usr/bin/nginx -t -c %s  # Validate before copying
+  notify: reload nginx
+
+# File Operation with Proper Attributes
+- name: Create directory with specific permissions
+  ansible.builtin.file:
+    path: /opt/application/data
+    state: directory
+    owner: appuser
+    group: appgroup
+    mode: '0750'
+
+# Package Installation (Cross-Platform)
+- name: Install package using generic module
+  ansible.builtin.package:
+    name: "{{ item }}"
+    state: present
+  loop:
+    - nginx
+    - python3
+    - git
+
+# Service Management
+- name: Ensure service is running and enabled
+  ansible.builtin.service:
+    name: nginx
+    state: started
+    enabled: yes
+
+# Template Deployment
+- name: Deploy configuration from template
+  ansible.builtin.template:
+    src: config.j2
+    dest: /etc/application/config.conf
+    owner: root
+    group: root
+    mode: '0644'
+    backup: yes  # Create backup before overwriting
+  notify: restart application
+
+# Task with Environment Variables
+- name: Run command with environment variables
+  ansible.builtin.command: /usr/local/bin/deploy.sh
+  environment:
+    DEPLOY_ENV: production
+    API_KEY: "{{ vault_api_key }}"
+  no_log: true  # Hide API key from logs
+
+# Async Task (Long-Running)
+- name: Run long-running task asynchronously
+  ansible.builtin.command: /usr/local/bin/long-process.sh
+  async: 3600  # Maximum runtime in seconds
+  poll: 0  # Fire and forget (0) or check interval
+  register: long_task
+
+- name: Check on async task
+  ansible.builtin.async_status:
+    jid: "{{ long_task.ansible_job_id }}"
+  register: job_result
+  until: job_result.finished
+  retries: 60
+  delay: 10
+
+# Task with Multiple Conditions
+- name: Complex conditional task
+  ansible.builtin.package:
+    name: special-package
+    state: present
+  when:
+    - ansible_os_family == "Debian"
+    - ansible_distribution_major_version | int >= 20
+    - special_feature_enabled | default(false)
+
+---
+# BEST PRACTICES SUMMARY
+
+# ✅ DO:
+# - Use descriptive task names (imperative form)
+# - Specify state explicitly (present/absent/started/stopped)
+# - Use FQCN for modules (ansible.builtin.copy, not just "copy")
+# - Implement proper error handling (block/rescue/always)
+# - Apply tags for selective execution
+# - Use changed_when and failed_when for clarity
+# - Implement idempotency checks (creates/removes)
+# - Apply no_log for sensitive data
+# - Validate configurations before applying
+# - Use become only when necessary
+
+# ❌ DON'T:
+# - Use shell/command when better modules exist
+# - Leave state implicit or undefined
+# - Skip error handling for critical operations
+# - Expose sensitive data in logs or output
+# - Make assumptions about target system state
+# - Use deprecated modules without warnings
+# - Hardcode values (use variables instead)
+# - Forget to tag tasks appropriately
+
+---
+# Template Version: 1.0.0
+# Last Updated: 2025-11-28
+# Maintained By: Agent Architecture Team

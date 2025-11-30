@@ -1,0 +1,384 @@
+# Ansible Cloud Provider Integration Patterns
+
+# This file demonstrates integration patterns for AWS, Azure, and GCP
+
+---
+# === AWS EC2 INSTANCE MANAGEMENT ===
+
+# Create EC2 instance
+- name: Launch EC2 instance
+  amazon.aws.ec2_instance:
+    name: "{{ instance_name }}"
+    key_name: "{{ ec2_key_name }}"
+    instance_type: "{{ instance_type | default('t3.micro') }}"
+    image_id: "{{ ami_id }}"  # AMI ID for the region
+    region: "{{ aws_region }}"
+    vpc_subnet_id: "{{ subnet_id }}"
+    security_groups: "{{ security_groups }}"
+    network:
+      assign_public_ip: true
+    tags:
+      Environment: "{{ environment }}"
+      Application: "{{ app_name }}"
+      ManagedBy: ansible
+    state: running
+    wait: yes
+  register: ec2_instance
+
+# Manage EC2 security group
+- name: Create security group
+  amazon.aws.ec2_security_group:
+    name: "{{ sg_name }}"
+    description: "Security group for {{ app_name }}"
+    region: "{{ aws_region }}"
+    vpc_id: "{{ vpc_id }}"
+    rules:
+      - proto: tcp
+        ports: [80, 443]
+        cidr_ip: 0.0.0.0/0
+        rule_desc: "Allow HTTP/HTTPS from anywhere"
+      - proto: tcp
+        ports: [22]
+        cidr_ip: "{{ admin_cidr }}"
+        rule_desc: "Allow SSH from admin network"
+    tags:
+      Name: "{{ sg_name }}"
+      Environment: "{{ environment }}"
+
+---
+# === AWS S3 BUCKET MANAGEMENT ===
+
+# Create S3 bucket
+- name: Create S3 bucket
+  amazon.aws.s3_bucket:
+    name: "{{ bucket_name }}"
+    region: "{{ aws_region }}"
+    versioning: yes
+    encryption: "AES256"
+    public_access:
+      block_public_acls: true
+      block_public_policy: true
+      ignore_public_acls: true
+      restrict_public_buckets: true
+    tags:
+      Environment: "{{ environment }}"
+      Application: "{{ app_name }}"
+
+# Upload file to S3
+- name: Upload file to S3
+  amazon.aws.s3_object:
+    bucket: "{{ bucket_name }}"
+    object: "{{ s3_key }}"
+    src: "{{ local_file_path }}"
+    mode: put
+    encrypt: yes
+    permission: private
+
+---
+# === AWS RDS DATABASE ===
+
+# Create RDS instance
+- name: Create RDS database instance
+  amazon.aws.rds_instance:
+    db_instance_identifier: "{{ db_instance_id }}"
+    engine: postgres
+    engine_version: "13.7"
+    db_instance_class: db.t3.micro
+    master_username: "{{ db_master_user }}"
+    master_user_password: "{{ vault_db_master_password }}"
+    allocated_storage: 20
+    vpc_security_group_ids:
+      - "{{ db_security_group_id }}"
+    db_subnet_group_name: "{{ db_subnet_group }}"
+    backup_retention_period: 7
+    preferred_backup_window: "03:00-04:00"
+    preferred_maintenance_window: "mon:04:00-mon:05:00"
+    storage_encrypted: yes
+    tags:
+      Environment: "{{ environment }}"
+      Application: "{{ app_name }}"
+    region: "{{ aws_region }}"
+  no_log: true  # Hide password
+
+---
+# === AZURE VIRTUAL MACHINE ===
+
+# Create resource group
+- name: Create Azure resource group
+  azure.azcollection.azure_rm_resourcegroup:
+    name: "{{ resource_group_name }}"
+    location: "{{ azure_location }}"
+    tags:
+      Environment: "{{ environment }}"
+      Application: "{{ app_name }}"
+
+# Create virtual network
+- name: Create virtual network
+  azure.azcollection.azure_rm_virtualnetwork:
+    resource_group: "{{ resource_group_name }}"
+    name: "{{ vnet_name }}"
+    address_prefixes_cidr:
+      - "10.0.0.0/16"
+    tags:
+      Environment: "{{ environment }}"
+
+# Create subnet
+- name: Create subnet
+  azure.azcollection.azure_rm_subnet:
+    resource_group: "{{ resource_group_name }}"
+    virtual_network_name: "{{ vnet_name }}"
+    name: "{{ subnet_name }}"
+    address_prefix_cidr: "10.0.1.0/24"
+
+# Create public IP
+- name: Create public IP address
+  azure.azcollection.azure_rm_publicipaddress:
+    resource_group: "{{ resource_group_name }}"
+    name: "{{ public_ip_name }}"
+    allocation_method: Static
+    sku: Standard
+    tags:
+      Environment: "{{ environment }}"
+  register: public_ip
+
+# Create VM
+- name: Create Azure VM
+  azure.azcollection.azure_rm_virtualmachine:
+    resource_group: "{{ resource_group_name }}"
+    name: "{{ vm_name }}"
+    vm_size: "{{ vm_size | default('Standard_B2s') }}"
+    admin_username: "{{ admin_user }}"
+    ssh_password_enabled: false
+    ssh_public_keys:
+      - path: "/home/{{ admin_user }}/.ssh/authorized_keys"
+        key_data: "{{ lookup('file', ssh_public_key_file) }}"
+    network_interfaces:
+      - name: "{{ vm_name }}-nic"
+    image:
+      offer: "{{ image_offer }}"
+      publisher: "{{ image_publisher }}"
+      sku: "{{ image_sku }}"
+      version: latest
+    os_disk:
+      caching: ReadWrite
+      managed_disk_type: Standard_LRS
+    tags:
+      Environment: "{{ environment }}"
+      Application: "{{ app_name }}"
+
+---
+# === AZURE STORAGE ACCOUNT ===
+
+# Create storage account
+- name: Create Azure storage account
+  azure.azcollection.azure_rm_storageaccount:
+    resource_group: "{{ resource_group_name }}"
+    name: "{{ storage_account_name }}"
+    account_type: Standard_LRS
+    kind: StorageV2
+    access_tier: Hot
+    https_only: true
+    minimum_tls_version: TLS1_2
+    tags:
+      Environment: "{{ environment }}"
+
+# Create blob container
+- name: Create blob container
+  azure.azcollection.azure_rm_storageblob:
+    resource_group: "{{ resource_group_name }}"
+    storage_account_name: "{{ storage_account_name }}"
+    container: "{{ container_name }}"
+    public_access: None
+
+---
+# === GCP COMPUTE INSTANCE ===
+
+# Create GCP compute instance
+- name: Create GCP VM instance
+  google.cloud.gcp_compute_instance:
+    name: "{{ instance_name }}"
+    machine_type: "{{ machine_type | default('n1-standard-1') }}"
+    zone: "{{ gcp_zone }}"
+    project: "{{ gcp_project }}"
+    auth_kind: serviceaccount
+    service_account_file: "{{ gcp_service_account_file }}"
+    disks:
+      - auto_delete: true
+        boot: true
+        initialize_params:
+          source_image: "{{ source_image }}"
+          disk_size_gb: 20
+    network_interfaces:
+      - network:
+          selfLink: "global/networks/default"
+        access_configs:
+          - name: External NAT
+            type: ONE_TO_ONE_NAT
+    metadata:
+      startup-script: "{{ lookup('file', 'startup.sh') }}"
+    tags:
+      items:
+        - http-server
+        - https-server
+    labels:
+      environment: "{{ environment }}"
+      application: "{{ app_name }}"
+    state: present
+  register: gcp_instance
+
+# Create firewall rule
+- name: Create GCP firewall rule
+  google.cloud.gcp_compute_firewall:
+    name: "{{ firewall_name }}"
+    network:
+      selfLink: "global/networks/default"
+    allowed:
+      - ip_protocol: tcp
+        ports:
+          - '80'
+          - '443'
+    source_ranges:
+      - '0.0.0.0/0'
+    target_tags:
+      - http-server
+      - https-server
+    project: "{{ gcp_project }}"
+    auth_kind: serviceaccount
+    service_account_file: "{{ gcp_service_account_file }}"
+    state: present
+
+---
+# === GCP CLOUD STORAGE ===
+
+# Create GCS bucket
+- name: Create GCS bucket
+  google.cloud.gcp_storage_bucket:
+    name: "{{ bucket_name }}"
+    project: "{{ gcp_project }}"
+    auth_kind: serviceaccount
+    service_account_file: "{{ gcp_service_account_file }}"
+    location: "{{ gcp_location }}"
+    storage_class: STANDARD
+    versioning:
+      enabled: yes
+    labels:
+      environment: "{{ environment }}"
+      application: "{{ app_name }}"
+    state: present
+
+# Upload object to GCS
+- name: Upload file to GCS
+  google.cloud.gcp_storage_object:
+    action: upload
+    bucket: "{{ bucket_name }}"
+    src: "{{ local_file }}"
+    dest: "{{ gcs_object_name }}"
+    project: "{{ gcp_project }}"
+    auth_kind: serviceaccount
+    service_account_file: "{{ gcp_service_account_file }}"
+
+---
+# === MULTI-CLOUD PATTERNS ===
+
+# Conditional cloud provisioning
+- name: Provision instance based on cloud provider
+  block:
+    - name: Provision AWS instance
+      amazon.aws.ec2_instance:
+        # AWS-specific parameters
+      when: cloud_provider == 'aws'
+
+    - name: Provision Azure VM
+      azure.azcollection.azure_rm_virtualmachine:
+        # Azure-specific parameters
+      when: cloud_provider == 'azure'
+
+    - name: Provision GCP instance
+      google.cloud.gcp_compute_instance:
+        # GCP-specific parameters
+      when: cloud_provider == 'gcp'
+
+# Dynamic inventory from cloud provider
+- name: Gather facts from cloud instances
+  block:
+    - name: Gather AWS EC2 facts
+      amazon.aws.ec2_instance_info:
+        region: "{{ aws_region }}"
+        filters:
+          "tag:Environment": "{{ environment }}"
+      register: aws_instances
+      when: cloud_provider == 'aws'
+
+    - name: Gather Azure VM facts
+      azure.azcollection.azure_rm_virtualmachine_info:
+        resource_group: "{{ resource_group_name }}"
+      register: azure_vms
+      when: cloud_provider == 'azure'
+
+---
+# === CLOUD-INIT INTEGRATION ===
+
+# AWS user data
+- name: Launch EC2 with cloud-init
+  amazon.aws.ec2_instance:
+    name: "{{ instance_name }}"
+    # ... other parameters ...
+    user_data: |
+      #!/bin/bash
+      apt-get update
+      apt-get install -y python3 python3-pip
+      pip3 install ansible
+    state: running
+
+# Azure custom data
+- name: Create Azure VM with custom data
+  azure.azcollection.azure_rm_virtualmachine:
+    name: "{{ vm_name }}"
+    # ... other parameters ...
+    custom_data: "{{ lookup('file', 'cloud-init.yml') | b64encode }}"
+
+---
+# === BEST PRACTICES ===
+
+# ✅ DO:
+# - Use service accounts/IAM roles for authentication
+# - Tag all cloud resources consistently
+# - Implement proper IAM/RBAC
+# - Use cloud-native monitoring and logging
+# - Encrypt data at rest and in transit
+# - Follow cloud provider security best practices
+# - Use dynamic inventory for cloud resources
+# - Implement cost tagging strategy
+# - Use cloud-specific modules (not shell commands)
+# - Test in non-production environment first
+# - Document cloud-specific requirements
+
+# ❌ DON'T:
+# - Hardcode credentials or API keys
+# - Use default security groups/firewall rules
+# - Skip encryption for sensitive data
+# - Forget to clean up unused resources
+# - Mix cloud providers without abstraction
+# - Use overly permissive IAM policies
+# - Ignore cloud cost optimization
+# - Skip backup and disaster recovery planning
+# - Use deprecated cloud services
+# - Forget region/zone specifications
+
+---
+# === AUTHENTICATION PATTERNS ===
+
+# AWS - Use IAM role or credentials file
+# ~/.aws/credentials or AWS_ACCESS_KEY_ID/AWS_SECRET_ACCESS_KEY env vars
+
+# Azure - Use service principal
+# AZURE_CLIENT_ID, AZURE_SECRET, AZURE_SUBSCRIPTION_ID, AZURE_TENANT env vars
+# Or: az login
+
+# GCP - Use service account key file
+# GOOGLE_APPLICATION_CREDENTIALS env var pointing to JSON key file
+
+---
+# Template Version: 1.0.0
+# Last Updated: 2025-11-28
+# Maintained By: Agent Architecture Team

@@ -1,0 +1,112 @@
+{
+  "measurement_date": "2025-11-28",
+  "phase": "baseline_pre_optimization",
+  "description": "Initial token usage measurements before template externalization and agent optimization",
+  "agents": {
+    "agent-sap-businesspartner-integration": {
+      "prompt_words": 2249,
+      "prompt_lines": 294,
+      "estimated_tokens": 15000,
+      "externalizable_content": {
+        "documentation_template": {
+          "words": 400,
+          "location": "lines 107-167",
+          "description": "BusinessPartner integration documentation structure template"
+        },
+        "quality_checklist": {
+          "words": 120,
+          "location": "lines 168-188",
+          "description": "Quality assurance checklist for deliverables"
+        },
+        "sap_agiloft_context": {
+          "words": 450,
+          "location": "lines 19-82",
+          "description": "SAP-Agiloft project-specific context and roadmap"
+        },
+        "kb_integration": {
+          "words": 250,
+          "location": "lines 242-281",
+          "description": "Knowledge base integration instructions"
+        },
+        "total_words": 1220
+      },
+      "reduction_potential_percent": 54,
+      "target_prompt_words": 750,
+      "target_estimated_tokens": 5000,
+      "expected_token_savings": 10000
+    },
+    "agent-ansible-automation": {
+      "prompt_words": 2433,
+      "prompt_lines": 575,
+      "estimated_tokens": 16000,
+      "externalizable_content": {
+        "playbook_doc_template": {
+          "words": 600,
+          "location": "lines 139-233",
+          "description": "Ansible playbook documentation template"
+        },
+        "task_implementation_pattern": {
+          "words": 250,
+          "location": "lines 236-276",
+          "description": "Task implementation best practices"
+        },
+        "variable_management_pattern": {
+          "words": 180,
+          "location": "lines 278-304",
+          "description": "Variable management and organization"
+        },
+        "jinja2_template_pattern": {
+          "words": 140,
+          "location": "lines 306-327",
+          "description": "Jinja2 templating examples"
+        },
+        "inventory_patterns": {
+          "words": 250,
+          "location": "lines 329-365",
+          "description": "Static and dynamic inventory examples"
+        },
+        "testing_framework": {
+          "words": 280,
+          "location": "lines 391-434",
+          "description": "ansible-lint, yamllint, molecule configuration"
+        },
+        "security_patterns": {
+          "words": 150,
+          "location": "lines 436-459",
+          "description": "Ansible Vault and secrets management"
+        },
+        "cloud_provider_patterns": {
+          "words": 240,
+          "location": "lines 485-522",
+          "description": "AWS, Azure, GCP integration examples"
+        },
+        "quality_checklist": {
+          "words": 100,
+          "location": "lines 372-389",
+          "description": "Quality assurance checklist"
+        },
+        "kb_integration": {
+          "words": 250,
+          "location": "lines 524-562",
+          "description": "Knowledge base integration instructions"
+        },
+        "total_words": 1690
+      },
+      "reduction_potential_percent": 69,
+      "target_prompt_words": 800,
+      "target_estimated_tokens": 5300,
+      "expected_token_savings": 11000
+    }
+  },
+  "summary": {
+    "total_agents_measured": 2,
+    "average_baseline_tokens": 15500,
+    "average_target_tokens": 5150,
+    "average_reduction_percent": 67,
+    "total_monthly_savings_estimate": {
+      "invocations_per_month": 200,
+      "tokens_saved_per_invocation": 10500,
+      "total_tokens_saved_monthly": 2100000
+    }
+  }
+}
