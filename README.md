@@ -1,411 +1,145 @@
-# Agentic Project - Agent Repository Hub
+# Agentic - Agent Repository Hub
 
-A centralized hub for designing, creating, testing, and maintaining reusable specialized Claude Code agents for enterprise integration work.
+A centralized hub for designing, creating, and maintaining reusable specialized Claude Code agents.
 
-## 📋 Project Overview
+## Quick Start
 
-**Purpose**: Serve as a base repository where specialized agents are designed, created, documented, and tested before deployment to other projects.
+### Use an Existing Agent
 
-**Vision**: Enable teams to leverage consistent, high-quality specialized agents across multiple projects with clear governance, versioning, and quality standards.
-
-**Current Status**: Production Ready (v1.0.0)
-
----
-
-## 🚀 Quick Start
-
-### I Want To...
-
-**Use an existing agent**
 ```bash
-@agent-sap-businesspartner-integration: Create documentation for [your request]
+# Find available agents
+See: AGENTS_REGISTRY.md
+
+# Invoke an agent
+@agent-sap-businesspartner-integration: Create documentation for BusinessPartner creation
+@agent-git-manager: Help me commit my changes
 ```
-→ See: [QUICKSTART.md](QUICKSTART.md)
 
-**Create a new agent**
-→ See: [AGENTS_REPOSITORY_GUIDE.md](AGENTS_REPOSITORY_GUIDE.md)
+### Create a New Agent
 
-**Understand the knowledge base**
-→ See: [.agent/README.md](.agent/README.md)
-
-**Find specific information**
-→ See: [INDEX.md](INDEX.md)
+1. Read `AGENTS_REPOSITORY_GUIDE.md` (7-phase workflow)
+2. Use `@agent-architect` for design help
+3. Create agent definition in `.claude/agents/`
+4. Add documentation in `agents/<agent-name>/`
+5. Register in `AGENTS_REGISTRY.md` and `CLAUDE.md`
 
 ---
 
-## 📚 What You'll Find Here
+## Available Agents
 
-### Available Agents
+| Agent | Purpose | Status |
+|-------|---------|--------|
+| `agent-sap-businesspartner-integration` | SAP S/4HANA BusinessPartner OData API documentation | Production |
+| `agent-ansible-automation` | Ansible playbooks, roles, and automation | Production |
+| `agent-robotarm-tester` | Raspberry Pi robot arm testing via SSH | Production |
+| `agent-git-manager` | Secure git workflow with pre-commit scanning | Production |
 
-| Agent | Purpose | Location | Status |
-|-------|---------|----------|--------|
-| **agent-sap-businesspartner-integration** | SAP S/4HANA Cloud BusinessPartner OData API documentation | `.claude/agents/` | ✅ Production |
-
-### Documentation
-
-| Document | Purpose |
-|----------|---------|
-| **CLAUDE.md** | Agent configuration and project setup |
-| **AGENTS_REGISTRY.md** | Central index of all agents |
-| **AGENTS_REPOSITORY_GUIDE.md** | How to create new agents (7-phase workflow) |
-| **QUICKSTART.md** | 5-minute getting started guide |
-| **INDEX.md** | Navigation and quick reference |
-
-### Knowledge Management System
-
-A comprehensive knowledge base for agents:
-
-```
-.agent/
-├── tasks/           ← PRDs & implementation plans
-├── system/          ← Project structure, schemas, APIs
-├── sops/            ← Standard operating procedures
-└── README.md        ← Knowledge base overview
-```
-
-See: [.agent/README.md](.agent/README.md)
+See `AGENTS_REGISTRY.md` for full details.
 
 ---
 
-## 🏗️ Project Structure
+## Project Structure
 
 ```
 Agentic/
+├── .claude/agents/           # Agent definitions (Claude Code reads these)
+│   ├── agent-sap-businesspartner-integration.md
+│   ├── agent-ansible-automation.md
+│   ├── agent-robotarm-tester.md
+│   └── agent-git-manager.md
 │
-├── 📄 Documentation (Read First)
-│   ├── README.md                ← You are here
-│   ├── QUICKSTART.md            ← 5-minute setup
-│   ├── INDEX.md                 ← Navigation guide
-│   ├── CLAUDE.md                ← Configuration
-│   ├── AGENTS_REGISTRY.md       ← Agent index
-│   └── AGENTS_REPOSITORY_GUIDE.md ← How to create agents
+├── agents/                   # Agent documentation & test cases
+│   ├── agent-sap-businesspartner-integration/
+│   ├── agent-ansible-automation/
+│   ├── agent-robotarm-tester/
+│   └── agent-git-manager/
 │
-├── 🔧 Agent Configuration (.claude/)
-│   ├── agents/
-│   │   ├── agent-architect.md           ← Meta-agent for designing agents
-│   │   └── agent-sap-businesspartner-integration.md ← SAP BP agent
+├── .agent/                   # Knowledge base for agents
+│   ├── tasks/               # PRDs & implementation plans
+│   ├── system/              # Schemas, APIs, integrations
+│   └── sops/                # Standard operating procedures
 │
-├── 📚 Knowledge Base (.agent/)           ← Knowledge management system
-│   ├── README.md
-│   ├── tasks/
-│   ├── system/
-│   └── sops/
+├── docs/                     # Generated documentation
 │
-├── 📂 Agent Documentation (agents/)
-│   └── agent-sap-businesspartner-integration/
-│       ├── README.md            ← Usage guide
-│       ├── test-cases.md        ← Validation tests
-│       └── system-prompt.md     ← Reference copy
-│
-├── 📂 Generated Documentation (docs/)
-│   └── sap-integration/
-│       └── businesspartner/     ← BP docs generated by agent
-│
-└── 📄 Other Files
-    ├── SETUP_COMPLETE.md
-    ├── AGENT_SETUP_FINAL.md
-    └── SETUP_COMPLETE.md
+├── README.md                 # This file
+├── CLAUDE.md                 # Claude Code configuration
+├── AGENTS_REGISTRY.md        # Central agent index
+└── AGENTS_REPOSITORY_GUIDE.md # How to create agents
 ```
 
 ---
 
-## 🎯 Three Core Components
+## Documentation
 
-### 1. Agents (`.claude/agents/`)
-
-Where Claude Code looks for custom agent definitions.
-
-- **agent-sap-businesspartner-integration.md** - Your first production-ready agent
-- YAML frontmatter + system prompt format
-- Invoked via `@agent-<id>: [request]`
-
-→ See: [AGENTS_REGISTRY.md](AGENTS_REGISTRY.md)
-
-### 2. Knowledge Base (`.agent/`)
-
-Centralized context for all agents to reference.
-
-**Tasks Folder** - PRDs and implementation plans
-**System Folder** - Project structure, schemas, APIs
-**SOPs Folder** - Standard operating procedures and common mistakes
-
-→ See: [.agent/README.md](.agent/README.md)
-
-### 3. Documentation (Root & `agents/`)
-
-User-facing guides and reference material.
-
-- Agent usage guides
-- Test cases for validation
-- Implementation templates
-- Integration references
-
-→ See: [AGENTS_REPOSITORY_GUIDE.md](AGENTS_REPOSITORY_GUIDE.md)
+| Document | Purpose |
+|----------|---------|
+| **CLAUDE.md** | Claude Code configuration, agent definitions, workflows |
+| **AGENTS_REGISTRY.md** | Central index of all agents with details |
+| **AGENTS_REPOSITORY_GUIDE.md** | 7-phase workflow for creating new agents |
+| **agents/*/README.md** | Agent-specific usage guides |
+| **.agent/README.md** | Knowledge base overview |
 
 ---
 
-## 🎓 How to Use This Project
+## How to Use
 
 ### For Agent Users
 
-1. **Find the agent you need**
-   ```bash
-   Check AGENTS_REGISTRY.md for available agents
-   ```
-
-2. **Read the agent's guide**
-   ```bash
-   Review agents/agent-<id>/README.md
-   ```
-
-3. **Invoke the agent**
-   ```bash
-   @agent-sap-businesspartner-integration: [your request]
-   ```
-
-4. **Get results**
-   ```bash
-   Agent returns documentation/guidance
-   ```
+1. Check `AGENTS_REGISTRY.md` for available agents
+2. Read the agent's `README.md` in `agents/<agent-name>/`
+3. Invoke: `@agent-<id>: [your request]`
+4. Verify output before using in production
 
 ### For Agent Creators
 
-1. **Read the creation guide**
-   ```bash
-   AGENTS_REPOSITORY_GUIDE.md (7-phase workflow)
-   ```
-
-2. **Use agent-architect for help**
-   ```bash
-   @agent-architect: [Your agent design request]
-   ```
-
-3. **Follow the workflow**
-   - Design with agent-architect
-   - Create agent definition in `.claude/agents/`
-   - Create supporting docs in `agents/`
-   - Create test cases
-   - Validate and deploy
-
-4. **Register your agent**
-   ```bash
-   Update AGENTS_REGISTRY.md
-   Update CLAUDE.md
-   ```
+1. Read `AGENTS_REPOSITORY_GUIDE.md` for the full workflow
+2. Use `@agent-architect` to help design your agent
+3. Follow the 7-phase creation process
+4. Test with comprehensive test cases
+5. Register in `AGENTS_REGISTRY.md` and `CLAUDE.md`
 
 ### For Knowledge Contributors
 
-1. **Understand the knowledge structure**
-   ```bash
-   Read: .agent/README.md
-   ```
-
-2. **Add documentation**
-   - **PRDs & Plans** → `.agent/tasks/`
-   - **Schemas & APIs** → `.agent/system/`
-   - **Procedures** → `.agent/sops/`
-
-3. **Log your additions**
-   ```bash
-   Update: .agent/injection-history.md
-   ```
+1. Read `.agent/README.md` for structure
+2. Add PRDs to `.agent/tasks/`
+3. Add schemas/APIs to `.agent/system/`
+4. Add procedures to `.agent/sops/`
+5. Log additions in `.agent/injection-history.md`
 
 ---
 
-## 📊 Current Status
-
-| Component | Status | Details |
-|-----------|--------|---------|
-| **Agent Framework** | ✅ Complete | Ready for new agents |
-| **Reference Agent** | ✅ Complete | agent-sap-businesspartner-integration (v1.0.0) |
-| **Knowledge Base** | ✅ Ready | Structure initialized, awaiting content |
-| **Documentation** | ✅ Complete | Comprehensive guides and templates |
-| **Testing** | ✅ Ready | 6+ test cases per agent |
-
----
-
-## 🚀 Next Steps
-
-### Immediate
-1. ✅ Try the SAP BusinessPartner agent
-2. ✅ Read QUICKSTART.md
-3. ✅ Explore AGENTS_REGISTRY.md
-
-### This Week
-- [ ] Use an agent in a real task
-- [ ] Explore the knowledge base structure
-- [ ] Review SOPs and templates
-
-### This Month
-- [ ] Create first task PRD
-- [ ] Create implementation plan for a feature
-- [ ] Document first SOP for a common process
-- [ ] Plan creation of next agent
-
-### This Quarter
-- [ ] Build library of specialized agents
-- [ ] Establish comprehensive knowledge base
-- [ ] Create SOPs for all common tasks
-- [ ] Share agents across multiple projects
-
----
-
-## 📚 Documentation Map
-
-**Getting Started**
-- [QUICKSTART.md](QUICKSTART.md) - 5-minute setup
-- [INDEX.md](INDEX.md) - Navigation guide
-- [SETUP_COMPLETE.md](SETUP_COMPLETE.md) - What you have
-
-**Using Agents**
-- [AGENTS_REGISTRY.md](AGENTS_REGISTRY.md) - Find agents
-- [CLAUDE.md](CLAUDE.md) - Configuration
-- `agents/agent-*/README.md` - Agent-specific guides
-
-**Creating Agents**
-- [AGENTS_REPOSITORY_GUIDE.md](AGENTS_REPOSITORY_GUIDE.md) - Full workflow
-- `.claude/agents/agent-*.md` - Example agents
-- `.agent/` - Agent context
-
-**Knowledge Management**
-- [.agent/README.md](.agent/README.md) - Overview
-- [.agent/tasks/README.md](.agent/tasks/README.md) - Tasks
-- [.agent/system/README.md](.agent/system/README.md) - System
-- [.agent/sops/README.md](.agent/sops/README.md) - SOPs
-
----
-
-## 🔧 Technologies & Tools
-
-### Core
-- **Claude Code** - IDE for working with Claude
-- **Claude Sonnet** - AI model for agents
-- **Claude Haiku** - Lightweight AI model
-- **Markdown** - Documentation format
-
-### Agent Development
-- **YAML** - Agent configuration (in Markdown frontmatter)
-- **System Prompts** - Agent behavior definition
-- **MCP** - Model context protocol (future)
-
-### Knowledge Management
-- **Markdown** - All documentation
-- **Git** - Version control
-- **Text-based** - All searchable and shareable
-
----
-
-## 📖 Key Concepts
-
-### What is an Agent?
-
-A specialized expert configured via a system prompt that Claude Code can invoke to handle specific tasks with deep domain knowledge.
-
-Example: `@agent-sap-businesspartner-integration: [request]`
-
-### Agent Repository Hub
-
-A centralized location where agents are:
-- Designed and specified
-- Implemented and tested
-- Documented thoroughly
-- Made available for reuse
-- Maintained and updated
-
-### Knowledge Base
-
-A growing collection of:
-- **Tasks**: PRDs and implementation plans
-- **System**: Project structure, schemas, APIs
-- **SOPs**: Standard procedures and lessons learned
-
-Used by agents to have better context for decision-making.
-
----
-
-## ✅ Quality Assurance
+## Quality Standards
 
 All agents meet these standards:
 
-- ✅ **Accurate** - Never fabricates functionality
-- ✅ **Transparent** - Acknowledges uncertainties
-- ✅ **Complete** - Full scope coverage
-- ✅ **Tested** - 6+ validation test cases
-- ✅ **Documented** - Comprehensive guides
-- ✅ **Professional** - Production-ready
+- **Accurate** - Never fabricates functionality
+- **Transparent** - Acknowledges uncertainties
+- **Complete** - Full scope coverage with examples
+- **Tested** - Comprehensive validation test cases
+- **Documented** - Usage guides and trigger conditions
 
 ---
 
-## 🤝 Contributing
+## Contributing
 
 ### Report Issues
 
-Found a problem with an agent?
 1. Document with specific examples
-2. Include agent ID, request, and actual vs. expected output
+2. Include: agent ID, request, actual vs expected output
 3. Report to Agent Architecture Team
 
 ### Suggest New Agents
 
-Need a specialized agent?
 1. Describe the problem to solve
 2. Define scope and requirements
 3. Identify use cases
 4. Submit to Agent Architecture Team
 
-### Improve Documentation
-
-Help improve guides and SOPs:
-- Suggest clarifications
-- Report errors
-- Add examples
-- Share lessons learned
-
 ---
 
-## 📞 Quick Links
+## Status
 
-| Need | Link |
-|------|------|
-| **Quick start** | [QUICKSTART.md](QUICKSTART.md) |
-| **Find agents** | [AGENTS_REGISTRY.md](AGENTS_REGISTRY.md) |
-| **Create agent** | [AGENTS_REPOSITORY_GUIDE.md](AGENTS_REPOSITORY_GUIDE.md) |
-| **Knowledge base** | [.agent/README.md](.agent/README.md) |
-| **Navigation** | [INDEX.md](INDEX.md) |
-| **Configuration** | [CLAUDE.md](CLAUDE.md) |
-
----
-
-## 📝 License & Status
-
-**License**: Internal use only
-**Repository**: `/home/talend/IntoData/Internal/Agentic`
-**Status**: Active, Production Ready
-**Version**: 1.0.0
-**Last Updated**: 2025-11-21
-
----
-
-## 🎉 Ready to Get Started?
-
-### First Time Here?
-1. Read [QUICKSTART.md](QUICKSTART.md)
-2. Try an agent: `@agent-sap-businesspartner-integration: [request]`
-3. Explore [AGENTS_REGISTRY.md](AGENTS_REGISTRY.md)
-
-### Want to Create an Agent?
-1. Read [AGENTS_REPOSITORY_GUIDE.md](AGENTS_REPOSITORY_GUIDE.md)
-2. Use `@agent-architect` for design help
-3. Follow the 7-phase workflow
-
-### Want to Build Knowledge Base?
-1. Read [.agent/README.md](.agent/README.md)
-2. Start with PRDs in `.agent/tasks/`
-3. Document systems in `.agent/system/`
-4. Create SOPs in `.agent/sops/`
-
----
-
-**This repository is designed to scale. As you create and refine agents and build the knowledge base, this system will grow to support your entire organization's specialized agent needs.**
-
-Let's build something great! 🚀
+**Version**: 1.2.0
+**Agents**: 4 production
+**Last Updated**: 2026-01-18
+**Status**: Active
