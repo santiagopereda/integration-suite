@@ -377,7 +377,66 @@ validation rules, and examples.
 
 ---
 
-**Version**: 1.0.0
+## Post-Update: Commit Workflow
+
+After completing documentation updates, invoke `@agent-git-manager` to commit changes safely.
+
+### Automatic Workflow
+
+When `/update_doc` completes, the following workflow is recommended:
+
+1. **Documentation changes are ready** - Files in `.agent/` have been created/updated
+2. **Invoke git manager** - Run `@agent-git-manager` or simply ask to commit
+3. **Security scan runs** - Agent scans documentation for any sensitive content
+4. **Commit message generated** - Agent creates appropriate `docs:` commit message
+5. **User confirms** - Commit executes only after explicit confirmation
+
+### Example
+
+After completing documentation updates:
+
+```
+User: I just finished running /update_doc
+
+Agent (git-manager):
+Documentation updated. Let me help you commit these changes.
+
+[Runs security scan on .agent/ files]
+
+Security Scan Results:
+- Files scanned: 3
+- Patterns checked: 15
+- Warnings: 0
+- Blocks: 0
+
+Suggested commit message:
+docs: update knowledge base documentation
+
+- Update/create documentation in .agent/
+- Update injection-history.md with changes
+
+Shall I proceed with this commit? [Y/n]
+```
+
+### Why This Integration Matters
+
+1. **Security**: Documentation files are scanned before commit
+2. **Consistency**: Proper conventional commit messages for docs
+3. **Audit trail**: injection-history.md changes are included
+4. **Workflow**: Seamless transition from documentation to version control
+
+### Related Agent
+
+See `@agent-git-manager` for:
+- Pre-commit security scanning
+- Conventional commit message generation
+- SSH/GitHub integration
+- Push workflow with confirmation
+
+---
+
+**Version**: 1.1.0
 **Created**: 2025-11-21
+**Updated**: 2025-01-18
 **Purpose**: Guide agents on documentation creation and updates
 **Status**: Active

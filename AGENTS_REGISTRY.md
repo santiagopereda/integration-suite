@@ -8,6 +8,8 @@ Central hub for all specialized Claude Code agents designed for this organizatio
 |----------|------|--------|--------|----------|
 | `agent-sap-businesspartner-integration` | SAP BusinessPartner Integration Process Author | SAP Integration | Production | Documenting BusinessPartner OData API integrations |
 | `agent-ansible-automation` | Ansible Automation Development Specialist | DevOps Automation | Production | Creating Ansible playbooks, roles, testing, and automation docs |
+| `agent-robotarm-tester` | Raspberry Pi Robot Arm Testing Engineer | Robotics Testing | Production | Testing, validating, debugging robot arms via SSH |
+| `agent-git-manager` | Git Repository Manager | Developer Tools | Production | Secure commits with pre-commit scanning, SSH/GitHub integration |
 
 ---
 
@@ -252,12 +254,297 @@ running against 200 servers including fact caching and parallel execution
 
 ---
 
+### 3. agent-robotarm-tester
+
+**Status**: Production Ready (v1.0.0)
+
+**Category**: Robotics Testing
+
+**Description**:
+Expert robotics testing engineer specializing in Raspberry Pi-based robot arm validation and debugging via SSH. Creates systematic, safe, and comprehensive test workflows that enable teams to validate robot arm functionality, discover operational boundaries, diagnose issues, and ensure reliable performance through remote testing.
+
+**Location**: `/agents/agent-robotarm-tester/`
+
+**Files**:
+- `.claude/agents/agent-robotarm-tester.md` - Agent definition (Claude Code format)
+- `README.md` - Detailed usage guide and trigger conditions
+- `test-cases.md` - 12 comprehensive validation test cases
+- `examples/` - Complete test workflows and benchmarking examples
+
+**Key Expertise**:
+- Robot arm testing methodologies (movement validation, workspace discovery, calibration)
+- Remote testing via SSH (passwordless auth, command execution, error handling)
+- Safety-first testing (progressive boundary discovery, automatic recovery)
+- Diagnostic data collection (timestamped logs, command-response capture, failure analysis)
+- Performance benchmarking (speed tests, accuracy validation, repeatability analysis)
+- Error recovery automation (home position return, intelligent retry logic)
+- Test sequence design (custom workflows, status checking, conditional execution)
+- Integration testing (vision systems, conveyor belts, external sensors)
+
+**Core Capabilities**:
+- Progressive workspace boundary discovery with safety-first approach
+- Systematic movement validation with automatic status checking
+- Error recovery automation with intelligent retry logic
+- Performance benchmarking (speed, accuracy, repeatability)
+- Calibration sequence verification
+- Integration testing with external systems
+- Comprehensive diagnostic data collection and logging
+- Configuration file generation and management
+
+**Trigger Conditions**:
+- User needs to discover and document safe operating boundaries for robot arm
+- User wants to test specific movements or pick-and-place sequences systematically
+- Robot arm exhibits inconsistent behavior requiring diagnostic testing
+- User needs to benchmark performance before production deployment
+- User wants to verify calibration accuracy or test calibration sequences
+- User is integrating with vision systems, conveyor belts, or external devices
+- User needs to validate error handling and recovery procedures
+- User requires comprehensive validation before production deployment
+
+**Output Format**:
+- Complete bash test scripts with SSH remote execution
+- Timestamped test session logs in Markdown format
+- CSV data files for statistical analysis
+- YAML configuration files with discovered workspace limits
+- Performance reports with statistical analysis
+- Failure pattern analysis and recommendations
+
+**Critical Constraints**:
+- Never compromises safety (progressive discovery, automatic recovery, status checks)
+- Never assumes unknown workspace limits (helps users discover them)
+- Never fabricates robot arm commands or parameters
+- Acknowledges when specific hardware details affect testing
+- Uses accurate robotics terminology (workspace, home position, limit)
+- Transparently states when limits are unknown
+
+**Progressive Discovery Approach**:
+Since workspace limits and safe parameters are often unknown:
+1. Start Conservative - Use small movements from home position
+2. Expand Systematically - Increase range gradually with status checks
+3. Document Findings - Record discovered limits in configuration files
+4. Warn Proactively - Alert when approaching unexplored areas
+5. Build Confidence - Create safe zones based on validated movements
+
+**Test Categories**:
+1. **Movement Tests**: Single-axis, multi-axis, coordinated, speed variation
+2. **Workspace Discovery**: Boundary exploration, safe zone mapping, limit detection
+3. **Calibration Tests**: Home position, end-effector, coordinate transformation
+4. **Performance Tests**: Speed, accuracy, repeatability, response time
+5. **Recovery Tests**: Error handling, retry logic, escalation, safety validation
+6. **Integration Tests**: Vision systems, conveyor belts, sensors, multi-device coordination
+7. **Stress Tests**: Extended operation, thermal performance, power consumption
+8. **Regression Tests**: Validate previous functionality after changes
+
+**Pre-Defined Test Patterns**:
+- `boundary-discovery`: Progressive workspace exploration
+- `pick-place-basic`: Simple pick-and-place validation
+- `pick-place-vision`: Vision-guided pick-and-place
+- `speed-benchmark`: Movement speed testing
+- `accuracy-test`: Position accuracy measurement
+- `repeatability-test`: 100-cycle repeatability validation
+- `calibration-verify`: Calibration sequence validation
+- `recovery-test`: Error recovery validation
+- `stress-test`: Extended operation reliability
+- `integration-vision`: Vision system end-to-end testing
+- `integration-conveyor`: Conveyor synchronization testing
+
+**Example Usage**:
+
+```bash
+# Workspace boundary discovery
+@agent-robotarm-tester: I just set up my robot arm. Help me discover
+the workspace boundaries safely and create a configuration file.
+
+# Pick-and-place validation
+@agent-robotarm-tester: Test our pick-and-place sequence 50 times
+and capture diagnostic data to identify failure patterns.
+
+# Performance benchmarking
+@agent-robotarm-tester: Benchmark my robot arm's performance
+before production deployment. Test speed, accuracy, and repeatability.
+
+# Vision integration
+@agent-robotarm-tester: Test integration with our vision system.
+Validate coordinate transformation and pick position accuracy.
+```
+
+**Quality Assurance**:
+- 12 comprehensive test cases covering all capabilities
+- Safety checks in all test sequences
+- Automatic error recovery with intelligent retry
+- Comprehensive diagnostic logging
+- Statistical analysis for performance tests
+- Configuration file generation
+- Transparent uncertainty acknowledgment
+
+**Advanced Features**:
+- Vision system coordinate transformation testing
+- Conveyor belt synchronization validation
+- Multi-device coordination testing
+- Custom test sequence definition (YAML)
+- Thermal monitoring integration (if sensors available)
+- Integration with external APIs and systems
+
+**Configuration Management**:
+Generates and maintains configuration files:
+- `workspace-config.yml` - Discovered workspace limits and safe zones
+- `calibration-config.yml` - Calibration parameters and offsets
+- `performance-baseline.yml` - Baseline performance metrics
+- `test-results-[timestamp].yml` - Complete test results
+
+**Safety Guarantees**:
+- Never commands movements without status verification
+- Always implements automatic error recovery
+- Warns when operating in unexplored workspace areas
+- Uses conservative defaults until limits are validated
+- Prioritizes safety over speed in all test sequences
+
+**Integration with Knowledge Base**:
+- References `.agent/system/` for robot arm specifications
+- Documents test procedures in `.agent/sops/`
+- Cross-references `.agent/tasks/` for integration requirements
+- Creates SOPs after discovering test patterns
+
+**Maintenance**:
+- Quarterly validation of test patterns
+- Update when robot arm hardware or software changes
+- Incorporate team feedback on testing procedures
+- Version control all test configurations
+
+**Contact**: Agent Architecture Team
+
+---
+
+### 4. agent-git-manager
+
+**Status**: Production Ready (v1.0.0)
+
+**Category**: Developer Tools
+
+**Description**:
+Expert git repository manager specializing in secure commit workflows with mandatory pre-commit security scanning. Provides intelligent change detection, SSH/GitHub integration, and seamless coordination with documentation workflows.
+
+**Location**: `/agents/agent-git-manager/`
+
+**Files**:
+- `.claude/agents/agent-git-manager.md` - Agent definition (Claude Code format)
+- `README.md` - Detailed usage guide and trigger conditions
+- `test-cases.md` - 10 comprehensive validation test cases
+- `examples/` - Complete workflow examples
+
+**Key Expertise**:
+- Pre-commit security scanning (file patterns, content detection)
+- Git operations (status, diff, add, commit, log, branch, push)
+- SSH authentication handling and troubleshooting
+- GitHub CLI integration (PR creation, status checks)
+- Conventional commit message generation
+- Documentation workflow coordination (update_doc integration)
+
+**Core Capabilities**:
+- Mandatory pre-commit security scanning for secrets and credentials
+- Intelligent commit threshold detection (files, lines, critical files)
+- SSH authentication verification and troubleshooting
+- Safe push workflow with explicit confirmation
+- Branch operations with awareness
+- Integration with `/update_doc` command
+
+**Trigger Conditions**:
+- User wants to commit changes with security assurance
+- User needs to push changes to a remote repository
+- User wants to check repository status
+- User completed documentation updates with `/update_doc`
+- Hook system detects significant file changes
+- User needs help with SSH authentication to GitHub
+
+**Output Format**:
+- Repository status summaries
+- Security scan reports (files scanned, patterns checked, warnings, blocks)
+- Conventional commit messages
+- SSH diagnostic information
+- Push operation previews
+
+**Critical Constraints**:
+- **Never** force push to any branch
+- **Never** amend commits without explicit user request
+- **Never** push to main/master without explicit confirmation
+- **Never** commit files with detected secrets without explicit override
+- **Always** run security scan before every commit
+- **Always** show changes before committing
+- **Always** require confirmation for push operations
+
+**Security Scanning**:
+Pre-commit scanning detects:
+
+*File Patterns*:
+- `.env`, `.env.*`, `*.env` - Environment files
+- `*credentials*`, `*secret*`, `*password*` - Credential files
+- `*.pem`, `*.key`, `*.p12`, `*.pfx` - Certificates and keys
+- `id_rsa`, `id_ed25519`, `*.pub` - SSH keys
+
+*Content Patterns*:
+- API keys: `api_key`, `apikey`, `api_secret`
+- AWS credentials: `AKIA...`, `aws_secret_access_key`
+- GitHub tokens: `ghp_`, `gho_`, `ghu_`, `ghs_`, `ghr_`
+- Generic secrets: `password=`, `secret=`, `token=`
+- Private keys: `-----BEGIN.*PRIVATE KEY-----`
+- Connection strings: `mysql://`, `postgres://`, `mongodb://`
+
+**Example Usage**:
+
+```bash
+# Commit workflow
+@agent-git-manager: Help me commit my changes
+
+# Repository status
+@agent-git-manager: What's the current git status?
+
+# Push changes
+@agent-git-manager: Push my commits to GitHub
+
+# After documentation
+@agent-git-manager: I just ran /update_doc, commit the changes
+
+# SSH troubleshooting
+@agent-git-manager: I can't push, getting permission denied
+```
+
+**Quality Assurance**:
+- 10 comprehensive test cases covering all capabilities
+- Security scanning in all commit workflows
+- SSH authentication verification
+- Safe push with explicit confirmation
+- Transparent uncertainty acknowledgment
+- Override mechanism for false positives
+
+**Integration with update_doc**:
+- Detects `.agent/` changes and suggests running `/update_doc`
+- After `/update_doc` completes, offers to commit documentation changes
+- Generates appropriate `docs:` commit messages
+
+**Integration with Knowledge Base**:
+- Detects changes in `.agent/` directory
+- Suggests documentation updates before commits
+- Coordinates with `/update_doc` command
+- Generates documentation-aware commit messages
+
+**Maintenance**:
+- Quarterly security pattern updates
+- Update when git/GitHub APIs change
+- Incorporate team feedback on workflows
+- Version control all agent configurations
+
+**Contact**: Agent Architecture Team
+
+---
+
 ## Repository Structure
 
 ```
 /.claude/agents/
   agent-ansible-automation.md          # Ansible automation agent definition
   agent-sap-businesspartner-integration.md  # SAP BP integration agent
+  agent-robotarm-tester.md             # Robot arm testing agent definition
+  agent-git-manager.md                 # Git repository manager agent definition
 
 /agents/
   /agent-sap-businesspartner-integration/
@@ -277,6 +564,23 @@ running against 200 servers including fact caching and parallel execution
       - webserver-role-example.md
       - playbook-example.md
       - molecule-test-example.md
+
+  /agent-robotarm-tester/
+    README.md                  # Usage guide and trigger conditions
+    test-cases.md             # 12 validation test cases
+    examples/                 # Example test workflows
+      - workspace-discovery-example.md
+      - pick-place-validation-example.md
+      - performance-benchmark-example.md
+
+  /agent-git-manager/
+    README.md                  # Usage guide and trigger conditions
+    test-cases.md             # 10 validation test cases
+    examples/                 # Example workflows
+      - commit-workflow-example.md
+      - security-scan-example.md
+      - ssh-github-example.md
+      - documentation-workflow-example.md
 
 /docs/sap-integration/businesspartner/
   # Generated documentation by agents
@@ -352,9 +656,11 @@ See `AGENTS_REPOSITORY_GUIDE.md` for detailed process.
 
 ## Agent Roadmap
 
-### Current (Q4 2025)
+### Current (Q1 2026)
 - [x] `agent-sap-businesspartner-integration` (v1.0.0) - Production
 - [x] `agent-ansible-automation` (v1.0.0) - Production
+- [x] `agent-robotarm-tester` (v1.0.0) - Production
+- [x] `agent-git-manager` (v1.0.0) - Production
 
 ### Planned
 
@@ -492,7 +798,7 @@ Deprecation process:
 
 ---
 
-**Registry Version**: 1.0.0
-**Last Updated**: 2025-11-20
+**Registry Version**: 1.1.0
+**Last Updated**: 2025-01-18
 **Maintained By**: Agent Architecture Team
 **Status**: Active

@@ -159,6 +159,164 @@ AWS infrastructure including VPC, subnets, security groups, and EC2 instances
 
 ---
 
+### agent-robotarm-tester (v1.0.0) - Production
+
+**ID**: `agent-robotarm-tester`
+
+**Purpose**: Expert robotics testing engineer specializing in Raspberry Pi-based robot arm validation, debugging, and performance benchmarking via SSH.
+
+**Use When**:
+- Discovering and documenting safe operating boundaries for robot arms
+- Testing specific movements or pick-and-place sequences systematically
+- Debugging inconsistent robot arm behavior with diagnostic logging
+- Benchmarking performance before production deployment (speed, accuracy, repeatability)
+- Verifying calibration accuracy or testing calibration sequences
+- Integrating with vision systems, conveyor belts, or external sensors
+- Validating error handling and recovery procedures
+- Requiring comprehensive production readiness validation
+
+**Location**: `.claude/agents/agent-robotarm-tester.md`
+
+**Key Files**:
+- `.claude/agents/agent-robotarm-tester.md` - Agent definition (Claude Code format)
+- `agents/agent-robotarm-tester/README.md` - Detailed usage guide
+- `agents/agent-robotarm-tester/test-cases.md` - 12 validation test cases
+- `agents/agent-robotarm-tester/examples/` - Complete test workflows
+
+**Capabilities**:
+- Progressive workspace boundary discovery with safety-first approach
+- Systematic movement validation with automatic status checking
+- Error recovery automation with intelligent retry logic
+- Performance benchmarking (speed, accuracy, repeatability)
+- Calibration sequence verification
+- Integration testing (vision systems, conveyor belts, external sensors)
+- Comprehensive diagnostic data collection and timestamped logging
+- Configuration file generation and management
+
+**Critical Constraints**:
+- Never compromises safety (progressive discovery, automatic recovery, status checks)
+- Never assumes unknown workspace limits (helps users discover them)
+- Never fabricates robot arm commands or parameters
+- Acknowledges when specific hardware details affect testing
+- Uses accurate robotics terminology (workspace, home position, limit)
+- Transparently states when limits are unknown
+
+**Invoke With**:
+```bash
+@agent-robotarm-tester: [Your testing request]
+```
+
+**Examples**:
+```bash
+# Workspace boundary discovery
+@agent-robotarm-tester: I just set up my robot arm. Help me discover
+the workspace boundaries safely and create a configuration file.
+
+# Pick-and-place validation
+@agent-robotarm-tester: Test our pick-and-place sequence 50 times
+and capture diagnostic data to identify failure patterns.
+
+# Performance benchmarking
+@agent-robotarm-tester: Benchmark my robot arm's performance
+before production deployment. Test speed, accuracy, and repeatability.
+
+# Vision integration
+@agent-robotarm-tester: Test integration with our vision system.
+Validate coordinate transformation and pick position accuracy.
+```
+
+**Documentation**:
+- User Guide: `agents/agent-robotarm-tester/README.md`
+- Test Cases: `agents/agent-robotarm-tester/test-cases.md`
+- Examples: `agents/agent-robotarm-tester/examples/`
+  - `workspace-discovery-example.md` - Complete workspace boundary discovery
+  - `pick-place-validation-example.md` - Pick-and-place with failure analysis
+  - `performance-benchmark-example.md` - Complete performance benchmarking
+
+---
+
+### agent-git-manager (v1.0.0) - Production
+
+**ID**: `agent-git-manager`
+
+**Purpose**: Expert git repository manager specializing in secure commit workflows with mandatory pre-commit security scanning, SSH/GitHub integration, and documentation workflow coordination.
+
+**Use When**:
+- Committing changes with security scanning assurance
+- Pushing changes to remote repositories (SSH/GitHub)
+- Checking repository status with security awareness
+- Completing documentation updates (integrates with `/update_doc`)
+- Troubleshooting SSH authentication issues with GitHub
+- Creating pull requests via GitHub CLI
+
+**Location**: `.claude/agents/agent-git-manager.md`
+
+**Key Files**:
+- `.claude/agents/agent-git-manager.md` - Agent definition (Claude Code format)
+- `agents/agent-git-manager/README.md` - Detailed usage guide
+- `agents/agent-git-manager/test-cases.md` - 10 validation test cases
+- `agents/agent-git-manager/examples/` - Complete workflow examples
+
+**Capabilities**:
+- Mandatory pre-commit security scanning (file patterns + content detection)
+- Intelligent commit threshold detection (files, lines, critical files)
+- SSH authentication verification and troubleshooting
+- Safe push workflow with explicit confirmation
+- Conventional commit message generation
+- Branch operations with awareness
+- GitHub CLI integration (PR creation, status checks)
+- Integration with `/update_doc` command
+
+**Security Scanning Detects**:
+- Environment files (`.env`, `.env.*`)
+- Credential files (`*credentials*`, `*secret*`, `*password*`)
+- Private keys (`.pem`, `.key`, `id_rsa`, `id_ed25519`)
+- API keys, AWS credentials, GitHub tokens in file content
+- Connection strings and passwords in code
+
+**Critical Constraints**:
+- Never force push to any branch
+- Never amend commits without explicit request
+- Never push to main/master without explicit confirmation
+- Never commit files with detected secrets without explicit override
+- Always run security scan before every commit
+- Always show changes before committing
+- Always require confirmation for push operations
+
+**Invoke With**:
+```bash
+@agent-git-manager: [Your request]
+```
+
+**Examples**:
+```bash
+# Commit workflow
+@agent-git-manager: Help me commit my changes
+
+# Repository status
+@agent-git-manager: What's the current git status?
+
+# Push changes
+@agent-git-manager: Push my commits to GitHub
+
+# After documentation
+@agent-git-manager: I just ran /update_doc, commit the changes
+
+# SSH troubleshooting
+@agent-git-manager: I can't push, getting permission denied
+```
+
+**Documentation**:
+- User Guide: `agents/agent-git-manager/README.md`
+- Test Cases: `agents/agent-git-manager/test-cases.md`
+- Examples: `agents/agent-git-manager/examples/`
+  - `commit-workflow-example.md` - Standard commit flow with security scan
+  - `security-scan-example.md` - Security blocking and override flow
+  - `ssh-github-example.md` - SSH authentication and push workflow
+  - `documentation-workflow-example.md` - Integration with update_doc
+
+---
+
 ## Agent Repository Tools
 
 ### agent-architect (Meta-Agent)
@@ -575,13 +733,15 @@ Report issues with:
 ## Project Status
 
 **Repository Status**: Active
-**Version**: 1.1.0
-**Last Updated**: 2025-11-22
+**Version**: 1.3.0
+**Last Updated**: 2025-01-18
 
 **Current Agents**:
-- 2 production-ready agents
+- 4 production-ready agents
   - agent-sap-businesspartner-integration (v1.0.0)
   - agent-ansible-automation (v1.0.0)
+  - agent-robotarm-tester (v1.0.0)
+  - agent-git-manager (v1.0.0)
 - 0 beta agents
 - 0 deprecated agents
 
@@ -597,6 +757,7 @@ Report issues with:
 2. **Explore existing agents** - Examples of production agents:
    - agent-sap-businesspartner-integration - SAP OData API integration
    - agent-ansible-automation - DevOps automation development
+   - agent-git-manager - Secure git commits with security scanning
 3. **Try an agent** - Invoke it with a specific request
 4. **Provide feedback** - Help improve the agents
 

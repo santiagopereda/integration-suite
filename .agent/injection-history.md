@@ -310,18 +310,21 @@ Each entry follows this format:
 
 ## 📍 Current Status
 
-- **Knowledge Base Version**: 1.2.0
+- **Knowledge Base Version**: 1.3.0
 - **Initialized**: 2025-11-21
-- **Last Updated**: 2025-11-28
-- **Total Documents**: 19 (infrastructure + templates + metrics)
+- **Last Updated**: 2026-01-18
+- **Total Documents**: 27 (infrastructure + templates + metrics + agent-git-manager docs)
 - **Folders Ready**: 5 (tasks, system, sops, templates, metrics)
-- **Status**: Active - Phase 2 optimization complete
+- **Status**: Active - 4 production agents
 
 **Recent Additions**:
+- agent-git-manager (v1.0.0) - Git repository management with security scanning
+  - Agent definition, README, test cases, 4 examples
+  - Hook configuration for automatic triggering
+  - Integration with /update_doc workflow
 - 13 agent templates (SAP + Ansible)
 - 4 metrics tracking files
 - Agent optimization infrastructure
-- Phase 2 Ansible agent compression (59% total reduction)
 
 **Next Addition**: Knowledge base population & agent scaffolds
 
@@ -355,6 +358,62 @@ Each entry follows this format:
 - Detailed appendix with optimization breakdown
 
 **Impact**: Complete documentation of 59% token reduction achievement and architecture alignment
+
+### 2026-01-18 - New Agent: agent-git-manager
+- **Added By**: Claude Opus 4.5
+- **Location**: `.claude/agents/agent-git-manager.md`
+- **Purpose**: Intelligent git repository management with pre-commit security scanning, SSH/GitHub integration, and documentation workflow coordination
+- **Links**: Integrates with `/update_doc` command, references AGENTS_REGISTRY.md, CLAUDE.md
+- **Status**: Complete
+
+**Files Created**:
+- `.claude/agents/agent-git-manager.md` - Agent definition (~200 lines)
+  - Pre-commit security scanning (file patterns + content detection)
+  - SSH/GitHub authentication handling
+  - Commit threshold detection (files, lines, critical files)
+  - Integration with `/update_doc` workflow
+  - Safety constraints (never force push, never amend without request)
+
+- `agents/agent-git-manager/README.md` - Comprehensive usage documentation
+  - Trigger conditions and invocation patterns
+  - Security scanning details (blocked patterns, content detection)
+  - Configuration options and thresholds
+  - Example workflows
+
+- `agents/agent-git-manager/test-cases.md` - 10 validation test cases
+  - Basic commit workflow
+  - Threshold detection
+  - Documentation integration
+  - Security scan - file patterns
+  - Security scan - content detection
+  - Security scan - override flow
+  - Branch operations
+  - Push workflow
+  - SSH authentication
+  - update_doc trigger
+
+- `agents/agent-git-manager/examples/` - 4 workflow examples
+  - `commit-workflow-example.md` - Standard commit with security scan
+  - `security-scan-example.md` - Security blocking and override flow
+  - `ssh-github-example.md` - SSH authentication and push
+  - `documentation-workflow-example.md` - Integration with /update_doc
+
+**Files Modified**:
+- `.claude/commands/update_doc.md` - Added "Post-Update: Commit Workflow" section
+- `AGENTS_REGISTRY.md` - Added agent-git-manager entry with full documentation
+- `CLAUDE.md` - Added agent-git-manager to Available Agents section, updated project status to 4 agents
+- `.claude/settings.local.json` - Added PostToolUse hook configuration for Edit|Write|NotebookEdit
+
+**Key Capabilities**:
+- **Pre-Commit Security Scanning**: Blocks `.env`, credentials, keys, tokens; scans content for API keys, AWS credentials, GitHub tokens, connection strings
+- **SSH/GitHub Integration**: Tests SSH connection, guides through authentication issues, supports GitHub CLI
+- **Documentation Workflow**: Detects `.agent/` changes, suggests `/update_doc`, auto-triggers after documentation updates
+- **Commit Threshold Detection**: Suggests commits at 5+ files, 100+ lines, or critical file changes
+- **Safety Constraints**: Never force push, never amend without request, always requires confirmation
+
+**Portability**: Copy `.claude/agents/agent-git-manager.md` and hook config to `.claude/settings.local.json` in any project
+
+**Impact**: Fourth production agent in the repository, enables secure git workflow automation across projects
 
 ---
 
@@ -396,7 +455,7 @@ Each entry follows this format:
 
 ---
 
-**Version**: 1.0.0
-**Last Updated**: 2025-11-21
+**Version**: 1.3.0
+**Last Updated**: 2026-01-18
 **Maintained By**: System
 **Status**: Active
