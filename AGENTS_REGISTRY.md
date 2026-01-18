@@ -11,6 +11,7 @@ Central hub for all specialized Claude Code agents designed for this organizatio
 | `agent-robotarm-tester` | Raspberry Pi Robot Arm Testing Engineer | Robotics Testing | Production | Testing, validating, debugging robot arms via SSH |
 | `agent-git-manager` | Git Repository Manager | Developer Tools | Production | Secure commits with pre-commit scanning, SSH/GitHub integration |
 | `agent-provisioner` | Agent Provisioner | Developer Tools | Production | Sync agents, commands, and hooks to other projects |
+| `agent-cv-optimizer` | CV Optimizer for Data & AI | Career Development | Production | CV tailoring, interview prep, application tracking for Data/AI roles |
 
 ---
 
@@ -641,6 +642,135 @@ Expert agent provisioning specialist for syncing agents, commands, and hooks fro
 
 ---
 
+### 6. agent-cv-optimizer
+
+**Status**: Production Ready (v1.0.0)
+
+**Category**: Career Development
+
+**Description**:
+Expert CV optimization specialist for Data & AI careers, combining career coaching, HR/recruitment expertise, and technical interview knowledge. Provides CV tailoring, interview preparation, and application tracking through three specialized modes.
+
+**Location**: `/agents/agent-cv-optimizer/`
+
+**Files**:
+- `.claude/agents/agent-cv-optimizer.md` - Agent definition (Claude Code format)
+- `README.md` - Detailed usage guide and trigger conditions
+- `test-cases.md` - 12 comprehensive validation test cases
+- `examples/` - Complete workflow examples
+
+**Three Operating Modes**:
+
+| Mode | Purpose | When Active |
+|------|---------|-------------|
+| Career Coach | Experience analysis, blindspot detection, positioning | Career questions, transitions |
+| HR Manager | JD analysis, CV tailoring, cover letters | JD provided, tailoring requests |
+| Interviewer | Company research, question prep, interview coaching | Interview mentioned |
+
+**Key Expertise**:
+- Data & AI career landscape and role variations
+- ATS systems and keyword optimization
+- RenderCV YAML format integration
+- Technical interviewing (system design, coding, ML)
+- Career positioning and narrative building
+- Company research and culture fit assessment
+
+**Core Capabilities**:
+- JD Analysis & Keyword Extraction
+- Skills Gap Analysis with match scores
+- CV Tailoring for specific job descriptions
+- Cover Letter Generation
+- Application Tracker management
+- Interview question generation
+- Company research via web search
+
+**Trigger Conditions**:
+- User wants to tailor CV for a Data/AI job posting
+- User needs career coaching for Data/AI roles
+- User is preparing for a technical interview
+- User wants to track multiple job applications
+- User needs a cover letter for a specific role
+- User wants skills gap analysis
+
+**Output Format**:
+- Keyword analysis tables
+- Skills gap reports with match scores
+- Tailored CV YAML files (RenderCV format)
+- Cover letters in Markdown
+- Interview preparation documents
+- Application tracker in Markdown
+
+**Directory Structure**:
+```
+applications/
+├── tracker.md                    # Central status tracker
+└── {company-name}/
+    ├── jd.md                     # Job description
+    ├── jd-analysis.md            # Keyword extraction
+    ├── cv-{company}.yaml         # Tailored RenderCV
+    ├── cover-letter.md           # Cover letter
+    ├── interview-notes.md        # Interview prep
+    └── research.md               # Company research
+```
+
+**Critical Constraints**:
+- **Never** fabricates company information or skills
+- **Never** invents experience not in user's background
+- **Always** shows changes before applying
+- **Always** preserves authenticity of achievements
+- **Transparent** about match quality and fit
+- **User control** - confirmation required for changes
+
+**Agent Coordination**:
+
+| Agent | When Used |
+|-------|-----------|
+| research-assistant | Deep company research, salary data |
+| documentation-specialist | Cover letter polish, formatting |
+| agent-git-manager | Version control of application materials |
+
+**Example Usage**:
+
+```bash
+# Career coaching
+@agent-cv-optimizer: I've been a backend developer for 5 years
+and want to move into data engineering. What should I highlight?
+
+# CV tailoring
+@agent-cv-optimizer: Here's a JD for a Senior Data Engineer at Spotify.
+Help me tailor my CV and write a cover letter.
+
+# Interview prep
+@agent-cv-optimizer: I have a system design interview at Meta
+next week. Help me prepare.
+
+# Application tracking
+@agent-cv-optimizer: Add Google to my tracker - just applied today
+```
+
+**Quality Assurance**:
+- 12 comprehensive test cases covering all modes
+- Authenticity verification (no fabricated experience)
+- User confirmation before changes
+- Match score accuracy validation
+- Directory structure verification
+
+**RenderCV Integration**:
+- Detects base CV files (`*_CV.yaml`) in working directory
+- Creates tailored variants for each application
+- Preserves design settings while modifying content
+- Supports all RenderCV section types
+
+**Maintenance**:
+- Quarterly Data/AI market trend review
+- Update interview patterns as companies change
+- Incorporate user feedback on effectiveness
+- Version control all agent configurations
+
+**Contact**: Agent Architecture Team
+
+---
+
 ## Repository Structure
 
 ```
@@ -650,6 +780,7 @@ Expert agent provisioning specialist for syncing agents, commands, and hooks fro
   agent-robotarm-tester.md             # Robot arm testing agent definition
   agent-git-manager.md                 # Git repository manager agent definition
   agent-provisioner.md                 # Agent provisioning agent definition
+  agent-cv-optimizer.md                # CV optimization agent definition
 
 /agents/
   /agent-sap-businesspartner-integration/
@@ -690,6 +821,15 @@ Expert agent provisioning specialist for syncing agents, commands, and hooks fro
   /agent-provisioner/
     README.md                  # Usage guide and trigger conditions
     test-cases.md             # 12 validation test cases
+
+  /agent-cv-optimizer/
+    README.md                  # Usage guide and trigger conditions
+    test-cases.md             # 12 validation test cases
+    examples/                 # Example workflows
+      - jd-analysis-example.md
+      - cv-tailoring-example.md
+      - interview-prep-example.md
+      - tracker-example.md
 
 /docs/sap-integration/businesspartner/
   # Generated documentation by agents
@@ -771,6 +911,7 @@ See `AGENTS_REPOSITORY_GUIDE.md` for detailed process.
 - [x] `agent-robotarm-tester` (v1.0.0) - Production
 - [x] `agent-git-manager` (v1.0.0) - Production
 - [x] `agent-provisioner` (v1.0.0) - Production
+- [x] `agent-cv-optimizer` (v1.0.0) - Production
 
 ### Planned
 
@@ -908,7 +1049,7 @@ Deprecation process:
 
 ---
 
-**Registry Version**: 1.2.0
+**Registry Version**: 1.3.0
 **Last Updated**: 2026-01-18
 **Maintained By**: Agent Architecture Team
 **Status**: Active

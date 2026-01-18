@@ -385,6 +385,101 @@ Validate coordinate transformation and pick position accuracy.
 
 ---
 
+### agent-cv-optimizer (v1.0.0) - Production
+
+**ID**: `agent-cv-optimizer`
+
+**Purpose**: Expert CV optimization specialist for Data & AI careers, combining career coaching, HR/recruitment expertise, and technical interview knowledge. Provides CV tailoring, interview preparation, and application tracking through three specialized modes.
+
+**Use When**:
+- Tailoring your CV for a specific Data/AI job posting
+- Seeking career coaching to identify strengths and blindspots
+- Preparing for technical or behavioral interviews
+- Tracking multiple job applications systematically
+- Needing a cover letter for a specific role
+- Wanting skills gap analysis for a target role
+
+**Location**: `.claude/agents/agent-cv-optimizer.md`
+
+**Key Files**:
+- `.claude/agents/agent-cv-optimizer.md` - Agent definition (Claude Code format)
+- `agents/agent-cv-optimizer/README.md` - Detailed usage guide
+- `agents/agent-cv-optimizer/test-cases.md` - 12 validation test cases
+- `agents/agent-cv-optimizer/examples/` - Complete workflow examples
+
+**Three Operating Modes**:
+
+| Mode | Purpose | Trigger |
+|------|---------|---------|
+| Career Coach | Experience analysis, blindspot detection, positioning | Career questions, transitions |
+| HR Manager | JD analysis, CV tailoring, cover letters | JD provided, tailoring requests |
+| Interviewer | Company research, question prep, interview coaching | Interview mentioned |
+
+**Capabilities**:
+- JD Analysis & Keyword Extraction
+- Skills Gap Analysis with match scores
+- CV Tailoring for specific job descriptions (RenderCV format)
+- Cover Letter Generation
+- Application Tracker management
+- Interview question generation and preparation
+- Company research via web search
+- Agent coordination (research-assistant, documentation-specialist, agent-git-manager)
+
+**Directory Structure Created**:
+```
+applications/
+├── tracker.md                    # Central status tracker
+└── {company-name}/
+    ├── jd.md                     # Job description
+    ├── jd-analysis.md            # Keyword extraction
+    ├── cv-{company}.yaml         # Tailored RenderCV
+    ├── cover-letter.md           # Cover letter
+    ├── interview-notes.md        # Interview prep
+    └── research.md               # Company research
+```
+
+**Critical Constraints**:
+- Never fabricates company information or skills
+- Never invents experience not in user's background
+- Always shows changes before applying
+- Always preserves authenticity of achievements
+- Transparent about match quality and fit
+- User control - confirmation required for changes
+
+**Invoke With**:
+```bash
+@agent-cv-optimizer: [Your request]
+```
+
+**Examples**:
+```bash
+# Career coaching
+@agent-cv-optimizer: I've been a backend developer for 5 years
+and want to move into data engineering. What should I highlight?
+
+# CV tailoring
+@agent-cv-optimizer: Here's a JD for a Senior Data Engineer at Spotify.
+Help me tailor my CV and write a cover letter.
+
+# Interview prep
+@agent-cv-optimizer: I have a system design interview at Meta
+next week. Help me prepare.
+
+# Application tracking
+@agent-cv-optimizer: Add Google to my tracker - just applied today
+```
+
+**Documentation**:
+- User Guide: `agents/agent-cv-optimizer/README.md`
+- Test Cases: `agents/agent-cv-optimizer/test-cases.md`
+- Examples: `agents/agent-cv-optimizer/examples/`
+  - `jd-analysis-example.md` - JD keyword extraction workflow
+  - `cv-tailoring-example.md` - CV modification workflow
+  - `interview-prep-example.md` - Interview preparation
+  - `tracker-example.md` - Application tracker format
+
+---
+
 ## Agent Repository Tools
 
 ### agent-architect (Meta-Agent)
@@ -801,16 +896,17 @@ Report issues with:
 ## Project Status
 
 **Repository Status**: Active
-**Version**: 1.4.0
+**Version**: 1.5.0
 **Last Updated**: 2026-01-18
 
 **Current Agents**:
-- 5 production-ready agents
+- 6 production-ready agents
   - agent-sap-businesspartner-integration (v1.0.0)
   - agent-ansible-automation (v1.0.0)
   - agent-robotarm-tester (v1.0.0)
   - agent-git-manager (v1.0.0)
   - agent-provisioner (v1.0.0)
+  - agent-cv-optimizer (v1.0.0)
 - 0 beta agents
 - 0 deprecated agents
 
@@ -828,6 +924,7 @@ Report issues with:
    - agent-ansible-automation - DevOps automation development
    - agent-git-manager - Secure git commits with security scanning
    - agent-provisioner - Sync agents to other projects
+   - agent-cv-optimizer - CV tailoring and interview prep for Data/AI roles
 3. **Try an agent** - Invoke it with a specific request
 4. **Provide feedback** - Help improve the agents
 

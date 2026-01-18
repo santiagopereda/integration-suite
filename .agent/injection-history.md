@@ -310,21 +310,23 @@ Each entry follows this format:
 
 ## 📍 Current Status
 
-- **Knowledge Base Version**: 1.3.0
+- **Knowledge Base Version**: 1.5.0
 - **Initialized**: 2025-11-21
 - **Last Updated**: 2026-01-18
-- **Total Documents**: 27 (infrastructure + templates + metrics + agent-git-manager docs)
+- **Total Documents**: 36 (infrastructure + templates + metrics + agent docs)
 - **Folders Ready**: 5 (tasks, system, sops, templates, metrics)
-- **Status**: Active - 4 production agents
+- **Status**: Active - 6 production agents
 
 **Recent Additions**:
-- agent-git-manager (v1.0.0) - Git repository management with security scanning
+- agent-cv-optimizer (v1.0.0) - CV optimization for Data & AI careers
+  - Three modes: Career Coach, HR Manager, Interviewer
   - Agent definition, README, test cases, 4 examples
-  - Hook configuration for automatic triggering
-  - Integration with /update_doc workflow
+  - JD analysis, skills gap analysis, cover letter generation
+  - Application tracker management
+- agent-provisioner (v1.0.0) - Agent sync to other projects
+- agent-git-manager (v1.0.0) - Git repository management with security scanning
 - 13 agent templates (SAP + Ansible)
 - 4 metrics tracking files
-- Agent optimization infrastructure
 
 **Next Addition**: Knowledge base population & agent scaffolds
 
@@ -515,6 +517,93 @@ find . -type f -newer .agent/injection-history.md \
 
 ---
 
+### 2026-01-18 - New Agent: agent-cv-optimizer
+- **Added By**: Claude Opus 4.5
+- **Location**: `.claude/agents/agent-cv-optimizer.md`
+- **Purpose**: CV optimization specialist for Data & AI careers with three operating modes: Career Coach, HR Manager, and Interviewer
+- **Links**: References AGENTS_REGISTRY.md, CLAUDE.md, integrates with research-assistant, documentation-specialist, agent-git-manager
+- **Status**: Complete
+
+**Files Created**:
+- `.claude/agents/agent-cv-optimizer.md` - Agent definition (~350 lines)
+  - Three operating modes: Career Coach, HR Manager, Interviewer
+  - JD analysis and keyword extraction
+  - Skills gap analysis with match scoring
+  - Cover letter generation
+  - Application tracker management
+  - RenderCV YAML format integration
+  - Web research for company information
+
+- `agents/agent-cv-optimizer/README.md` - Comprehensive usage documentation
+  - Mode descriptions and trigger conditions
+  - Output modes (Brief/Standard/Detailed)
+  - Directory structure for applications
+  - Quality standards and portability notes
+
+- `agents/agent-cv-optimizer/test-cases.md` - 12 validation test cases
+  - TC-01: Career Coach - Experience Mining
+  - TC-02: Career Coach - Blindspot Detection
+  - TC-03: HR Manager - JD Analysis
+  - TC-04: HR Manager - CV Tailoring
+  - TC-05: HR Manager - Skills Gap Analysis
+  - TC-06: HR Manager - Cover Letter Generation
+  - TC-07: Interviewer - Company Research
+  - TC-08: Interviewer - Question Generation
+  - TC-09: Interviewer - Interview Prep Document
+  - TC-10: Application Tracker - New Entry
+  - TC-11: Application Tracker - Status Update
+  - TC-12: Integration - Full Workflow
+
+- `agents/agent-cv-optimizer/examples/` - 4 workflow examples
+  - `jd-analysis-example.md` - JD keyword extraction workflow
+  - `cv-tailoring-example.md` - CV modification with match scores
+  - `interview-prep-example.md` - System design interview preparation
+  - `tracker-example.md` - Application tracker format and usage
+
+**Files Modified**:
+- `AGENTS_REGISTRY.md` - Added agent-cv-optimizer entry, updated version to 1.3.0
+- `CLAUDE.md` - Added agent-cv-optimizer to Available Agents, updated status to 6 agents, version to 1.5.0
+
+**Key Capabilities**:
+- **Career Coach Mode**: Experience mining, blindspot detection, career positioning, transition planning
+- **HR Manager Mode**: JD analysis, keyword extraction, CV tailoring, cover letter generation, skills gap analysis
+- **Interviewer Mode**: Company research via web, interview question generation, STAR method coaching, interview prep documents
+- **Application Tracker**: Central `applications/tracker.md` with status tracking, statistics, goals
+
+**Directory Structure** (created per application):
+```
+applications/
+├── tracker.md                    # Central status tracker
+└── {company-name}/
+    ├── jd.md                     # Original job description
+    ├── jd-analysis.md            # Keyword extraction
+    ├── cv-{company-name}.yaml    # Tailored RenderCV
+    ├── cover-letter.md           # Targeted cover letter
+    ├── interview-notes.md        # Interview preparation
+    └── research.md               # Company research
+```
+
+**Agent Coordination**:
+| Agent | When Used |
+|-------|-----------|
+| research-assistant | Deep company research, salary data |
+| documentation-specialist | Cover letter polish, formatting |
+| agent-git-manager | Version control of application materials |
+
+**Critical Constraints**:
+- Never fabricates company information or skills
+- Never invents experience not in user's background
+- Always shows changes before applying
+- Preserves authenticity of achievements
+- Transparent about match quality and fit
+- Requires user confirmation for changes
+
+**Portability**: Copy `.claude/agents/agent-cv-optimizer.md` to any project's `.claude/agents/` folder
+
+**Impact**: Sixth production agent in the repository, enables comprehensive CV optimization and job application management for Data & AI careers
+
+---
+
 ## 🔄 Maintenance Schedule
 
 ### Weekly
@@ -553,8 +642,8 @@ find . -type f -newer .agent/injection-history.md \
 
 ---
 
-**Version**: 1.4.0
+**Version**: 1.5.0
 **Last Updated**: 2026-01-18
-**Total Documents**: 29
+**Total Documents**: 36
 **Maintained By**: System
 **Status**: Active
