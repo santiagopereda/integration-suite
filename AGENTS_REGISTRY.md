@@ -10,6 +10,7 @@ Central hub for all specialized Claude Code agents designed for this organizatio
 | `agent-ansible-automation` | Ansible Automation Development Specialist | DevOps Automation | Production | Creating Ansible playbooks, roles, testing, and automation docs |
 | `agent-robotarm-tester` | Raspberry Pi Robot Arm Testing Engineer | Robotics Testing | Production | Testing, validating, debugging robot arms via SSH |
 | `agent-git-manager` | Git Repository Manager | Developer Tools | Production | Secure commits with pre-commit scanning, SSH/GitHub integration |
+| `agent-provisioner` | Agent Provisioner | Developer Tools | Production | Sync agents, commands, and hooks to other projects |
 
 ---
 
@@ -537,6 +538,109 @@ Pre-commit scanning detects:
 
 ---
 
+### 5. agent-provisioner
+
+**Status**: Production Ready (v1.0.0)
+
+**Category**: Developer Tools
+
+**Description**:
+Expert agent provisioning specialist for syncing agents, commands, and hooks from the Agentic hub to other local projects. Enables safe deployment and updates with version awareness, interactive selection, and proper backup procedures.
+
+**Location**: `/agents/agent-provisioner/`
+
+**Files**:
+- `.claude/agents/agent-provisioner.md` - Agent definition (Claude Code format)
+- `README.md` - Detailed usage guide and trigger conditions
+- `test-cases.md` - 12 validation test cases
+
+**Key Expertise**:
+- Agent definition management (`.claude/agents/*.md`)
+- Command synchronization (`.claude/commands/*.md`)
+- Hook configuration merging (`.claude/settings.local.json`)
+- Version comparison (file modification dates)
+- Safe file operations (backups, conflict resolution)
+
+**Core Capabilities**:
+- List all available agents from the hub
+- Compare versions between hub and target project
+- Interactive agent selection for sync
+- Backup creation before overwriting
+- Command and hook dependency management
+- Hook merging with permission preservation
+
+**Trigger Conditions**:
+- User wants to list available agents in the hub
+- User needs to compare agents with another project
+- User wants to provision agents to a new project
+- User needs to update agents in an existing project
+- User asks to sync configurations to a target
+
+**Output Format**:
+- Formatted tables of agents with versions
+- Comparison reports (New, Update, Up to date)
+- Sync progress with confirmation prompts
+- Backup notifications
+
+**Critical Constraints**:
+- **Always** creates backups before overwriting files
+- **Always** requires user selection before syncing
+- **Always** shows what will change before executing
+- **Never** dumps all agents without asking
+- **Never** replaces settings.local.json (merges hooks only)
+- **Preserves** target's existing permissions
+
+**Commands**:
+```bash
+# List available agents
+@agent-provisioner: list
+
+# Compare with target project
+@agent-provisioner: compare /path/to/project
+
+# Sync agents to target
+@agent-provisioner: sync /path/to/project
+```
+
+**Agent-to-Dependency Map**:
+
+| Agent | Commands | Hooks |
+|-------|----------|-------|
+| agent-git-manager | update_doc.md | PostToolUse: Edit\|Write\|NotebookEdit |
+| agent-sap-bp-integration | - | - |
+| agent-ansible-automation | - | - |
+| agent-robotarm-tester | - | - |
+
+**Example Usage**:
+
+```bash
+# List what's available
+@agent-provisioner: list
+
+# Check what needs updating
+@agent-provisioner: compare /home/user/my-project
+
+# Sync selected agents
+@agent-provisioner: sync /home/user/my-project
+# Then select: 1,3 (picks first and third agent)
+```
+
+**Quality Assurance**:
+- 12 comprehensive test cases
+- Interactive selection mandatory
+- Backup verification
+- Hook merge testing
+- Permission preservation validation
+
+**Maintenance**:
+- Update when new agents are added to hub
+- Keep dependency map current
+- Version control agent configurations
+
+**Contact**: Agent Architecture Team
+
+---
+
 ## Repository Structure
 
 ```
@@ -545,6 +649,7 @@ Pre-commit scanning detects:
   agent-sap-businesspartner-integration.md  # SAP BP integration agent
   agent-robotarm-tester.md             # Robot arm testing agent definition
   agent-git-manager.md                 # Git repository manager agent definition
+  agent-provisioner.md                 # Agent provisioning agent definition
 
 /agents/
   /agent-sap-businesspartner-integration/
@@ -581,6 +686,10 @@ Pre-commit scanning detects:
       - security-scan-example.md
       - ssh-github-example.md
       - documentation-workflow-example.md
+
+  /agent-provisioner/
+    README.md                  # Usage guide and trigger conditions
+    test-cases.md             # 12 validation test cases
 
 /docs/sap-integration/businesspartner/
   # Generated documentation by agents
@@ -661,6 +770,7 @@ See `AGENTS_REPOSITORY_GUIDE.md` for detailed process.
 - [x] `agent-ansible-automation` (v1.0.0) - Production
 - [x] `agent-robotarm-tester` (v1.0.0) - Production
 - [x] `agent-git-manager` (v1.0.0) - Production
+- [x] `agent-provisioner` (v1.0.0) - Production
 
 ### Planned
 
@@ -798,7 +908,7 @@ Deprecation process:
 
 ---
 
-**Registry Version**: 1.1.0
-**Last Updated**: 2025-01-18
+**Registry Version**: 1.2.0
+**Last Updated**: 2026-01-18
 **Maintained By**: Agent Architecture Team
 **Status**: Active

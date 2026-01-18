@@ -417,6 +417,104 @@ Each entry follows this format:
 
 ---
 
+### 2026-01-18 - New Agent: agent-provisioner
+- **Added By**: Claude Opus 4.5
+- **Location**: `.claude/agents/agent-provisioner.md`
+- **Purpose**: Agent provisioning specialist for syncing agents, commands, and hooks from the Agentic hub to other local projects
+- **Links**: References AGENTS_REGISTRY.md, CLAUDE.md, integrates with all agents
+- **Status**: Complete
+
+**Files Created**:
+- `.claude/agents/agent-provisioner.md` - Agent definition (~250 lines)
+  - Hub awareness (knows this is the source repository)
+  - List, compare, sync commands
+  - Interactive agent selection workflow
+  - Backup creation before overwriting
+  - Hook merging with permission preservation
+
+- `agents/agent-provisioner/README.md` - Comprehensive usage documentation
+  - Command reference (list, compare, sync)
+  - Dependency map (agent → commands → hooks)
+  - Safety features and backup procedures
+  - Example workflows
+
+- `agents/agent-provisioner/test-cases.md` - 12 validation test cases
+  - List available agents
+  - Compare with empty target
+  - Compare with existing agents
+  - Compare with up-to-date agents
+  - Sync with interactive selection
+  - Sync creates backups
+  - Sync with dependencies
+  - Sync with "none" selection
+  - Invalid target path
+  - Create .claude directory structure
+  - Hook merging preserves permissions
+  - Agent without dependencies
+
+**Files Modified**:
+- `AGENTS_REGISTRY.md` - Added agent-provisioner entry, updated version to 1.2.0
+- `CLAUDE.md` - Added agent-provisioner to Available Agents, updated status to 5 agents, version to 1.4.0
+
+**Key Capabilities**:
+- **List**: Shows all hub agents with versions and descriptions
+- **Compare**: Version comparison between hub and target (New, Update, Up to date)
+- **Sync**: Interactive selection → backup → copy → merge hooks
+- **Dependencies**: agent-git-manager syncs with update_doc.md command and PostToolUse hook
+- **Safety**: Always backup, always ask, always show changes first
+
+**Agent-to-Dependency Map**:
+| Agent | Commands | Hooks |
+|-------|----------|-------|
+| agent-git-manager | update_doc.md | PostToolUse: Edit\|Write\|NotebookEdit |
+| agent-sap-bp-integration | - | - |
+| agent-ansible-automation | - | - |
+| agent-robotarm-tester | - | - |
+
+**Impact**: Fifth production agent, enables agent deployment across multiple projects from centralized hub
+
+---
+
+### 2026-01-18 - Enhancement: /update_doc Auto-Detection Mode
+- **Added By**: Claude Opus 4.5
+- **Location**: `.claude/commands/update_doc.md`
+- **Purpose**: Add automatic change detection when /update_doc is called without arguments
+- **Links**: References `.agent/injection-history.md` for timestamp baseline
+- **Status**: Complete
+
+**Changes Made**:
+- Added "Auto-Detection Mode (No Arguments)" section (~115 lines)
+  - Step 1: Determine last documentation timestamp from injection-history.md
+  - Step 2: Find changed files using `find -newer`
+  - Step 3: Categorize changes (Agents, Commands, Configs, Code, Documentation)
+  - Step 4: Present summary with NEW/MODIFIED status
+  - Step 5: User selects categories to document
+
+- Added "Scenario 6: Auto-Detection Mode" example in Common Scenarios
+  - Complete example session with user interaction
+  - Handling when no changes detected
+
+- Updated "Workflow Checklist" with auto-detection steps
+
+- Updated version to 1.2.0
+
+**Behavior**:
+- With arguments: Works as before (document specific topic)
+- Without arguments: Auto-detect and categorize changes since last injection-history.md update
+
+**Detection Logic**:
+```bash
+# Find files modified since last documentation update
+find . -type f -newer .agent/injection-history.md \
+  -not -path "./.git/*" \
+  -not -path "./.agent/*" \
+  [other exclusions]
+```
+
+**Impact**: Streamlines documentation workflow by automatically detecting what needs documenting
+
+---
+
 ## 🔄 Maintenance Schedule
 
 ### Weekly
@@ -455,7 +553,8 @@ Each entry follows this format:
 
 ---
 
-**Version**: 1.3.0
+**Version**: 1.4.0
 **Last Updated**: 2026-01-18
+**Total Documents**: 29
 **Maintained By**: System
 **Status**: Active

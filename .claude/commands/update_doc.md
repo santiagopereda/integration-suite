@@ -16,6 +16,120 @@ This guide helps agents understand:
 
 ---
 
+## Auto-Detection Mode (No Arguments)
+
+When `/update_doc` is called without arguments, automatically detect changes needing documentation.
+
+### Step 1: Determine Last Documentation Timestamp
+
+Get the modification time of `.agent/injection-history.md`:
+```bash
+stat -c %Y .agent/injection-history.md
+```
+
+This represents when documentation was last updated. All files modified after this timestamp are candidates for documentation.
+
+### Step 2: Find Changed Files
+
+Find all project files modified after the last documentation update:
+```bash
+find . -type f -newer .agent/injection-history.md \
+  -not -path "./.git/*" \
+  -not -path "./.agent/*" \
+  -not -path "./node_modules/*" \
+  -not -path "./venv/*" \
+  -not -path "./__pycache__/*" \
+  -not -name "*.log" \
+  -not -name "*.pyc"
+```
+
+**Exclude from detection**:
+- `.git/` - version control internals
+- `.agent/` - documentation itself (avoid circular updates)
+- `node_modules/`, `venv/`, `__pycache__/` - dependencies and build artifacts
+- Log files and compiled files
+
+### Step 3: Categorize Changes
+
+Group detected changes by documentation type:
+
+| Category | File Patterns | Documentation Target |
+|----------|---------------|---------------------|
+| Agents | `.claude/agents/*.md` | AGENTS_REGISTRY.md, CLAUDE.md |
+| Commands | `.claude/commands/*.md` | Command documentation |
+| Configs | `.claude/settings*.json` | Configuration docs |
+| Code | `*.ts`, `*.py`, `*.js`, etc. | `.agent/system/` API/Schema docs |
+| Documentation | `*.md` (root level) | Cross-references |
+| Agent Docs | `agents/*/` | Agent-specific documentation |
+
+### Step 4: Present Summary
+
+Display categorized changes to user:
+```
+Scanning for changes since last documentation update...
+Last update: 2026-01-18 07:55:56 UTC
+
+Changes detected:
+
+Agents (2 files):
+  + .claude/agents/agent-provisioner.md (NEW)
+  ~ .claude/agents/agent-git-manager.md (MODIFIED)
+
+Agent Documentation (2 files):
+  + agents/agent-provisioner/README.md (NEW)
+  + agents/agent-provisioner/test-cases.md (NEW)
+
+Registry Updates (2 files):
+  ~ AGENTS_REGISTRY.md (MODIFIED)
+  ~ CLAUDE.md (MODIFIED)
+
+Code (0 files):
+  [No code changes detected]
+
+What would you like to document?
+1. All changes (recommended)
+2. Only new agents
+3. Skip - I'll specify manually
+```
+
+### Step 5: Proceed with Documentation
+
+For selected categories:
+1. Follow standard documentation workflow (sections below)
+2. Create appropriate entries in `.agent/` if needed
+3. Update `injection-history.md` with summary of changes documented
+
+### Auto-Detection Logic Details
+
+**Timestamp Comparison**:
+```bash
+# Get last documentation timestamp (Unix epoch)
+LAST_DOC=$(stat -c %Y .agent/injection-history.md 2>/dev/null || echo 0)
+
+# Find files newer than that timestamp
+find . -type f -newermt "@$LAST_DOC" [exclusions]
+```
+
+**Change Status Detection**:
+For each detected file, determine status:
+- **NEW**: File not tracked in git or created after last commit
+- **MODIFIED**: File exists in git but changed since last commit
+
+```bash
+# Check if file is new (untracked)
+git ls-files --error-unmatch "$file" 2>/dev/null || echo "NEW"
+
+# Check if file is modified
+git diff --name-only HEAD -- "$file" | grep -q "$file" && echo "MODIFIED"
+```
+
+**Smart Filtering**:
+- Group related files (e.g., agent definition + README + test-cases = "Agent Package")
+- Highlight critical changes (agent deletions, API changes, breaking changes)
+- Prioritize agents and commands over general documentation
+
+---
+
 ## Knowledge Base Structure
 
 The project maintains a centralized knowledge base at `.agent/` with three main sections:
@@ -265,13 +379,86 @@ Always consult the section's README.md before creating new documentation.
 4. Verify links work
 5. Update `.agent/injection-history.md` to note the fix
 
+### Scenario 6: Auto-Detection Mode (No Arguments)
+
+**When to use**: Run `/update_doc` without arguments when you want to document all changes made since the last documentation update.
+
+**What happens**:
+1. System checks `.agent/injection-history.md` modification time
+2. Finds all project files changed since then
+3. Presents categorized summary of changes
+4. User selects what to document
+5. Proceeds with standard workflow for selected items
+
+**Example session**:
+```
+User: /update_doc
+
+Agent:
+Scanning for changes since last documentation update...
+Last update: 2026-01-18 07:55:56 UTC
+
+Changes detected:
+
+Agents (1 new):
+  + .claude/agents/agent-provisioner.md
+
+Registry Updates (2 modified):
+  ~ AGENTS_REGISTRY.md
+  ~ CLAUDE.md
+
+Agent Documentation (2 new):
+  + agents/agent-provisioner/README.md
+  + agents/agent-provisioner/test-cases.md
+
+What would you like to document?
+1. All changes (recommended)
+2. Only new agents
+3. Skip - I'll specify manually
+
+User: 1
+
+Agent:
+Proceeding to document all detected changes...
+
+[Follows standard documentation workflow for each category]
+[Updates injection-history.md with summary]
+
+Documentation complete. Changes have been logged to injection-history.md.
+```
+
+**When no changes detected**:
+```
+User: /update_doc
+
+Agent:
+Scanning for changes since last documentation update...
+Last update: 2026-01-18 10:30:00 UTC
+
+No changes detected since last documentation update.
+
+Options:
+1. Force re-scan with extended lookback
+2. Specify what to document manually
+3. Cancel
+```
+
 ---
 
 ## Workflow Checklist
 
 Use this checklist when creating or updating documentation:
 
-**Before You Start**:
+**Auto-Detection Mode (No Arguments)**:
+- [ ] No arguments passed - entering auto-detection mode
+- [ ] Check `.agent/injection-history.md` modification timestamp
+- [ ] Scan for files modified since that timestamp
+- [ ] Categorize detected changes by type
+- [ ] Present summary to user
+- [ ] Get user selection before proceeding
+- [ ] Proceed with standard workflow for selected categories
+
+**Before You Start (Manual Mode)**:
 - [ ] Read the relevant section's README.md
 - [ ] Check what already exists in that section
 - [ ] Review `.agent/injection-history.md` for recent additions
@@ -435,8 +622,8 @@ See `@agent-git-manager` for:
 
 ---
 
-**Version**: 1.1.0
+**Version**: 1.2.0
 **Created**: 2025-11-21
-**Updated**: 2025-01-18
+**Updated**: 2026-01-18
 **Purpose**: Guide agents on documentation creation and updates
 **Status**: Active

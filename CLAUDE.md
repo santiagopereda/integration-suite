@@ -317,6 +317,74 @@ Validate coordinate transformation and pick position accuracy.
 
 ---
 
+### agent-provisioner (v1.0.0) - Production
+
+**ID**: `agent-provisioner`
+
+**Purpose**: Expert agent provisioning specialist for syncing agents, commands, and hooks from the Agentic hub to other local projects with version awareness, interactive selection, and backup procedures.
+
+**Use When**:
+- Listing available agents in this hub
+- Comparing agent versions with another project
+- Provisioning agents to a new project
+- Updating agents in an existing project
+- Syncing commands and hooks alongside agents
+
+**Location**: `.claude/agents/agent-provisioner.md`
+
+**Key Files**:
+- `.claude/agents/agent-provisioner.md` - Agent definition (Claude Code format)
+- `agents/agent-provisioner/README.md` - Detailed usage guide
+- `agents/agent-provisioner/test-cases.md` - 12 validation test cases
+
+**Capabilities**:
+- List all available agents from the hub with versions
+- Compare versions between hub and target project
+- Interactive agent selection for sync operations
+- Backup creation before overwriting existing files
+- Command and hook dependency management
+- Hook merging with permission preservation
+
+**Agent-to-Dependency Map**:
+
+| Agent | Commands | Hooks |
+|-------|----------|-------|
+| agent-git-manager | update_doc.md | PostToolUse: Edit\|Write\|NotebookEdit |
+| agent-sap-bp-integration | - | - |
+| agent-ansible-automation | - | - |
+| agent-robotarm-tester | - | - |
+
+**Critical Constraints**:
+- Always creates backups before overwriting files
+- Always requires user selection before syncing
+- Always shows what will change before executing
+- Never dumps all agents without asking
+- Never replaces settings.local.json (merges hooks only)
+- Preserves target's existing permissions
+
+**Invoke With**:
+```bash
+@agent-provisioner: [Your request]
+```
+
+**Examples**:
+```bash
+# List available agents
+@agent-provisioner: list
+
+# Compare with target project
+@agent-provisioner: compare /home/user/my-project
+
+# Sync agents to target
+@agent-provisioner: sync /home/user/my-project
+```
+
+**Documentation**:
+- User Guide: `agents/agent-provisioner/README.md`
+- Test Cases: `agents/agent-provisioner/test-cases.md`
+
+---
+
 ## Agent Repository Tools
 
 ### agent-architect (Meta-Agent)
@@ -733,15 +801,16 @@ Report issues with:
 ## Project Status
 
 **Repository Status**: Active
-**Version**: 1.3.0
-**Last Updated**: 2025-01-18
+**Version**: 1.4.0
+**Last Updated**: 2026-01-18
 
 **Current Agents**:
-- 4 production-ready agents
+- 5 production-ready agents
   - agent-sap-businesspartner-integration (v1.0.0)
   - agent-ansible-automation (v1.0.0)
   - agent-robotarm-tester (v1.0.0)
   - agent-git-manager (v1.0.0)
+  - agent-provisioner (v1.0.0)
 - 0 beta agents
 - 0 deprecated agents
 
@@ -758,6 +827,7 @@ Report issues with:
    - agent-sap-businesspartner-integration - SAP OData API integration
    - agent-ansible-automation - DevOps automation development
    - agent-git-manager - Secure git commits with security scanning
+   - agent-provisioner - Sync agents to other projects
 3. **Try an agent** - Invoke it with a specific request
 4. **Provide feedback** - Help improve the agents
 
