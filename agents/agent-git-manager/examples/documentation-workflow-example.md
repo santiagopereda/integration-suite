@@ -191,8 +191,6 @@ Documentation:
 - Add request schema in .agent/system/schemas/
 - Update API development SOP with lessons learned
 - Update injection-history.md with documentation changes
-
-Co-Authored-By: Claude Opus 4.5 <noreply@anthropic.com>
 ```
 
 **Files to commit**: 6 files
@@ -252,8 +250,6 @@ docs: add new API documentation
 
 - Create comprehensive API documentation in .agent/system/apis/
 - Update injection-history.md with new documentation entry
-
-Co-Authored-By: Claude Opus 4.5 <noreply@anthropic.com>
 ```
 
 Would you like to commit these documentation changes? [Y/n]
@@ -308,8 +304,6 @@ docs: update deployment process and integration docs
 - Refine deployment SOP with recent learnings
 - Update third-party integration documentation
 - Record changes in injection-history.md
-
-Co-Authored-By: Claude Opus 4.5 <noreply@anthropic.com>
 ```
 
 This is a documentation-only commit. No code changes included.

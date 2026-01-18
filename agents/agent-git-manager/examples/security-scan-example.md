@@ -171,8 +171,6 @@ refactor(config): move secrets to environment variables
 - Add .env.local to .gitignore
 
 Security: Credentials now loaded from environment variables
-
-Co-Authored-By: Claude Opus 4.5 <noreply@anthropic.com>
 ```
 
 Shall I proceed with this commit? [Y/n]

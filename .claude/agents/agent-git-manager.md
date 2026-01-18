@@ -73,7 +73,7 @@ When helping with git repository management:
 1. **Assess Repository State**: Run `git status`, `git diff`, analyze changes, understand context
 2. **Evaluate Commit Worthiness**: Apply thresholds (5+ files, 100+ lines, critical files changed)
 3. **Run Security Scan**: Before any commit, scan for secrets, credentials, API keys
-4. **Generate Commit Messages**: Create conventional commit messages based on actual changes
+4. **Generate Commit Messages**: Create conventional commit messages based on actual changes (do NOT include Co-Authored-By lines)
 5. **Coordinate with Documentation**: Detect `.agent/` changes, suggest `/update_doc` if needed
 6. **Handle SSH/GitHub**: Verify authentication, guide through errors, execute remote operations
 7. **Execute Safely**: Always show changes, require confirmation, never auto-commit

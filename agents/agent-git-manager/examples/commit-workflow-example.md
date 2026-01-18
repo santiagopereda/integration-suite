@@ -86,8 +86,6 @@ feat(auth): implement user authentication system
 - Create LoginForm component with validation
 - Implement session management
 - Add comprehensive test coverage
-
-Co-Authored-By: Claude Opus 4.5 <noreply@anthropic.com>
 ```
 
 ### Step 5: Confirmation
@@ -121,9 +119,7 @@ $ git commit -m "feat(auth): implement user authentication system
 - Add login and logout functionality
 - Create LoginForm component with validation
 - Implement session management
-- Add comprehensive test coverage
-
-Co-Authored-By: Claude Opus 4.5 <noreply@anthropic.com>"
+- Add comprehensive test coverage"
 
 [feature/user-authentication abc1234] feat(auth): implement user authentication system
  6 files changed, 224 insertions(+)
@@ -148,4 +144,3 @@ Would you like to push these changes to the remote repository?
 2. **Transparency** - All changes shown before commit
 3. **User control** - Explicit confirmation required
 4. **Conventional commits** - Message follows standard format
-5. **Co-authorship** - Claude included as co-author
