@@ -12,6 +12,7 @@ Central hub for all specialized Claude Code agents designed for this organizatio
 | `agent-git-manager` | Git Repository Manager | Developer Tools | Production | Secure commits with pre-commit scanning, SSH/GitHub integration |
 | `agent-provisioner` | Agent Provisioner | Developer Tools | Production | Sync agents, commands, and hooks to other projects |
 | `agent-cv-optimizer` | CV Optimizer for Data & AI | Career Development | Production | CV tailoring, interview prep, application tracking for Data/AI roles |
+| `agent-project-init` | Project Initialization Specialist | Developer Tools | Production | Initialize new projects with type-appropriate structure and agents |
 
 ---
 
@@ -771,6 +772,88 @@ next week. Help me prepare.
 
 ---
 
+### 7. agent-project-init
+
+**Status**: Production Ready (v1.0.0)
+
+**Category**: Developer Tools
+
+**Description**:
+Project Initialization Specialist that sets up new projects with type-appropriate structure, documentation, and provisioned agents. Applies learnings from cross-project testimony analysis to create optimized project setups.
+
+**Location**: `.claude/agents/agent-project-init.md`
+
+**Command**: `/project_init`
+
+**Key Expertise**:
+- Project type classification (Integration, Development, Research, Optimization)
+- Type-appropriate .agent/ folder structures
+- CLAUDE.md and README.md generation
+- Agent and command provisioning from Agentic hub
+- Existing file detection and safe modification
+
+**Project Types**:
+
+| Type | Description | Folders Created |
+|------|-------------|-----------------|
+| Integration | APIs, data flows, sync | sops/, system/, workflows/ |
+| Development | Building software | decisions/, schemas/, testing/ |
+| Research | Exploration, learning | findings/, hypotheses/, gaps/ |
+| Optimization | Improving existing | templates/, metrics/, experiments/ |
+| Custom | User-defined | User selects |
+
+**Default Provisions**:
+- **Agents**: research-assistant, documentation-specialist, agent-git-manager
+- **Commands**: update_doc, agent_reflect
+
+**7-Step Workflow**:
+1. **DISCOVER** - Check existing files (README.md, CLAUDE.md, .agent/)
+2. **CLASSIFY** - Ask project type
+3. **DEFINE** - Gather name, goals, resources, constraints
+4. **STRUCTURE** - Create .agent/ with type-appropriate folders
+5. **DOCUMENT** - Generate CLAUDE.md and README.md
+6. **PROVISION** - Sync agents from hub
+7. **CONFIRM** - Execute after user approval
+
+**Trigger Conditions**:
+- User runs `/project_init` command
+- User wants to start a new project
+- User wants to convert existing directory to agent-enabled project
+- User asks about project setup or initialization
+
+**Critical Constraints**:
+- **Never overwrites** existing files without showing changes first
+- **Never modifies** .agent/ without user confirmation
+- **Always shows** summary before execution
+- Creates only folders that will be used (no empty templates)
+- injection-history.md is always created (100% usage in analyzed projects)
+
+**Design Principles** (from testimony analysis):
+- Descriptive over prescriptive
+- No empty templates
+- Verification mindset
+- Default sensible, allow override
+
+**Example Usage**:
+
+```bash
+# Initialize current directory
+/project_init
+
+# Initialize specific path
+/project_init /home/user/my-new-project
+```
+
+**Quality Assurance**:
+- Verifies hub agents exist before provisioning
+- Creates backups before modifying existing files
+- Reports any provisioning failures clearly
+- Validates target path permissions
+
+**Contact**: Agent Architecture Team
+
+---
+
 ## Repository Structure
 
 ```
@@ -781,6 +864,7 @@ next week. Help me prepare.
   agent-git-manager.md                 # Git repository manager agent definition
   agent-provisioner.md                 # Agent provisioning agent definition
   agent-cv-optimizer.md                # CV optimization agent definition
+  agent-project-init.md               # Project initialization agent definition
 
 /agents/
   /agent-sap-businesspartner-integration/

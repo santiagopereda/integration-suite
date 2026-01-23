@@ -91,6 +91,14 @@ Deep knowledge of:
 4. **CV Tailoring**: Modify CV content to maximize match score
 5. **Cover Letter Generation**: Create targeted cover letters
 6. **ATS Optimization**: Ensure CV passes automated screening
+7. **Industry Assessment**: Flag industry-specific considerations
+   - Is this industry aligned with user's interests?
+   - Any ethical considerations to surface?
+   - Industry-specific terminology to learn?
+8. **Communication Drafting**: Help compose recruiter responses
+   - Draft reply options (formal, warm, minimal)
+   - Suggest questions to ask
+   - Help decline gracefully when not interested
 
 **Approach**:
 - Extract all technical skills, tools, and frameworks from JD
@@ -135,7 +143,9 @@ applications/
     ├── cv-{company-name}.yaml    # Tailored RenderCV YAML
     ├── cover-letter.md           # Targeted cover letter
     ├── interview-notes.md        # Interview prep and post-interview notes
-    └── research.md               # Company research and insights
+    ├── research.md               # Company research and insights
+    ├── interactions.md           # Communication log (emails, LinkedIn, calls)
+    └── resources.md              # Links, documents, contacts, compensation
 ```
 
 **Directory Creation Workflow**:
@@ -147,12 +157,29 @@ applications/
 
 **Portability**: All paths are relative to working directory. Agent works in any project, not hardcoded to specific locations.
 
+## Recruiter Outreach Workflow
+
+When a recruiter reaches out (LinkedIn, email) before user actively applies:
+
+1. **Log the interaction** in `interactions.md` immediately with full message content
+2. **Extract what's known**: company, role, recruiter name, any links provided
+3. **Create application directory** with partial info
+4. **Fetch JD** from provided link or ask recruiter for details
+5. **Draft response options** for user to choose from (formal, warm, minimal)
+6. **Research company** proactively if user expresses interest
+7. **Assess intent**: Is this a Target, Practice, or Exploratory opportunity?
+
+**Intent Categories**:
+- **Target**: Serious interest, would accept offer if right
+- **Practice**: Low stakes, use for interview practice & market intel
+- **Exploratory**: Curious but uncertain about fit
+
 ## RenderCV Integration
 
 **Format**: Work with RenderCV YAML format for CV variants
 
 **Base CV Detection**:
-1. Look for `*_CV.yaml` files in working directory
+1. Look for `cvs/*_CV.yaml` files in working directory
 2. If found, use as base for tailoring
 3. If not found, ask user to provide CV information
 
@@ -170,6 +197,89 @@ applications/
 - `cv.sections.experience` - Bullet points modified for relevance
 - `cv.sections.education` - Highlight relevant coursework
 
+## File Templates
+
+### interactions.md Template
+Track all communications chronologically:
+
+```markdown
+# Interactions Log - {Company}
+
+## Contacts
+| Name | Role | Email | LinkedIn | Notes |
+|------|------|-------|----------|-------|
+
+## Communication Timeline
+<!-- Add entries in reverse chronological order (newest first) -->
+
+### YYYY-MM-DD - [Email/LinkedIn/Call/Interview]
+**With**: {contact name and role}
+**Channel**: Email / LinkedIn DM / Phone / Video Call
+**Direction**: Inbound / Outbound
+
+**Summary**: {1-2 sentence summary}
+
+**Key Points**:
+- Point 1
+- Point 2
+
+**Action Items**:
+- [ ] {Next step}
+
+<details>
+<summary>Full Content</summary>
+{Paste full message here}
+</details>
+
+---
+```
+
+### resources.md Template
+Collect all application materials and compensation info:
+
+```markdown
+# Resources - {Company}
+
+## Job Posting
+- **URL**: {link}
+- **Captured**: {date}
+- **Status**: Active / Closed
+
+## Company Research
+### Official Sources
+- [ ] Company website:
+- [ ] Careers page:
+- [ ] Engineering blog:
+- [ ] GitHub org:
+
+### External Research
+- [ ] LinkedIn company page:
+- [ ] Glassdoor reviews:
+- [ ] Glassdoor interviews:
+
+## Key People
+| Name | Role | LinkedIn | Notes |
+|------|------|----------|-------|
+
+## Compensation
+
+| Stage | Amount | Notes |
+|-------|--------|-------|
+| **JD Range** | {if posted} | From job posting |
+| **Market Rate** | {researched} | Glassdoor/Levels.fyi |
+| **Recruiter Quote** | {if shared} | Initial discussion |
+| **Offer** | {if received} | Final offer |
+| **Negotiated** | {if applicable} | After negotiation |
+
+### Expectations
+- **Minimum acceptable**:
+- **Target**:
+- **Stretch**:
+
+## Notes
+{Observations, red flags, highlights}
+```
+
 ## Application Tracker Format
 
 **File**: `applications/tracker.md`
@@ -181,11 +291,12 @@ Last Updated: {timestamp}
 
 ## Active Applications
 
-| Company | Role | Status | Applied | Last Activity | Next Step | Priority |
-|---------|------|--------|---------|---------------|-----------|----------|
-| {company} | {role} | {status} | {date} | {date} | {action} | {H/M/L} |
+| Company | Role | Status | Applied | Next Step | Priority | Intent | Comp Range |
+|---------|------|--------|---------|-----------|----------|--------|------------|
+| {company} | {role} | {status} | {date} | {action} | {H/M/L} | {Target/Practice/Exploratory} | {range} |
 
 ## Status Legend
+- **Recruiter Outreach**: Recruiter contacted, initial response pending
 - **Researching**: Gathering company info, analyzing JD
 - **Preparing**: Tailoring CV, writing cover letter
 - **Applied**: Application submitted
@@ -195,6 +306,11 @@ Last Updated: {timestamp}
 - **Offer**: Received offer
 - **Rejected**: Application rejected
 - **Withdrawn**: Withdrew application
+
+## Intent Categories
+- **Target**: Serious interest, would accept offer
+- **Practice**: Low stakes, for interview practice & market intel
+- **Exploratory**: Curious but uncertain about fit
 
 ## Statistics
 - Total Applications: {count}

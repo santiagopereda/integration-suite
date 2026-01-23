@@ -480,6 +480,60 @@ next week. Help me prepare.
 
 ---
 
+### agent-project-init (v1.0.0) - Production
+
+**ID**: `agent-project-init`
+
+**Purpose**: Initialize new projects with type-appropriate structure, documentation, and provisioned agents based on learnings from cross-project testimony analysis.
+
+**Use When**:
+- Starting a new project from scratch
+- Converting an existing directory into an agent-enabled project
+- Setting up project structure with appropriate .agent/ folders
+- Provisioning agents and commands to a new project
+
+**Location**: `.claude/agents/agent-project-init.md`
+
+**Project Types Supported**:
+
+| Type | Description | Folders Created |
+|------|-------------|-----------------|
+| Integration | APIs, data flows, sync | sops/, system/, workflows/ |
+| Development | Building software | decisions/, schemas/, testing/ |
+| Research | Exploration, learning | findings/, hypotheses/, gaps/ |
+| Optimization | Improving existing | templates/, metrics/, experiments/ |
+| Custom | User-defined | User selects |
+
+**Default Provisions**:
+- **Agents**: research-assistant, documentation-specialist, agent-git-manager
+- **Commands**: update_doc, agent_reflect
+
+**Invoke With**:
+```bash
+/project_init                    # Initialize current directory
+/project_init /path/to/project   # Initialize specific path
+```
+
+**Workflow**:
+1. DISCOVER - Check existing files
+2. CLASSIFY - Select project type
+3. DEFINE - Gather project info
+4. STRUCTURE - Create .agent/ folders
+5. DOCUMENT - Create CLAUDE.md, README.md
+6. PROVISION - Sync agents from hub
+7. CONFIRM - Execute after approval
+
+**Key Features**:
+- Creates only folders that will be used (no empty templates)
+- Always includes injection-history.md (100% usage in analyzed projects)
+- Reads existing files before proposing changes
+- Asks before modifying existing content
+
+**Documentation**:
+- Command: `.claude/commands/project_init.md`
+
+---
+
 ## Agent Repository Tools
 
 ### agent-architect (Meta-Agent)
@@ -506,6 +560,74 @@ Use this specialized agent to help design new agents:
 - Test case development
 - Quality standard definition
 - Integration guidance
+
+---
+
+## Available Commands
+
+### /agent_reflect - Project Journey Testimony Generator
+
+**Purpose**: Generate comprehensive reflection documents that capture a project's evolution, lessons learned, and insights by analyzing the `.agent/` knowledge base.
+
+**Use When**:
+- Documenting project journey for retrospectives
+- Capturing lessons learned before project handoff
+- Generating cross-project analysis
+- Creating testimony documents for research
+
+**Invocation**:
+```bash
+/agent_reflect                    # Analyze current project
+/agent_reflect /path/to/project   # Analyze specific project
+```
+
+**Output**:
+- Testimony document at `/home/askeox/IntoData/Internal/AI_Research_Initiative/Agent_Testimony/`
+- Format: `{project-name}_testimony_{YYYY-MM-DD}.md`
+
+**Agent Used**: `documentation-specialist`
+
+**Data Sources**:
+- `.agent/injection-history.md` - Chronological audit trail
+- `.agent/PHASE*_COMPLETE.md` - Milestone narratives
+- `.agent/metrics/` - Quantitative data
+- `.agent/sops/common-mistakes.md` - Documented failures
+
+**Location**: `.claude/commands/agent_reflect.md`
+
+---
+
+### /project_init - Project Initialization Command
+
+**Purpose**: Initialize new projects with type-appropriate structure, documentation, and provisioned agents.
+
+**Use When**:
+- Starting a new project from scratch
+- Converting existing directory to agent-enabled project
+- Setting up .agent/ knowledge base structure
+
+**Invocation**:
+```bash
+/project_init                    # Initialize current directory
+/project_init /path/to/project   # Initialize specific path
+```
+
+**Workflow**:
+1. Discovers existing files (README.md, CLAUDE.md, .agent/)
+2. Asks project type (Integration, Development, Research, Optimization, Custom)
+3. Gathers project info (name, goals, resources, constraints)
+4. Creates type-appropriate .agent/ structure
+5. Generates CLAUDE.md and README.md
+6. Provisions default agents and commands from hub
+7. Executes after user confirmation
+
+**Default Provisions**:
+- Agents: research-assistant, documentation-specialist, agent-git-manager
+- Commands: update_doc, agent_reflect
+
+**Agent Used**: `agent-project-init`
+
+**Location**: `.claude/commands/project_init.md`
 
 ---
 
