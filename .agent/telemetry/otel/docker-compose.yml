@@ -1,0 +1,13 @@
+services:
+  otel-collector:
+    image: otel/opentelemetry-collector-contrib:0.96.0
+    container_name: claude-telemetry-collector
+    restart: unless-stopped
+    ports:
+      - "4317:4317"   # OTLP gRPC
+      - "4318:4318"   # OTLP HTTP
+      - "8889:8889"   # Prometheus metrics endpoint
+    volumes:
+      - ./otel-config.yaml:/etc/otelcol-contrib/config.yaml
+      - ./data:/data
+    command: ["--config=/etc/otelcol-contrib/config.yaml"]

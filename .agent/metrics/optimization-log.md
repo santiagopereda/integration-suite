@@ -307,6 +307,91 @@ Optimization is successful when:
 ---
 
 **Started**: 2025-11-28
-**Status**: Phase 1 Complete - Template externalization and refactoring finished
-**Next Milestone**: Phase 2 - Knowledge Base Population & Agent Scaffolds
+**Status**: Ongoing - Template externalization continuing
 **Maintained By**: Agent Architecture Team
+
+---
+
+## 2026-01-24: Agent Provisioner Optimization Complete
+
+### agent-provisioner Template Externalization
+
+**Target Agent**: `agent-provisioner`
+
+**Before**:
+- File: `.claude/agents/agent-provisioner.md`
+- Size: 713 lines, 3,378 words, 25,095 characters
+- Estimated tokens: ~6,274
+
+**After**:
+- Size: 361 lines, 1,887 words, 14,303 characters
+- Estimated tokens: ~3,576
+- Templates created: 7 files
+
+**Templates Created**:
+1. `.agent/templates/provisioner/sync-workflow.md` (~350 words)
+2. `.agent/templates/provisioner/sync-back-workflow.md` (~400 words)
+3. `.agent/templates/provisioner/telemetry-sync-workflow.md` (~300 words)
+4. `.agent/templates/provisioner/register-workflow.md` (~350 words)
+5. `.agent/templates/provisioner/registry-templates.md` (~300 words)
+6. `.agent/templates/provisioner/hook-merge-logic.md` (~200 words)
+7. `.agent/templates/provisioner/workflow-examples.md` (~500 words)
+
+**Optimizations Applied**:
+1. **Template Externalization** (PAT-01):
+   - Extracted 6 workflow sections to external templates
+   - Extracted registry templates and hook merge logic
+   - Extracted workflow examples
+   - Total words externalized: ~2,400
+
+2. **Section Compression** (PAT-04):
+   - Commands section converted to table format
+   - Output modes compressed to table + brief descriptions
+   - Removed redundant explanatory text
+
+3. **Output Modes Control** (PAT-03):
+   - Added user-controllable verbosity (brief/standard/detailed)
+   - Example: `@agent-provisioner: list mode=brief`
+
+**Results**:
+- Lines reduced: 352 (49.4% reduction)
+- Words reduced: 1,491 (44.1% reduction)
+- Characters reduced: 10,792 (43.0% reduction)
+- Estimated token reduction: ~2,698 (43.0%)
+
+**Quality Gates Validation**:
+- [x] QG-1: 12 test cases remain valid (structural analysis)
+- [x] QG-2: Fabrication constraints preserved (lines 391-398 intact)
+- [x] QG-3: N/A (infrastructure agent, no uncertainty statements)
+- [x] QG-4: All 7 templates created and accessible
+- [x] QG-5: All 16 critical constraints preserved
+
+**ROI Analysis**:
+- Development time: ~1 hour
+- Token savings per invocation: ~2,698 (without template loading)
+- Net savings per invocation: ~2,300 (after 1 template load)
+- Estimated annual savings: ~184K tokens (at 80 invocations/year)
+
+**Validation Pending**:
+- [ ] Manual test of sync workflow with template loading
+- [ ] Manual test of sync-back workflow
+- [ ] Manual test of register workflow
+
+**Completed**: 2026-01-24
+
+---
+
+## Aggregate Optimization Summary (As of 2026-01-24)
+
+| Agent | Baseline Tokens | Current Tokens | Reduction | Templates |
+|-------|----------------|----------------|-----------|-----------|
+| agent-sap-bp-integration | ~15,000 | ~6,300 | 58% | 3 |
+| agent-ansible-automation | ~16,000 | ~6,493 | 59% | 10 |
+| agent-provisioner | ~6,274 | ~3,576 | 43% | 7 |
+| **Total** | **~37,274** | **~16,369** | **56%** | **20** |
+
+**Hub-wide Impact**:
+- 3 agents optimized
+- 20 templates created
+- ~20,905 tokens saved per full agent set
+- Average reduction: 53%

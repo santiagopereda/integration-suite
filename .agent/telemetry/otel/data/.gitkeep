@@ -1,0 +1,2 @@
+# This directory stores OTel telemetry data exports
+# Data files are auto-rotated by the collector (90 days retention)

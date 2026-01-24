@@ -13,6 +13,7 @@ Central hub for all specialized Claude Code agents designed for this organizatio
 | `agent-provisioner` | Agent Provisioner | Developer Tools | Production | Sync agents, commands, and hooks to other projects |
 | `agent-cv-optimizer` | CV Optimizer for Data & AI | Career Development | Production | CV tailoring, interview prep, application tracking for Data/AI roles |
 | `agent-project-init` | Project Initialization Specialist | Developer Tools | Production | Initialize new projects with type-appropriate structure and agents |
+| `agent-optimizer` | Agent Optimization Specialist | Developer Tools | Production | Analyze and optimize agents using telemetry and structural analysis |
 
 ---
 
@@ -854,6 +855,92 @@ Project Initialization Specialist that sets up new projects with type-appropriat
 
 ---
 
+### 8. agent-optimizer
+
+**Status**: Production Ready (v1.0.0)
+
+**Category**: Developer Tools
+
+**Description**:
+Agent Optimization Specialist that analyzes existing agents using structural analysis and telemetry data from cross-project usage to improve token efficiency and answer quality while maintaining 100% test pass rate.
+
+**Location**: `.claude/agents/agent-optimizer.md`
+
+**Command**: `/optimize`
+
+**Key Expertise**:
+- Agent token usage measurement and estimation
+- Telemetry data interpretation (usage patterns, error rates)
+- Proven optimization patterns (template externalization, lazy loading)
+- Quality gate enforcement (100% test pass, constraint preservation)
+- Cross-project insights from reflection_pool
+- Time-series metrics tracking
+
+**5-Phase Workflow**:
+1. **MEASURE** - Capture structural + telemetry metrics
+2. **ANALYZE** - Apply proven patterns from reflection_pool
+3. **RECOMMEND** - Generate optimization plan with estimates
+4. **VALIDATE** - Enforce quality gates
+5. **TRACK** - Record before/after metrics for time-series
+
+**Optimization Patterns**:
+
+| Pattern | Expected Reduction | When to Apply |
+|---------|-------------------|---------------|
+| Template Externalization | 51-65% | Embedded content > 100 words |
+| Lazy Loading | 5% overhead | Templates loaded unconditionally |
+| Output Modes | Control | No verbosity options |
+| Section Compression | 15-30% | Similar agent is smaller |
+
+**Quality Gates**:
+- QG-1: 100% test pass rate maintained
+- QG-2: No fabrication constraints removed
+- QG-3: Uncertainty acknowledgment preserved
+- QG-4: All referenced templates exist
+- QG-5: Critical constraints intact
+
+**Data Sources**:
+- `.agent/metrics/` - Token usage, optimization logs
+- `.agent/telemetry/` - Cross-project usage data
+- `.agent/reflection_pool/` - Proven patterns and insights
+
+**Trigger Conditions**:
+- User wants to analyze agents for optimization
+- User wants to apply proven patterns to agents
+- User wants to track token efficiency over time
+- User runs `/optimize` command
+
+**Example Usage**:
+
+```bash
+# Analyze all agents
+/optimize
+
+# Optimize specific agent
+/optimize agent-git-manager
+
+# View hub-wide status
+/optimize status
+
+# Preview without recording
+/optimize --dry-run
+```
+
+**Critical Constraints**:
+- **Never applies** optimizations without quality gate validation
+- **Never removes** fabrication prevention constraints
+- **Always preserves** uncertainty acknowledgment
+- **Always records** before/after metrics
+- Uses only proven patterns from testimony analysis
+
+**Documentation**:
+- User Guide: `agents/agent-optimizer/README.md`
+- Test Cases: `agents/agent-optimizer/test-cases.md`
+
+**Contact**: Agent Architecture Team
+
+---
+
 ## Repository Structure
 
 ```
@@ -865,6 +952,7 @@ Project Initialization Specialist that sets up new projects with type-appropriat
   agent-provisioner.md                 # Agent provisioning agent definition
   agent-cv-optimizer.md                # CV optimization agent definition
   agent-project-init.md               # Project initialization agent definition
+  agent-optimizer.md                  # Agent optimization specialist definition
 
 /agents/
   /agent-sap-businesspartner-integration/
@@ -914,6 +1002,11 @@ Project Initialization Specialist that sets up new projects with type-appropriat
       - cv-tailoring-example.md
       - interview-prep-example.md
       - tracker-example.md
+
+  /agent-optimizer/
+    README.md                  # Usage guide and trigger conditions
+    test-cases.md             # 12 validation test cases
+    examples/                 # Example workflows (optional)
 
 /docs/sap-integration/businesspartner/
   # Generated documentation by agents

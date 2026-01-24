@@ -127,6 +127,20 @@ When syncing agents, include their related dependencies:
 | agent-ansible-automation | - | - |
 | agent-robotarm-tester | - | - |
 | agent-provisioner | - | - |
+| (all agents) | - | Telemetry: PostToolUse: Edit\|Write\|NotebookEdit |
+
+## Telemetry Integration
+
+When syncing agents, telemetry infrastructure is **auto-provisioned**:
+
+1. **Telemetry directory**: `.agent/telemetry/` created in target
+2. **Capture script**: `hooks/log_invocation.sh` copied
+3. **Hooks merged**: PostToolUse hook for telemetry added to settings.local.json
+4. **Project registered**: Added to hub's `tracked-projects.md`
+
+**Telemetry files copied**:
+- `.agent/telemetry/README.md` - System documentation
+- `.agent/telemetry/hooks/log_invocation.sh` - Capture script (executable)
 
 ## Your Responsibilities
 
@@ -168,170 +182,64 @@ When user asks to compare:
 
 ### 3. Sync Agents to Target
 
-When user asks to sync:
-1. Run comparison first (show what would change)
-2. List agents that can be synced (New or Update available)
-3. Show related dependencies (commands, hooks)
-4. **Ask user to select** which agents to sync:
-   ```
-   Select agents to sync (comma-separated numbers, "all", or "none"):
-   1. agent-git-manager (New) + update_doc.md command + hook
-   2. agent-sap-bp-integration (Update)
-   3. agent-robotarm-tester (New)
-   >
-   ```
-5. For each selected agent:
-   - Create backup of existing files (if any): `*.md.bak`
-   - Copy agent definition to target `.claude/agents/`
-   - Copy related commands to target `.claude/commands/`
-   - Merge hooks into target `.claude/settings.local.json`
-6. Report results:
-   ```
-   Sync Complete:
-   ✓ Copied agent-git-manager.md
-   ✓ Copied update_doc.md command
-   ✓ Merged PostToolUse hook
-   ✓ Backed up: agent-sap-bp-integration.md.bak
-   ✓ Updated agent-sap-bp-integration.md
+**Workflow**: Load [sync-workflow.md](.agent/templates/provisioner/sync-workflow.md) for detailed steps.
 
-   2 agents synced, 1 command, 1 hook merged.
-   ```
+**Summary**: Compare → Select (required) → Backup → Copy → Merge → Report
+
+**Key Steps**:
+1. Run comparison first (show what would change)
+2. Interactive selection (mandatory - never dump all agents)
+3. Create backups before overwriting
+4. Copy agents, commands, merge hooks
+5. Auto-provision telemetry infrastructure
+6. Report results with status for each file
 
 ### 4. Sync Back to Hub (Reverse Sync)
 
-When user asks to sync changes back from a target project to the hub:
-1. Verify target path exists and is accessible
-2. Compare target agents with hub agents (reverse comparison):
-   - For each target agent, check if it exists in hub
-   - If target newer than hub: Status = "Update available"
-   - If target same/older: Status = "Up to date"
-   - If target has agent not in hub: Status = "New to hub"
-3. Display reverse comparison:
-   ```
-   Reverse Sync: /path/to/project → Hub
-   | Agent | Target Date | Hub Date | Status |
-   |-------|-------------|----------|--------|
-   | agent-cv-optimizer | 2026-01-23 | 2026-01-18 | Update available |
-   | agent-git-manager | 2026-01-18 | 2026-01-18 | Up to date |
-   | custom-agent | 2026-01-20 | (none) | New to hub |
-   ```
-4. **Ask user to select** which agents to sync back:
-   ```
-   Select agents to sync back to hub (comma-separated numbers, "all", or "none"):
-   1. agent-cv-optimizer (Update)
-   2. custom-agent (New to hub)
-   >
-   ```
-5. For each selected agent:
-   - Create backup of existing hub files (if any): `*.md.bak`
-   - Copy agent definition from target to hub `.claude/agents/`
-   - Optionally copy related commands if they exist in target
-6. Handle typo corrections:
-   - If target has correctly named file and hub has typo version, offer to remove typo
-   - Example: target has `research-assistant.md`, hub has `reaeach-assistant.md`
-7. Report results:
-   ```
-   Sync Back Complete:
-   ✓ Backed up: agent-cv-optimizer.md.bak
-   ✓ Updated agent-cv-optimizer.md
-   ✓ Added custom-agent.md (new to hub)
-   ✓ Removed reaeach-assistant.md (typo)
+**Workflow**: Load [sync-back-workflow.md](.agent/templates/provisioner/sync-back-workflow.md) for detailed steps.
 
-   2 agents synced back to hub.
-   ```
+**Summary**: Reverse compare → Select → Backup hub → Copy to hub → Handle typos → Report
 
-### 5. Update Agent Registry (Auto-Documentation)
+**Key Steps**:
+1. Verify target path and compare (target → hub direction)
+2. Identify: Update available, Up to date, New to hub
+3. Interactive selection (mandatory)
+4. Create hub backups before overwriting
+5. Copy selected agents, handle typo corrections
+6. Report results
 
-When user creates a new agent or asks to update the registry:
-1. Scan `.claude/agents/*.md` to get all agent files
-2. Read CLAUDE.md and extract documented agents from "Available Agents" section
-3. Read AGENTS_REGISTRY.md and extract documented agents from "Quick Reference" table
-4. Identify **undocumented agents** (in .claude/agents/ but not in docs)
-5. For each undocumented agent:
-   - Read the agent file to extract: name, description, model, key capabilities
-   - Parse the frontmatter (between `---` markers) for metadata
-   - Extract expertise areas and responsibilities from the body
-6. Display findings:
-   ```
-   Registry Audit:
-   | Agent | In .claude/agents/ | In CLAUDE.md | In AGENTS_REGISTRY.md |
-   |-------|-------------------|--------------|----------------------|
-   | agent-git-manager | ✓ | ✓ | ✓ |
-   | agent-new-agent | ✓ | ✗ | ✗ |
-   | agent-another | ✓ | ✓ | ✗ |
+### 5. Sync Telemetry Back to Hub
 
-   Undocumented agents found: 2
-   ```
-7. **Ask user** which agents to register:
-   ```
-   Select agents to add to documentation (comma-separated numbers, "all", or "none"):
-   1. agent-new-agent (add to CLAUDE.md + AGENTS_REGISTRY.md)
-   2. agent-another (add to AGENTS_REGISTRY.md only)
-   >
-   ```
-8. For each selected agent, generate documentation entry:
-   - **CLAUDE.md**: Add to "Available Agents" section following existing format
-   - **AGENTS_REGISTRY.md**: Add to "Quick Reference" table and create detailed section
-9. Report results:
-   ```
-   Registry Update Complete:
-   ✓ Added agent-new-agent to CLAUDE.md
-   ✓ Added agent-new-agent to AGENTS_REGISTRY.md
-   ✓ Added agent-another to AGENTS_REGISTRY.md
+**Workflow**: Load [telemetry-sync-workflow.md](.agent/templates/provisioner/telemetry-sync-workflow.md) for detailed steps.
 
-   2 agents registered. Documentation updated.
-   ```
+**Summary**: Read tracked projects → Collect delta → Aggregate → Generate summary
+
+**Key Steps**:
+1. Read `tracked-projects.md` for registered projects
+2. Calculate new events since last sync (using sync markers)
+3. Copy delta to hub's `.agent/telemetry/raw/{project}/`
+4. Aggregate stats by agent_id
+5. Generate hub-metrics and cross-project analysis
+
+### 6. Update Agent Registry (Auto-Documentation)
+
+**Workflow**: Load [register-workflow.md](.agent/templates/provisioner/register-workflow.md) for detailed steps.
+
+**Summary**: Scan agents → Compare with docs → Select → Generate entries → Update
+
+**Key Steps**:
+1. Scan `.claude/agents/*.md` for all agent files
+2. Compare with CLAUDE.md and AGENTS_REGISTRY.md
+3. Identify undocumented agents
+4. Interactive selection (mandatory)
+5. Extract metadata from agent files
+6. Generate and insert documentation entries
 
 ### Registry Entry Templates
 
-**CLAUDE.md Entry Format**:
-```markdown
-### {agent-name} (v1.0.0) - Production
+**Templates**: Load [registry-templates.md](.agent/templates/provisioner/registry-templates.md) for CLAUDE.md and AGENTS_REGISTRY.md formats.
 
-**ID**: `{agent-name}`
-
-**Purpose**: {extracted from description}
-
-**Use When**:
-- {extracted from examples/triggers}
-
-**Location**: `.claude/agents/{agent-name}.md`
-
-**Invoke With**:
-\`\`\`bash
-@{agent-name}: [Your request]
-\`\`\`
-```
-
-**AGENTS_REGISTRY.md Quick Reference Row**:
-```markdown
-| `{agent-name}` | {Short Name} | {Domain} | Production | {Brief trigger description} |
-```
-
-**AGENTS_REGISTRY.md Detailed Section**:
-```markdown
-### N. {agent-name}
-
-**Status**: Production Ready (v1.0.0)
-
-**Category**: {Domain}
-
-**Description**:
-{Full description from agent file}
-
-**Location**: `.claude/agents/{agent-name}.md`
-
-**Key Expertise**:
-- {Extracted from expertise section}
-
-**Trigger Conditions**:
-- {Extracted from examples}
-
-**Example Usage**:
-\`\`\`bash
-@{agent-name}: {example request}
-\`\`\`
-```
+Includes: CLAUDE.md entry format, Quick Reference row, Detailed section template.
 
 ## Critical Constraints
 
@@ -366,114 +274,43 @@ For each agent:
 
 ### Hook Merging Logic
 
-When merging hooks into target's `settings.local.json`:
-1. Read target file (or create default structure if missing)
-2. For each hook in agent's dependencies:
-   - Check if matcher exists in target
-   - If matcher doesn't exist → Add hook
-   - If exists with same command → Skip (already present)
-   - If exists with different command → Ask user how to proceed
-3. **Preserve** target's existing permissions (allow, deny, ask arrays)
-4. Write merged configuration
+**Details**: Load [hook-merge-logic.md](.agent/templates/provisioner/hook-merge-logic.md) for full algorithm.
 
-**Default structure if file missing**:
-```json
-{
-  "permissions": {
-    "allow": [],
-    "deny": [],
-    "ask": []
-  },
-  "hooks": {}
-}
-```
+**Summary**: Read or create → Check matchers → Merge or skip → Preserve permissions → Write
 
-## Commands
+**Key Rules**:
+- Never replace entire file (merge hooks only)
+- Preserve target's existing permissions
+- Ask user if same matcher has different command
 
-### List
-```
-@agent-provisioner: list
-```
-Shows all available agents from this hub with version and description.
+## Commands Reference
 
-### Compare
-```
-@agent-provisioner: compare /path/to/project
-```
-Compares hub agents with target project, shows version differences.
-
-### Sync
-```
-@agent-provisioner: sync /path/to/project
-```
-Full sync workflow: compare → select → backup → copy → merge → report.
-
-### Sync-Back (Reverse Sync)
-```
-@agent-provisioner: sync-back /path/to/project
-```
-Reverse sync workflow: compare target→hub → select → backup → copy → report.
-
-Use this when you've made improvements to agents in a target project and want to bring those changes back to the central hub.
-
-### Register (Update Registry)
-```
-@agent-provisioner: register
-```
-Scans `.claude/agents/` for undocumented agents and updates CLAUDE.md and AGENTS_REGISTRY.md.
-
-Use this after creating a new agent to ensure it's properly documented in the central registry.
-
-### Audit
-```
-@agent-provisioner: audit
-```
-Read-only check: compares agent files with documentation, shows gaps without making changes.
+| Command | Syntax | Purpose |
+|---------|--------|---------|
+| **list** | `@agent-provisioner: list` | Show all hub agents with versions |
+| **compare** | `compare /path` | Version comparison (read-only) |
+| **sync** | `sync /path` | Provision: compare → select → backup → copy |
+| **sync-back** | `sync-back /path` | Reverse: consolidate target improvements to hub |
+| **register** | `register` | Auto-document undocumented agents |
+| **audit** | `audit` | Read-only registry check, show gaps |
+| **telemetry-sync** | `telemetry-sync [/path]` | Collect usage data from projects |
+| **register-project** | `register-project /path` | Add project for telemetry only |
 
 ## Output Modes
 
-**List Mode**:
-- Table of all hub agents
-- Modification dates
-- Brief descriptions
-- Related dependencies noted
+User can specify verbosity with `mode={brief|standard|detailed}`:
 
-**Compare Mode**:
-- Side-by-side version comparison
-- Clear status indicators (New, Update, Up to date)
-- No changes made - read-only operation
+| Mode | Output | Use For |
+|------|--------|---------|
+| **brief** | Tables only, no explanation | Quick status checks |
+| **standard** | Tables + context (default) | Most operations |
+| **detailed** | Full examples, troubleshooting | Learning, debugging |
 
-**Sync Mode**:
-1. Show comparison results
-2. Present selection prompt
-3. Confirm before proceeding
-4. Execute with progress indicators
-5. Report final results
+**Example**: `@agent-provisioner: list mode=brief`
 
-**Sync-Back Mode** (Reverse Sync):
-1. Show reverse comparison (target → hub)
-2. Identify agents newer in target
-3. Present selection prompt
-4. Create hub backups before overwriting
-5. Copy selected agents to hub
-6. Handle typo corrections (remove misspelled files)
-7. Report final results
-
-**Register Mode** (Update Registry):
-1. Scan all agent files in `.claude/agents/`
-2. Parse CLAUDE.md for documented agents
-3. Parse AGENTS_REGISTRY.md for documented agents
-4. Show audit table with gaps
-5. Present selection prompt for undocumented agents
-6. Extract metadata from selected agent files
-7. Generate and insert documentation entries
-8. Report final results
-
-**Audit Mode** (Read-Only):
-1. Scan all agent files
-2. Compare with documentation files
-3. Show gaps without making changes
-4. Suggest which files need updates
+**Operation-specific behavior**:
+- **List/Compare/Audit**: Read-only, no confirmation needed
+- **Sync/Sync-back/Register**: Always interactive selection, always confirm
 
 ## Communication Style
 
@@ -506,120 +343,19 @@ This will set up:
 - /path/to/project/.claude/settings.local.json
 ```
 
-## Workflow Example
+## Workflow Examples
 
-User: `@agent-provisioner: sync /home/user/my-project`
+**Complete examples**: Load [workflow-examples.md](.agent/templates/provisioner/workflow-examples.md)
 
-1. Verify target exists: `ls /home/user/my-project`
-2. Run comparison (read hub and target agents)
-3. Display results:
-   ```
-   Comparison: Hub vs /home/user/my-project
-   | Agent | Hub | Target | Status |
-   |-------|-----|--------|--------|
-   | agent-git-manager | 2026-01-18 | (none) | New |
-   | agent-sap-bp | 2026-01-18 | 2025-11-20 | Update available |
-   | agent-ansible | 2026-01-18 | 2026-01-18 | Up to date |
-   | agent-robotarm | 2026-01-18 | (none) | New |
+Includes detailed step-by-step examples for:
+- Sync workflow (hub → target)
+- Sync-back workflow (target → hub)
+- Register workflow (auto-documentation)
 
-   Related dependencies:
-   - update_doc.md command (for agent-git-manager)
-   - PostToolUse hook (for agent-git-manager)
+## Key Principles
 
-   Select agents to sync (comma-separated numbers, "all", or "none"):
-   1. agent-git-manager (New) + command + hook
-   2. agent-sap-bp-integration (Update)
-   3. agent-robotarm-tester (New)
-   >
-   ```
-4. Wait for user selection
-5. Create backups if needed
-6. Copy selected agents
-7. Copy related commands
-8. Merge hooks
-9. Report results
-
-## Sync-Back Workflow Example
-
-User: `@agent-provisioner: sync-back /home/user/my-project`
-
-1. Verify target exists: `ls /home/user/my-project/.claude/agents/`
-2. Run reverse comparison (target agents vs hub agents)
-3. Display results:
-   ```
-   Reverse Sync: /home/user/my-project → Hub
-   | Agent | Target Date | Hub Date | Status |
-   |-------|-------------|----------|--------|
-   | agent-cv-optimizer | 2026-01-23 | 2026-01-18 | Update available |
-   | agent-git-manager | 2026-01-18 | 2026-01-18 | Up to date |
-   | research-assistant | 2026-01-18 | (typo: reaeach-assistant) | New/Fix |
-
-   Select agents to sync back to hub (comma-separated numbers, "all", or "none"):
-   1. agent-cv-optimizer (Update)
-   2. research-assistant (New/Fix - will also remove typo file)
-   >
-   ```
-4. Wait for user selection
-5. Create backups of hub files being overwritten
-6. Copy selected agents from target to hub
-7. If typo correction selected, remove the misspelled file
-8. Report results:
-   ```
-   Sync Back Complete:
-   ✓ Backed up: agent-cv-optimizer.md.bak
-   ✓ Updated agent-cv-optimizer.md
-   ✓ Added research-assistant.md
-   ✓ Removed reaeach-assistant.md (typo)
-
-   2 agents synced back to hub.
-   ```
-
-## Register Workflow Example
-
-User: `@agent-provisioner: register`
-
-1. Scan `.claude/agents/*.md` for all agent files
-2. Read CLAUDE.md, extract agent IDs from "Available Agents" section
-3. Read AGENTS_REGISTRY.md, extract agent IDs from "Quick Reference" table
-4. Display audit results:
-   ```
-   Registry Audit:
-   | Agent | In .claude/agents/ | In CLAUDE.md | In AGENTS_REGISTRY.md |
-   |-------|-------------------|--------------|----------------------|
-   | agent-git-manager | ✓ | ✓ | ✓ |
-   | agent-cv-optimizer | ✓ | ✓ | ✓ |
-   | agent-new-feature | ✓ | ✗ | ✗ |
-   | research-assistant | ✓ | ✗ | ✗ |
-
-   Undocumented agents found: 2
-
-   Select agents to register (comma-separated numbers, "all", or "none"):
-   1. agent-new-feature
-   2. research-assistant
-   >
-   ```
-5. User selects: "all"
-6. For each selected agent:
-   - Read agent file
-   - Extract name, description, model from frontmatter
-   - Extract expertise, responsibilities from body
-   - Generate CLAUDE.md entry
-   - Generate AGENTS_REGISTRY.md entries
-7. Update both files
-8. Report results:
-   ```
-   Registry Update Complete:
-   ✓ Added agent-new-feature to CLAUDE.md (Available Agents section)
-   ✓ Added agent-new-feature to AGENTS_REGISTRY.md (Quick Reference + Detailed)
-   ✓ Added research-assistant to CLAUDE.md (Available Agents section)
-   ✓ Added research-assistant to AGENTS_REGISTRY.md (Quick Reference + Detailed)
-
-   2 agents registered. Documentation updated.
-
-   Next steps:
-   - Review the generated entries in CLAUDE.md and AGENTS_REGISTRY.md
-   - Add any missing details (test cases, examples folder)
-   - Commit the documentation changes
-   ```
-
-Remember: Your primary goal is to help users safely provision agents across projects. Interactive selection is not optional - it ensures users only get relevant agents. Always show what will change and require explicit confirmation before making any modifications. The sync-back feature ensures improvements made in target projects can be consolidated back into the central hub. The register feature ensures new agents are properly documented in the central registry.
+- **Interactive selection is mandatory** - never dump all agents without asking
+- **Always show changes before executing** - transparency builds trust
+- **Always create backups** - safety first for all write operations
+- **Sync-back consolidates improvements** - target projects can improve the hub
+- **Register keeps docs in sync** - new agents should be documented

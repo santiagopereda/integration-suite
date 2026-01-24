@@ -36,9 +36,11 @@ Read these files from `.agent/` in priority order:
 | 2 | `PHASE*_COMPLETE.md` | Milestone narratives with metrics |
 | 3 | `metrics/optimization-log.md` | Change history with reasoning |
 | 4 | `metrics/*.json` | Quantitative baseline/current data |
-| 5 | `sops/common-mistakes.md` | Documented failures and lessons |
-| 6 | `tasks/*/prd.md` | Original requirements and objectives |
-| 7 | `README.md` | Project knowledge base overview |
+| 5 | `telemetry/invocation-log.jsonl` | Agent usage telemetry data |
+| 6 | `telemetry/daily/*.json` | Daily aggregated telemetry |
+| 7 | `sops/common-mistakes.md` | Documented failures and lessons |
+| 8 | `tasks/*/prd.md` | Original requirements and objectives |
+| 9 | `README.md` | Project knowledge base overview |
 
 ### Graceful Degradation
 
@@ -166,6 +168,40 @@ the most significant learnings and outcomes]
 
 ---
 
+## Agent Usage Telemetry
+
+*This section is populated from `.agent/telemetry/` data when available.*
+
+### Agent Usage Summary
+| Agent | Invocations | Avg Tokens | Success Rate | Avg Duration |
+|-------|-------------|------------|--------------|--------------|
+| [agent-id] | [count] | [tokens] | [%] | [ms] |
+
+### Usage Patterns
+- **Most Active Agent**: [agent-id] ([X]% of invocations)
+- **Total Agent Invocations**: [count]
+- **Total Tokens Consumed**: [estimate]
+- **Overall Success Rate**: [%]
+
+### Tool Distribution
+| Tool | Usage % | Context |
+|------|---------|---------|
+| [tool-name] | [%] | [typical use case] |
+
+### Quality Signals
+- **Task Completion Rate**: [%]
+- **User Reverts**: [count] ([%])
+- **Error Rate**: [%]
+
+### Telemetry Insights
+- [Observation about agent usage patterns]
+- [Insight about which agents were most effective]
+- [Note about any error patterns detected]
+
+*Note: If telemetry is not available, this section will indicate "Telemetry not enabled" and recommend setup.*
+
+---
+
 ## Recommendations for Future Projects
 
 ### Do This
@@ -264,6 +300,32 @@ Trace how approaches changed:
 - Compare early vs. late injection-history entries
 - Note architecture changes between phases
 - Identify process improvements documented
+
+### Step 6.5: Extract Telemetry Data
+
+If `.agent/telemetry/` exists:
+1. Parse `invocation-log.jsonl` for all events
+2. Aggregate by agent_id:
+   - Count invocations per agent
+   - Calculate average tokens
+   - Compute success rate
+   - Calculate average duration
+3. Determine tool distribution
+4. Extract quality signals (task completion, reverts)
+5. Identify patterns and insights
+
+If telemetry not available:
+- Note "Telemetry not enabled" in output
+- Recommend enabling via `@agent-provisioner: sync`
+
+**Telemetry Aggregation Query**:
+```bash
+# Count invocations by agent
+jq -s 'group_by(.agent_id) | map({agent: .[0].agent_id, count: length})' invocation-log.jsonl
+
+# Calculate success rate
+jq -s '[.[] | .status] | group_by(.) | map({status: .[0], count: length})' invocation-log.jsonl
+```
 
 ### Step 7: Generate Testimony
 
@@ -485,6 +547,7 @@ After generating testimonies for multiple projects, you can synthesize patterns:
 |---------|------|---------|
 | 1.0.0 | 2026-01-23 | Initial release |
 | 1.1.0 | 2026-01-23 | Dual-write: project-local + central hub; added project tracker |
+| 1.2.0 | 2026-01-24 | Added telemetry integration: Agent Usage Telemetry section with quantitative metrics |
 
 ---
 

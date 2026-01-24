@@ -1,0 +1,3 @@
+{"timestamp":"2026-01-24T17:51:50Z","session_id":"8a9756ed-8f3d-4ff0-b849-2cba49ee5f02","tool":"Edit","agent_id":"unknown","agent_version":"1.0.0","file_size":0,"file_lines":0,"estimated_tokens":0,"status":"success"}
+{"timestamp":"2026-01-24T17:54:10Z","project_id":"Claude-Agents","session_id":"8a9756ed-8f3d-4ff0-b849-2cba49ee5f02","tool":"Edit","agent_id":"unknown","agent_version":"1.0.0","file_size":0,"file_lines":0,"estimated_tokens":0,"status":"success"}
+{"type":"session_summary","timestamp":"2026-01-24T17:58:04Z","project_id":"Claude-Agents","session_id":"8a9756ed-8f3d-4ff0-b849-2cba49ee5f02","duration_sec":374,"tool_operations":2,"files_changed":6,"lines_added":497,"lines_removed":384,"estimated_tokens":2643}

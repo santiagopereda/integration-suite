@@ -534,6 +534,67 @@ next week. Help me prepare.
 
 ---
 
+### agent-optimizer (v1.0.0) - Production
+
+**ID**: `agent-optimizer`
+
+**Purpose**: Expert agent optimization specialist that analyzes existing agents using structural analysis and telemetry data from cross-project usage to improve token efficiency and answer quality while maintaining 100% test pass rate.
+
+**Use When**:
+- Analyzing agents for optimization opportunities
+- Applying proven patterns from testimony data (template externalization, lazy loading)
+- Measuring token usage and tracking improvements over time
+- Validating quality gates before optimization
+- Generating hub-wide optimization status reports
+
+**Location**: `.claude/agents/agent-optimizer.md`
+
+**Key Files**:
+- `.claude/agents/agent-optimizer.md` - Agent definition
+- `.claude/commands/optimize.md` - Command interface
+- `agents/agent-optimizer/README.md` - Detailed usage guide
+- `agents/agent-optimizer/test-cases.md` - 12 validation test cases
+
+**Workflow (5 Phases)**:
+1. MEASURE - Capture structural + telemetry metrics
+2. ANALYZE - Apply proven patterns from reflection_pool
+3. RECOMMEND - Generate optimization plan with estimates
+4. VALIDATE - Enforce quality gates (100% test pass, constraints preserved)
+5. TRACK - Record before/after metrics for time-series analysis
+
+**Optimization Patterns**:
+| Pattern | Expected Reduction | When to Apply |
+|---------|-------------------|---------------|
+| Template Externalization | 51-65% | Embedded content > 100 words |
+| Lazy Loading | 5% overhead | Templates loaded unconditionally |
+| Output Modes | Control | No verbosity options |
+| Section Compression | 15-30% | Similar agent is smaller |
+
+**Quality Gates**:
+- QG-1: 100% test pass rate maintained
+- QG-2: No fabrication constraints removed
+- QG-3: Uncertainty acknowledgment preserved
+- QG-4: All referenced templates exist
+- QG-5: Critical constraints intact
+
+**Invoke With**:
+```bash
+/optimize                        # Analyze all agents
+/optimize agent-git-manager      # Optimize specific agent
+/optimize status                 # Hub-wide dashboard
+```
+
+**Data Sources**:
+- `.agent/metrics/` - Token usage, optimization logs
+- `.agent/telemetry/` - Cross-project usage data
+- `.agent/reflection_pool/` - Proven patterns and insights
+
+**Documentation**:
+- User Guide: `agents/agent-optimizer/README.md`
+- Test Cases: `agents/agent-optimizer/test-cases.md`
+
+---
+
 ## Agent Repository Tools
 
 ### agent-architect (Meta-Agent)
@@ -628,6 +689,42 @@ Use this specialized agent to help design new agents:
 **Agent Used**: `agent-project-init`
 
 **Location**: `.claude/commands/project_init.md`
+
+---
+
+### /optimize - Agent Optimization Command
+
+**Purpose**: Analyze and optimize agents using structural analysis and telemetry data from cross-project usage.
+
+**Use When**:
+- Analyzing agents for optimization opportunities
+- Applying proven patterns (template externalization, lazy loading)
+- Tracking token efficiency improvements over time
+- Generating hub-wide optimization status reports
+
+**Invocation**:
+```bash
+/optimize                        # Analyze all agents
+/optimize agent-git-manager      # Optimize specific agent
+/optimize status                 # Hub-wide dashboard
+/optimize --dry-run              # Preview without recording
+```
+
+**Workflow**:
+1. MEASURE - Capture structural + telemetry metrics
+2. ANALYZE - Apply proven patterns from reflection_pool
+3. RECOMMEND - Generate optimization plan with estimates
+4. VALIDATE - Enforce quality gates
+5. TRACK - Record before/after metrics
+
+**Agent Used**: `agent-optimizer`
+
+**Data Sources**:
+- `.agent/metrics/` - Token usage, optimization logs
+- `.agent/telemetry/` - Cross-project usage data
+- `.agent/reflection_pool/` - Proven patterns
+
+**Location**: `.claude/commands/optimize.md`
 
 ---
 
@@ -1018,17 +1115,19 @@ Report issues with:
 ## Project Status
 
 **Repository Status**: Active
-**Version**: 1.5.0
-**Last Updated**: 2026-01-18
+**Version**: 1.6.0
+**Last Updated**: 2026-01-24
 
 **Current Agents**:
-- 6 production-ready agents
+- 8 production-ready agents
   - agent-sap-businesspartner-integration (v1.0.0)
   - agent-ansible-automation (v1.0.0)
   - agent-robotarm-tester (v1.0.0)
   - agent-git-manager (v1.0.0)
-  - agent-provisioner (v1.0.0)
+  - agent-provisioner (v1.0.0) - Now with telemetry-sync
   - agent-cv-optimizer (v1.0.0)
+  - agent-project-init (v1.0.0)
+  - agent-optimizer (v1.0.0) - NEW: Telemetry-driven optimization
 - 0 beta agents
 - 0 deprecated agents
 

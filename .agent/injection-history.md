@@ -201,6 +201,23 @@ Each entry follows this format:
 | ansible/cloud-patterns.yml | Complete | 2025-11-28 |
 | ansible/quality-checklist.md | Complete | 2025-11-28 |
 | ansible/best-practices.md | Complete | 2025-11-28 |
+| provisioner/sync-workflow.md | Complete | 2026-01-24 |
+| provisioner/sync-back-workflow.md | Complete | 2026-01-24 |
+| provisioner/telemetry-sync-workflow.md | Complete | 2026-01-24 |
+| provisioner/register-workflow.md | Complete | 2026-01-24 |
+| provisioner/registry-templates.md | Complete | 2026-01-24 |
+| provisioner/hook-merge-logic.md | Complete | 2026-01-24 |
+| provisioner/workflow-examples.md | Complete | 2026-01-24 |
+
+### Telemetry Folder (`.agent/telemetry/`)
+| Document | Status | Date Added |
+|----------|--------|-----------|
+| README.md (v2.0.0) | Complete | 2026-01-24 |
+| hooks/log_invocation.sh (v3) | Complete | 2026-01-24 |
+| otel/docker-compose.yml | Complete | 2026-01-24 |
+| otel/otel-config.yaml | Complete | 2026-01-24 |
+| otel/README.md | Complete | 2026-01-24 |
+| otel/query-telemetry.sh | Complete | 2026-01-24 |
 
 ### Metrics Folder (`.agent/metrics/`)
 | Document | Status | Date Added |
@@ -328,37 +345,41 @@ Each entry follows this format:
 
 ## 📍 Current Status
 
-- **Knowledge Base Version**: 1.6.0
+- **Knowledge Base Version**: 1.7.0
 - **Initialized**: 2025-11-21
-- **Last Updated**: 2026-01-23
-- **Total Documents**: 51 (infrastructure + templates + metrics + agents + commands + testimonies)
-- **Folders Ready**: 7 (tasks, system, sops, templates, metrics, testimony, reflection_pool)
-- **Status**: Active - 7 production agents
+- **Last Updated**: 2026-01-24
+- **Total Documents**: 65 (infrastructure + templates + metrics + agents + commands + testimonies + telemetry)
+- **Folders Ready**: 8 (tasks, system, sops, templates, metrics, testimony, reflection_pool, telemetry)
+- **Status**: Active - 8 production agents
 
-**Recent Additions** (2026-01-23):
+**Recent Additions** (2026-01-24):
+- agent-optimizer (v1.0.0) - Data-driven agent optimization specialist
+  - 5-phase workflow: MEASURE → ANALYZE → RECOMMEND → VALIDATE → TRACK
+  - 4 optimization patterns from testimony analysis
+  - 5 quality gates for optimization validation
+- /optimize command - Agent optimization command
+- .agent/telemetry/otel/ - OpenTelemetry infrastructure (Anthropic-aligned)
+  - docker-compose.yml, otel-config.yaml, query-telemetry.sh
+  - 90-day automatic retention
+  - Multi-project ready
+- .agent/templates/provisioner/ - 7 new templates for agent-provisioner
+  - sync-workflow.md, sync-back-workflow.md, telemetry-sync-workflow.md
+  - register-workflow.md, registry-templates.md, hook-merge-logic.md, workflow-examples.md
+- log_invocation.sh v3 - Simplified to lightweight agent attribution only
+- .envrc - Telemetry environment variables for direnv
+
+**Previous Additions** (2026-01-23):
 - agent-project-init (v1.0.0) - Project initialization with type-appropriate structure
-  - 7-step workflow: DISCOVER → CLASSIFY → DEFINE → STRUCTURE → DOCUMENT → PROVISION → CONFIRM
-  - 4 project types: Integration, Development, Research, Optimization
-  - Templates for CLAUDE.md, README.md, injection-history.md
 - /agent_reflect command - Project journey testimony generator
-  - Dual-write: project-local + central hub
-  - Cross-project analysis capability
-- /project_init command - Project initialization invocation
 - .agent/testimony/ - 6 project testimonies from cross-project analysis
 - .agent/reflection_pool/ - 4 synthesized analysis files
-  - directory-usage-analysis.md (original intent vs reality)
-  - key-insights.md (quotable lessons)
-  - testimony-analysis-2026-01-23.md (patterns discovered)
-- research-assistant (renamed from reaeach-assistant - typo fix)
 
-**Previous Additions**:
-- agent-cv-optimizer (v1.0.0) - CV optimization for Data & AI careers
-- agent-provisioner (v1.0.0) - Agent sync to other projects
-- agent-git-manager (v1.0.0) - Git repository management with security scanning
-- 13 agent templates (SAP + Ansible)
-- 4 metrics tracking files
+**Agents Optimized** (56% average token reduction):
+- agent-sap-businesspartner-integration (58% reduction)
+- agent-ansible-automation (59% reduction)
+- agent-provisioner (43% reduction)
 
-**Next Steps**: Test agent-project-init on new projects
+**Next Steps**: Enable OTel collector, test telemetry data flow
 
 ### 2025-11-28 - Update: Metrics README
 - **Modified By**: agent-architect
@@ -787,6 +808,119 @@ applications/
 
 ---
 
+### 2026-01-24 - New Agent: agent-optimizer
+- **Added By**: Claude Opus 4.5
+- **Location**: `.claude/agents/agent-optimizer.md`
+- **Purpose**: Analyze and optimize existing agents using structural analysis and telemetry data from cross-project usage
+- **Links**: References AGENTS_REGISTRY.md, CLAUDE.md, integrates with `.agent/metrics/`, `.agent/telemetry/`, `.agent/reflection_pool/`
+- **Status**: Complete
+
+**Files Created**:
+- `.claude/agents/agent-optimizer.md` - Agent definition (~350 lines)
+  - 5-phase workflow: MEASURE → ANALYZE → RECOMMEND → VALIDATE → TRACK
+  - 4 optimization patterns: Template Externalization, Lazy Loading, Output Modes, Section Compression
+  - 5 quality gates: Test pass rate, fabrication constraints, uncertainty acknowledgment, template existence, critical constraints
+  - Integration with telemetry data for data-driven decisions
+
+- `.claude/commands/optimize.md` - Command documentation
+  - Usage: `/optimize`, `/optimize agent-id`, `/optimize status`
+  - Pattern application guidance
+  - Quality gate enforcement
+
+- `agents/agent-optimizer/README.md` - Comprehensive usage documentation
+- `agents/agent-optimizer/test-cases.md` - 12 validation test cases
+
+**Optimization Patterns**:
+| Pattern | Expected Reduction | When to Apply |
+|---------|-------------------|---------------|
+| Template Externalization | 51-65% | Embedded content > 100 words |
+| Lazy Loading | 5% overhead | Templates loaded unconditionally |
+| Output Modes | Control | No verbosity options |
+| Section Compression | 15-30% | Similar agent is smaller |
+
+**Impact**: Eighth production agent, enables systematic optimization of all agents using proven patterns
+
+---
+
+### 2026-01-24 - Infrastructure: Telemetry System v2.0 (OTel-based)
+- **Added By**: Claude Opus 4.5
+- **Location**: `.agent/telemetry/`
+- **Purpose**: Redesign telemetry to follow Anthropic best practices using native OpenTelemetry
+- **Links**: References `.agent/metrics/`, documented in `.agent/telemetry/README.md`
+- **Status**: Complete
+
+**Files Created**:
+- `.agent/telemetry/otel/docker-compose.yml` - OTel collector deployment
+- `.agent/telemetry/otel/otel-config.yaml` - Collector configuration (90-day retention)
+- `.agent/telemetry/otel/README.md` - OTel setup guide
+- `.agent/telemetry/otel/query-telemetry.sh` - Query utility (--today, --week, --month)
+- `.agent/telemetry/otel/data/.gitkeep` - Data directory
+- `.envrc` - Telemetry environment variables for direnv
+
+**Files Modified**:
+- `.agent/telemetry/hooks/log_invocation.sh` - Simplified to v3 (lightweight agent attribution only)
+- `.agent/telemetry/README.md` - Updated to v2.0.0 with hybrid architecture
+
+**Architecture**:
+```
+Claude Code (native OTel) → OTel Collector → telemetry.jsonl (rich metrics)
+                    ↓
+          log_invocation.sh → session-activity.log (agent attribution)
+```
+
+**Key Decisions**:
+- Native OTel for rich metrics (tokens, costs, lines) - Anthropic recommended
+- Lightweight hook for agent ID tracking only - Hooks should be fast
+- 90-day automatic retention via collector rotation
+- Multi-project ready (single collector serves all)
+
+**Impact**: Telemetry now follows Anthropic best practices with actual token/cost tracking
+
+---
+
+### 2026-01-24 - Templates: agent-provisioner Optimization
+- **Added By**: Claude Opus 4.5
+- **Location**: `.agent/templates/provisioner/`
+- **Purpose**: Externalize agent-provisioner workflow content for 43% token reduction
+- **Links**: Loaded by `.claude/agents/agent-provisioner.md`
+- **Status**: Complete
+
+**Templates Created** (7 files):
+1. `sync-workflow.md` (~350 words) - Full sync procedure
+2. `sync-back-workflow.md` (~400 words) - Reverse sync procedure
+3. `telemetry-sync-workflow.md` (~300 words) - Telemetry collection
+4. `register-workflow.md` (~350 words) - Auto-documentation workflow
+5. `registry-templates.md` (~300 words) - CLAUDE.md/AGENTS_REGISTRY formats
+6. `hook-merge-logic.md` (~200 words) - Hook merging algorithm
+7. `workflow-examples.md` (~500 words) - Complete example workflows
+
+**Agent Modifications**:
+- `.claude/agents/agent-provisioner.md` - 713 → 361 lines (49.4% reduction)
+- Commands section converted to table format
+- Output modes added (brief/standard/detailed)
+
+**Metrics**:
+- Baseline: 6,274 tokens
+- Current: 3,576 tokens
+- Reduction: 43%
+- Net savings per invocation: ~2,298 tokens
+
+**Impact**: Third agent optimized using template externalization pattern
+
+---
+
+### 2026-01-24 - Update: Metrics and Optimization Log
+- **Modified By**: Claude Opus 4.5
+- **Location**: `.agent/metrics/`
+- **Changes**:
+  - Updated `token-usage-current.json` with agent-provisioner metrics
+  - Updated `optimization-log.md` with agent-provisioner optimization details
+  - Added aggregate metrics section (3 agents optimized, 56% average reduction)
+- **Purpose**: Track agent-provisioner optimization results
+- **Status**: Complete
+
+---
+
 ## 🔄 Maintenance Schedule
 
 ### Weekly
@@ -825,8 +959,8 @@ applications/
 
 ---
 
-**Version**: 1.6.0
-**Last Updated**: 2026-01-23
-**Total Documents**: 51
+**Version**: 1.7.0
+**Last Updated**: 2026-01-24
+**Total Documents**: 65
 **Maintained By**: System
 **Status**: Active

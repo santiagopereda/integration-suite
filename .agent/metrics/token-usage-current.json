@@ -1,8 +1,42 @@
 {
-  "measurement_date": "2025-11-28",
-  "phase": "post_phase1_optimization",
+  "measurement_date": "2026-01-24",
+  "phase": "continuous_optimization",
   "optimization_strategy": "template_externalization",
   "agents": {
+    "agent-provisioner": {
+      "baseline": {
+        "prompt_words": 3378,
+        "estimated_tokens": 6274,
+        "lines": 713,
+        "characters": 25095
+      },
+      "current": {
+        "prompt_words": 1887,
+        "estimated_tokens": 3576,
+        "lines": 361,
+        "characters": 14303
+      },
+      "reduction": {
+        "words_saved": 1491,
+        "tokens_saved": 2698,
+        "percent_reduction": 43,
+        "lines_reduced": 352
+      },
+      "externalized_templates": [
+        ".agent/templates/provisioner/sync-workflow.md",
+        ".agent/templates/provisioner/sync-back-workflow.md",
+        ".agent/templates/provisioner/telemetry-sync-workflow.md",
+        ".agent/templates/provisioner/register-workflow.md",
+        ".agent/templates/provisioner/registry-templates.md",
+        ".agent/templates/provisioner/hook-merge-logic.md",
+        ".agent/templates/provisioner/workflow-examples.md"
+      ],
+      "template_loading_cost": {
+        "per_invocation_tokens": 400,
+        "net_savings_per_invocation": 2298
+      },
+      "optimization_date": "2026-01-24"
+    },
     "agent-sap-businesspartner-integration": {
       "baseline": {
         "prompt_words": 2249,
@@ -72,28 +106,30 @@
     }
   },
   "aggregate_metrics": {
-    "total_baseline_tokens": 31000,
-    "total_current_tokens": 15200,
-    "total_tokens_saved": 15800,
-    "average_reduction_percent": 51,
-    "templates_created": 12,
-    "agents_optimized": 2
+    "total_baseline_tokens": 37274,
+    "total_current_tokens": 16369,
+    "total_tokens_saved": 20905,
+    "average_reduction_percent": 56,
+    "templates_created": 20,
+    "agents_optimized": 3
   },
   "roi_analysis": {
-    "development_time_hours": 4,
+    "development_time_hours": 5,
     "token_savings_per_agent_invocation": {
       "sap_bp_agent": 8200,
-      "ansible_agent": 6700
+      "ansible_agent": 6700,
+      "provisioner_agent": 2298
     },
     "break_even_invocations": {
       "sap_bp_agent": 1,
       "ansible_agent": 1,
+      "provisioner_agent": 1,
       "note": "Savings realized immediately on first invocation"
     },
     "estimated_annual_savings": {
       "assumptions": "10 invocations per agent per month",
-      "monthly_token_savings": 178800,
-      "annual_token_savings": 2145600
+      "monthly_token_savings": 171976,
+      "annual_token_savings": 2063712
     }
   },
   "quality_validation": {
@@ -103,11 +139,12 @@
     "documentation_complete": true
   },
   "notes": [
-    "Phase 1 optimization focused on template externalization",
-    "Both agents use lazy loading pattern - templates loaded only when needed",
+    "Continuous optimization using template externalization",
+    "All agents use lazy loading pattern - templates loaded only when needed",
     "Net savings account for template loading cost (~300-500 tokens per load)",
-    "Actual token reduction: SAP 58%, Ansible 45% (average 51%)",
+    "Actual token reduction: SAP 58%, Ansible 59%, Provisioner 43% (average 56%)",
     "All agent functionality preserved, quality standards maintained",
-    "Output modes (Brief/Standard/Detailed) added for better control"
+    "Output modes (Brief/Standard/Detailed) added for better control",
+    "2026-01-24: Added agent-provisioner optimization with 7 new templates"
   ]
 }
