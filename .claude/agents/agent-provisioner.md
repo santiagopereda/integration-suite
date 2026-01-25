@@ -129,6 +129,44 @@ When syncing agents, include their related dependencies:
 | agent-provisioner | - | - |
 | (all agents) | - | Telemetry: PostToolUse: Edit\|Write\|NotebookEdit |
 
+## Deployment Tracking
+
+When syncing agents, **deployments are tracked** in `deployments/registry.json`:
+
+1. **Registry updated**: Add project to `deployments/registry.json`
+2. **Agent versions recorded**: Track which version was deployed
+3. **History logged**: Add entry to deployment_history
+4. **Statistics updated**: Increment deployment counts
+5. **Per-project file created**: `deployments/by-project/{project-name}.md`
+
+**After successful sync, update**:
+```bash
+# Read current registry
+cat deployments/registry.json
+
+# Add project entry (if new)
+# Add deployed agents to project
+# Update deployment_history
+# Update statistics
+
+# Create per-project summary
+deployments/by-project/{project-name}.md
+```
+
+**Deployment Entry Format**:
+```json
+{
+  "path": "/home/user/my-project",
+  "name": "my-project",
+  "deployed_at": "2026-01-25",
+  "agents": [
+    {"id": "agent-git-manager", "version": "1.0.0", "deployed_at": "2026-01-25"}
+  ],
+  "testimony_collected": false,
+  "last_sync": "2026-01-25"
+}
+```
+
 ## Telemetry Integration
 
 When syncing agents, telemetry infrastructure is **auto-provisioned**:
@@ -234,6 +272,39 @@ When user asks to compare:
 4. Interactive selection (mandatory)
 5. Extract metadata from agent files
 6. Generate and insert documentation entries
+
+### 7. Track Deployments (Post-Sync)
+
+After every successful sync, update deployment tracking:
+
+**Steps**:
+1. Read `deployments/registry.json`
+2. Find or create project entry by path
+3. Update `agents` array with deployed agents + versions
+4. Add entry to `deployment_history`
+5. Update `statistics` (total_projects, total_deployments, agents_deployed)
+6. Create/update `deployments/by-project/{project-name}.md`
+7. Write updated registry
+
+**Per-Project Summary Format**:
+```markdown
+# Project: {project-name}
+
+**Path**: {full-path}
+**First Deployed**: {date}
+**Last Sync**: {date}
+
+## Deployed Agents
+
+| Agent | Version | Deployed | Updated |
+|-------|---------|----------|---------|
+| agent-git-manager | 1.0.0 | 2026-01-25 | - |
+
+## Testimony Status
+
+- [ ] Testimony generated
+- [ ] Synced to reflection pool
+```
 
 ### Registry Entry Templates
 

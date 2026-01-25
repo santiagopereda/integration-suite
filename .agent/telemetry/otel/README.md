@@ -365,6 +365,45 @@ These are set in the project's `.envrc` file for automatic loading with direnv.
 
 ---
 
+## Feedback Capture
+
+In addition to automated telemetry, the system supports manual feedback capture for agent quality tracking.
+
+### Capturing Feedback
+
+After an agent invocation, capture user feedback:
+
+```bash
+# Via script
+.agent/telemetry/hooks/feedback_capture.sh agent-git-manager 5 "Worked perfectly"
+
+# Rating scale: 1-5 (1=poor, 5=excellent)
+```
+
+### Feedback Data
+
+Feedback is stored in `.agent/telemetry/data/feedback.jsonl`:
+
+```json
+{"timestamp":"2026-01-25T10:30:00+00:00","session_id":"abc123","agent_id":"agent-git-manager","rating":5,"comment":"Worked perfectly","type":"feedback"}
+```
+
+### Quality Metrics from Feedback
+
+Feedback data enables quality gate QG-6 (Quality Score >= 4.0/5):
+
+```bash
+# Calculate average rating per agent
+jq -s 'group_by(.agent_id) | map({agent: .[0].agent_id, avg_rating: (map(.rating) | add / length)})' data/feedback.jsonl
+```
+
+### Integration with /optimize
+
+The `/optimize` command reads feedback data to:
+1. Calculate quality scores per agent
+2. Identify agents needing improvement
+3. Validate that optimizations don't degrade quality
+
 ## File Structure
 
 ```
@@ -375,7 +414,8 @@ otel/
 ├── README.md             # This documentation
 └── data/
     ├── .gitkeep          # Ensures directory exists in git
-    └── telemetry.jsonl   # Collected metrics (auto-generated)
+    ├── telemetry.jsonl   # Collected metrics (auto-generated)
+    └── feedback.jsonl    # User feedback data
 ```
 
 ---

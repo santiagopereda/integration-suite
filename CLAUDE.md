@@ -1,1161 +1,198 @@
-# CLAUDE.md - Agent Repository Hub Configuration
+# CLAUDE.md - Agentic Hub Configuration
 
-This file configures Claude Code agents and tools for the Agentic project - a centralized hub for designing, creating, and maintaining reusable specialized agents.
+Central hub for designing, creating, and deploying specialized Claude Code agents.
 
-## Project Overview
+**Vision**: Track agents deployed to projects, collect feedback, use telemetry to improve agents.
 
-**Purpose**: Serve as a base repository where specialized Claude Code agents are designed, created, documented, and tested before deployment to other projects.
+## Quick Reference: Agents
 
-**Vision**: Enable teams to leverage consistent, high-quality specialized agents across multiple projects with clear governance, versioning, and quality standards.
+| Agent | Domain | Purpose |
+|-------|--------|---------|
+| `agent-sap-businesspartner-integration` | SAP/ERP | BusinessPartner OData API documentation |
+| `agent-ansible-automation` | DevOps | Ansible playbooks, roles, testing |
+| `agent-robotarm-tester` | Robotics | Robot arm validation via SSH |
+| `agent-git-manager` | Utility | Secure commits with security scanning |
+| `agent-cv-optimizer` | Career | CV tailoring, interview prep for Data/AI |
+| `agent-provisioner` | Hub | Sync agents to other projects |
+| `agent-project-init` | Hub | Initialize new projects with agents |
+| `agent-optimizer` | Hub | Analyze and optimize agents |
+| `agent-architect` | Hub | Design new agents |
+| `agent-hub-orchestrator` | Hub | Coordinate multi-agent workflows |
+| `research-assistant` | Support | Research and information gathering |
+| `documentation-specialist` | Support | Documentation generation |
 
-## Available Agents
+**Full Details**: See `agents-registry.json` for complete agent metadata.
 
-### agent-sap-businesspartner-integration (v1.0.0) - Production
+**Agent Files**: All agents in `.claude/agents/{agent-id}.md`
 
-**ID**: `agent-sap-businesspartner-integration`
+## Quick Reference: Commands
 
-**Purpose**: Expert SAP S/4HANA Cloud consultant specializing in BusinessPartner master data integration through OData APIs.
+| Command | Purpose | Agent |
+|---------|---------|-------|
+| `/project_init` | Initialize new projects | agent-project-init |
+| `/optimize` | Analyze/optimize agents | agent-optimizer |
+| `/agent_reflect` | Generate project testimony | documentation-specialist |
+| `/agent-status` | Hub-wide dashboard | - |
+| `/agent-test` | Run validation tests | - |
+| `/agent-deploy` | One-command deployment | - |
+| `/update_doc` | Update documentation | - |
 
-**Use When**:
-- Documenting BusinessPartner OData API integration procedures
-- Creating step-by-step guides for BP create/update/patch operations
-- Defining data sequencing and dependencies across sub-entities
-- Requiring integration best practices and error handling guidance
-- Clarifying PATCH vs PUT operation semantics
-- Establishing validation rules and escalation procedures
+## Using Agents
 
-**Location**: `.claude/agents/agent-sap-businesspartner-integration.md`
-
-**Key Files**:
-- `.claude/agents/agent-sap-businesspartner-integration.md` - Agent definition (Claude Code format)
-- `agents/agent-sap-businesspartner-integration/README.md` - Detailed usage guide
-- `agents/agent-sap-businesspartner-integration/test-cases.md` - Validation test cases
-
-**Capabilities**:
-- BusinessPartner entity creation and updates
-- Sub-entity management (Roles, Addresses, Tax, Bank, Communications)
-- API sequencing and dependency documentation
-- PATCH vs PUT operation guidance
-- Validation and data cleansing rules
-- Error handling and troubleshooting
-- Escalation procedures
-- Misuse prevention guidance
-
-**Critical Constraints**:
-- Never fabricates SAP functionality
-- Acknowledges uncertainties and recommends verification
-- Uses accurate SAP terminology and API patterns
-- Does not include proprietary SAP content
-- Provides accurate entity names and endpoint patterns
-
-**Invoke With**:
+**Invoke any agent**:
 ```bash
-@agent-sap-businesspartner-integration: [Your documentation request]
+@{agent-id}: [Your request]
 ```
 
 **Examples**:
 ```bash
-# Complete integration guide
-@agent-sap-businesspartner-integration: Create comprehensive documentation
-for BusinessPartner creation with addresses and tax numbers
-
-# Specific operation
-@agent-sap-businesspartner-integration: Document how to use PATCH
-to update a BusinessPartner address field
-
-# Best practices
-@agent-sap-businesspartner-integration: Document best practices
-for bulk BusinessPartner imports with error handling
-```
-
-**Documentation**:
-- User Guide: `agents/agent-sap-businesspartner-integration/README.md`
-- Test Cases: `agents/agent-sap-businesspartner-integration/test-cases.md`
-
----
-
-### agent-ansible-automation (v1.0.0) - Production
-
-**ID**: `agent-ansible-automation`
-
-**Purpose**: Expert DevOps automation specialist focusing on Ansible automation development including playbook creation, role design, inventory management, testing, and security best practices.
-
-**Use When**:
-- Creating production-ready Ansible playbooks, roles, or tasks
-- Designing Ansible role structure and best practices
-- Requiring inventory management guidance (static or dynamic)
-- Implementing testing strategies (ansible-lint, molecule, yamllint)
-- Needing security best practices (Ansible Vault, secrets management)
-- Optimizing Ansible performance and execution
-- Integrating with cloud providers (AWS, Azure, GCP)
-- Troubleshooting and debugging Ansible automation
-
-**Location**: `.claude/agents/agent-ansible-automation.md`
-
-**Key Files**:
-- `.claude/agents/agent-ansible-automation.md` - Agent definition (Claude Code format)
-- `agents/agent-ansible-automation/README.md` - Detailed usage guide
-- `agents/agent-ansible-automation/test-cases.md` - 12 validation test cases
-- `agents/agent-ansible-automation/examples/` - Complete examples
-
-**Capabilities**:
-- Production-ready Ansible playbooks and roles
-- Role directory structure with all components
-- Idempotent task implementations
-- Comprehensive error handling (block/rescue/always)
-- Variable management and Jinja2 templating
-- Testing framework setup (molecule, ansible-lint, yamllint)
-- Security implementation (Ansible Vault, no_log)
-- Performance optimization strategies
-- Cloud provider integration (AWS, Azure, GCP)
-- Multi-platform role development
-- CI/CD pipeline integration
-- Troubleshooting and debugging guidance
-
-**Critical Constraints**:
-- Never fabricates Ansible modules or parameters
-- Acknowledges uncertainties and recommends verification
-- Uses accurate Ansible terminology (playbook, role, handler)
-- References correct module names with FQCN (ansible.builtin.*)
-- Provides correct YAML syntax (2-space indentation)
-- Warns about deprecated modules and features
-- Does not assume undocumented module behavior
-
-**Invoke With**:
-```bash
-@agent-ansible-automation: [Your automation request]
-```
-
-**Examples**:
-```bash
-# Complete role creation
-@agent-ansible-automation: Create a complete Ansible role for deploying
-a Django application with Nginx, Gunicorn, PostgreSQL, and SSL certificates
-
-# Security guidance
-@agent-ansible-automation: Document best practices for managing secrets
-in Ansible using Ansible Vault and integration with HashiCorp Vault
-
-# Testing framework
-@agent-ansible-automation: Create a molecule testing framework for
-testing an Ansible role across Ubuntu 20.04, CentOS 8, and Debian 11
-
-# Performance optimization
-@agent-ansible-automation: Provide optimization strategies for playbooks
-running against 200 servers including fact caching and parallel execution
-
-# Cloud integration
-@agent-ansible-automation: Create an Ansible playbook for provisioning
-AWS infrastructure including VPC, subnets, security groups, and EC2 instances
-```
-
-**Documentation**:
-- User Guide: `agents/agent-ansible-automation/README.md`
-- Test Cases: `agents/agent-ansible-automation/test-cases.md`
-- Examples: `agents/agent-ansible-automation/examples/`
-  - `webserver-role-example.md` - Complete Nginx role
-  - `playbook-example.md` - Multi-tier deployment playbook
-  - `molecule-test-example.md` - Testing framework
-
----
-
-### agent-robotarm-tester (v1.0.0) - Production
-
-**ID**: `agent-robotarm-tester`
-
-**Purpose**: Expert robotics testing engineer specializing in Raspberry Pi-based robot arm validation, debugging, and performance benchmarking via SSH.
-
-**Use When**:
-- Discovering and documenting safe operating boundaries for robot arms
-- Testing specific movements or pick-and-place sequences systematically
-- Debugging inconsistent robot arm behavior with diagnostic logging
-- Benchmarking performance before production deployment (speed, accuracy, repeatability)
-- Verifying calibration accuracy or testing calibration sequences
-- Integrating with vision systems, conveyor belts, or external sensors
-- Validating error handling and recovery procedures
-- Requiring comprehensive production readiness validation
-
-**Location**: `.claude/agents/agent-robotarm-tester.md`
-
-**Key Files**:
-- `.claude/agents/agent-robotarm-tester.md` - Agent definition (Claude Code format)
-- `agents/agent-robotarm-tester/README.md` - Detailed usage guide
-- `agents/agent-robotarm-tester/test-cases.md` - 12 validation test cases
-- `agents/agent-robotarm-tester/examples/` - Complete test workflows
-
-**Capabilities**:
-- Progressive workspace boundary discovery with safety-first approach
-- Systematic movement validation with automatic status checking
-- Error recovery automation with intelligent retry logic
-- Performance benchmarking (speed, accuracy, repeatability)
-- Calibration sequence verification
-- Integration testing (vision systems, conveyor belts, external sensors)
-- Comprehensive diagnostic data collection and timestamped logging
-- Configuration file generation and management
-
-**Critical Constraints**:
-- Never compromises safety (progressive discovery, automatic recovery, status checks)
-- Never assumes unknown workspace limits (helps users discover them)
-- Never fabricates robot arm commands or parameters
-- Acknowledges when specific hardware details affect testing
-- Uses accurate robotics terminology (workspace, home position, limit)
-- Transparently states when limits are unknown
-
-**Invoke With**:
-```bash
-@agent-robotarm-tester: [Your testing request]
-```
-
-**Examples**:
-```bash
-# Workspace boundary discovery
-@agent-robotarm-tester: I just set up my robot arm. Help me discover
-the workspace boundaries safely and create a configuration file.
-
-# Pick-and-place validation
-@agent-robotarm-tester: Test our pick-and-place sequence 50 times
-and capture diagnostic data to identify failure patterns.
-
-# Performance benchmarking
-@agent-robotarm-tester: Benchmark my robot arm's performance
-before production deployment. Test speed, accuracy, and repeatability.
-
-# Vision integration
-@agent-robotarm-tester: Test integration with our vision system.
-Validate coordinate transformation and pick position accuracy.
-```
-
-**Documentation**:
-- User Guide: `agents/agent-robotarm-tester/README.md`
-- Test Cases: `agents/agent-robotarm-tester/test-cases.md`
-- Examples: `agents/agent-robotarm-tester/examples/`
-  - `workspace-discovery-example.md` - Complete workspace boundary discovery
-  - `pick-place-validation-example.md` - Pick-and-place with failure analysis
-  - `performance-benchmark-example.md` - Complete performance benchmarking
-
----
-
-### agent-git-manager (v1.0.0) - Production
-
-**ID**: `agent-git-manager`
-
-**Purpose**: Expert git repository manager specializing in secure commit workflows with mandatory pre-commit security scanning, SSH/GitHub integration, and documentation workflow coordination.
-
-**Use When**:
-- Committing changes with security scanning assurance
-- Pushing changes to remote repositories (SSH/GitHub)
-- Checking repository status with security awareness
-- Completing documentation updates (integrates with `/update_doc`)
-- Troubleshooting SSH authentication issues with GitHub
-- Creating pull requests via GitHub CLI
-
-**Location**: `.claude/agents/agent-git-manager.md`
-
-**Key Files**:
-- `.claude/agents/agent-git-manager.md` - Agent definition (Claude Code format)
-- `agents/agent-git-manager/README.md` - Detailed usage guide
-- `agents/agent-git-manager/test-cases.md` - 10 validation test cases
-- `agents/agent-git-manager/examples/` - Complete workflow examples
-
-**Capabilities**:
-- Mandatory pre-commit security scanning (file patterns + content detection)
-- Intelligent commit threshold detection (files, lines, critical files)
-- SSH authentication verification and troubleshooting
-- Safe push workflow with explicit confirmation
-- Conventional commit message generation
-- Branch operations with awareness
-- GitHub CLI integration (PR creation, status checks)
-- Integration with `/update_doc` command
-
-**Security Scanning Detects**:
-- Environment files (`.env`, `.env.*`)
-- Credential files (`*credentials*`, `*secret*`, `*password*`)
-- Private keys (`.pem`, `.key`, `id_rsa`, `id_ed25519`)
-- API keys, AWS credentials, GitHub tokens in file content
-- Connection strings and passwords in code
-
-**Critical Constraints**:
-- Never force push to any branch
-- Never amend commits without explicit request
-- Never push to main/master without explicit confirmation
-- Never commit files with detected secrets without explicit override
-- Always run security scan before every commit
-- Always show changes before committing
-- Always require confirmation for push operations
-
-**Invoke With**:
-```bash
-@agent-git-manager: [Your request]
-```
-
-**Examples**:
-```bash
-# Commit workflow
 @agent-git-manager: Help me commit my changes
-
-# Repository status
-@agent-git-manager: What's the current git status?
-
-# Push changes
-@agent-git-manager: Push my commits to GitHub
-
-# After documentation
-@agent-git-manager: I just ran /update_doc, commit the changes
-
-# SSH troubleshooting
-@agent-git-manager: I can't push, getting permission denied
+@agent-ansible-automation: Create an Nginx deployment role
+@agent-cv-optimizer: Tailor my CV for this Spotify job posting
 ```
 
-**Documentation**:
-- User Guide: `agents/agent-git-manager/README.md`
-- Test Cases: `agents/agent-git-manager/test-cases.md`
-- Examples: `agents/agent-git-manager/examples/`
-  - `commit-workflow-example.md` - Standard commit flow with security scan
-  - `security-scan-example.md` - Security blocking and override flow
-  - `ssh-github-example.md` - SSH authentication and push workflow
-  - `documentation-workflow-example.md` - Integration with update_doc
+**Best Practice**: Read the agent's definition file before complex tasks:
+- `.claude/agents/{agent-id}.md` - Full capabilities and constraints
 
----
-
-### agent-provisioner (v1.0.0) - Production
-
-**ID**: `agent-provisioner`
-
-**Purpose**: Expert agent provisioning specialist for syncing agents, commands, and hooks from the Agentic hub to other local projects with version awareness, interactive selection, and backup procedures.
-
-**Use When**:
-- Listing available agents in this hub
-- Comparing agent versions with another project
-- Provisioning agents to a new project
-- Updating agents in an existing project
-- Syncing commands and hooks alongside agents
-
-**Location**: `.claude/agents/agent-provisioner.md`
-
-**Key Files**:
-- `.claude/agents/agent-provisioner.md` - Agent definition (Claude Code format)
-- `agents/agent-provisioner/README.md` - Detailed usage guide
-- `agents/agent-provisioner/test-cases.md` - 12 validation test cases
-
-**Capabilities**:
-- List all available agents from the hub with versions
-- Compare versions between hub and target project
-- Interactive agent selection for sync operations
-- Backup creation before overwriting existing files
-- Command and hook dependency management
-- Hook merging with permission preservation
-
-**Agent-to-Dependency Map**:
-
-| Agent | Commands | Hooks |
-|-------|----------|-------|
-| agent-git-manager | update_doc.md | PostToolUse: Edit\|Write\|NotebookEdit |
-| agent-sap-bp-integration | - | - |
-| agent-ansible-automation | - | - |
-| agent-robotarm-tester | - | - |
-
-**Critical Constraints**:
-- Always creates backups before overwriting files
-- Always requires user selection before syncing
-- Always shows what will change before executing
-- Never dumps all agents without asking
-- Never replaces settings.local.json (merges hooks only)
-- Preserves target's existing permissions
-
-**Invoke With**:
-```bash
-@agent-provisioner: [Your request]
-```
-
-**Examples**:
-```bash
-# List available agents
-@agent-provisioner: list
-
-# Compare with target project
-@agent-provisioner: compare /home/user/my-project
-
-# Sync agents to target
-@agent-provisioner: sync /home/user/my-project
-```
-
-**Documentation**:
-- User Guide: `agents/agent-provisioner/README.md`
-- Test Cases: `agents/agent-provisioner/test-cases.md`
-
----
-
-### agent-cv-optimizer (v1.0.0) - Production
-
-**ID**: `agent-cv-optimizer`
-
-**Purpose**: Expert CV optimization specialist for Data & AI careers, combining career coaching, HR/recruitment expertise, and technical interview knowledge. Provides CV tailoring, interview preparation, and application tracking through three specialized modes.
-
-**Use When**:
-- Tailoring your CV for a specific Data/AI job posting
-- Seeking career coaching to identify strengths and blindspots
-- Preparing for technical or behavioral interviews
-- Tracking multiple job applications systematically
-- Needing a cover letter for a specific role
-- Wanting skills gap analysis for a target role
-
-**Location**: `.claude/agents/agent-cv-optimizer.md`
-
-**Key Files**:
-- `.claude/agents/agent-cv-optimizer.md` - Agent definition (Claude Code format)
-- `agents/agent-cv-optimizer/README.md` - Detailed usage guide
-- `agents/agent-cv-optimizer/test-cases.md` - 12 validation test cases
-- `agents/agent-cv-optimizer/examples/` - Complete workflow examples
-
-**Three Operating Modes**:
-
-| Mode | Purpose | Trigger |
-|------|---------|---------|
-| Career Coach | Experience analysis, blindspot detection, positioning | Career questions, transitions |
-| HR Manager | JD analysis, CV tailoring, cover letters | JD provided, tailoring requests |
-| Interviewer | Company research, question prep, interview coaching | Interview mentioned |
-
-**Capabilities**:
-- JD Analysis & Keyword Extraction
-- Skills Gap Analysis with match scores
-- CV Tailoring for specific job descriptions (RenderCV format)
-- Cover Letter Generation
-- Application Tracker management
-- Interview question generation and preparation
-- Company research via web search
-- Agent coordination (research-assistant, documentation-specialist, agent-git-manager)
-
-**Directory Structure Created**:
-```
-applications/
-├── tracker.md                    # Central status tracker
-└── {company-name}/
-    ├── jd.md                     # Job description
-    ├── jd-analysis.md            # Keyword extraction
-    ├── cv-{company}.yaml         # Tailored RenderCV
-    ├── cover-letter.md           # Cover letter
-    ├── interview-notes.md        # Interview prep
-    └── research.md               # Company research
-```
-
-**Critical Constraints**:
-- Never fabricates company information or skills
-- Never invents experience not in user's background
-- Always shows changes before applying
-- Always preserves authenticity of achievements
-- Transparent about match quality and fit
-- User control - confirmation required for changes
-
-**Invoke With**:
-```bash
-@agent-cv-optimizer: [Your request]
-```
-
-**Examples**:
-```bash
-# Career coaching
-@agent-cv-optimizer: I've been a backend developer for 5 years
-and want to move into data engineering. What should I highlight?
-
-# CV tailoring
-@agent-cv-optimizer: Here's a JD for a Senior Data Engineer at Spotify.
-Help me tailor my CV and write a cover letter.
-
-# Interview prep
-@agent-cv-optimizer: I have a system design interview at Meta
-next week. Help me prepare.
-
-# Application tracking
-@agent-cv-optimizer: Add Google to my tracker - just applied today
-```
-
-**Documentation**:
-- User Guide: `agents/agent-cv-optimizer/README.md`
-- Test Cases: `agents/agent-cv-optimizer/test-cases.md`
-- Examples: `agents/agent-cv-optimizer/examples/`
-  - `jd-analysis-example.md` - JD keyword extraction workflow
-  - `cv-tailoring-example.md` - CV modification workflow
-  - `interview-prep-example.md` - Interview preparation
-  - `tracker-example.md` - Application tracker format
-
----
-
-### agent-project-init (v1.0.0) - Production
-
-**ID**: `agent-project-init`
-
-**Purpose**: Initialize new projects with type-appropriate structure, documentation, and provisioned agents based on learnings from cross-project testimony analysis.
-
-**Use When**:
-- Starting a new project from scratch
-- Converting an existing directory into an agent-enabled project
-- Setting up project structure with appropriate .agent/ folders
-- Provisioning agents and commands to a new project
-
-**Location**: `.claude/agents/agent-project-init.md`
-
-**Project Types Supported**:
-
-| Type | Description | Folders Created |
-|------|-------------|-----------------|
-| Integration | APIs, data flows, sync | sops/, system/, workflows/ |
-| Development | Building software | decisions/, schemas/, testing/ |
-| Research | Exploration, learning | findings/, hypotheses/, gaps/ |
-| Optimization | Improving existing | templates/, metrics/, experiments/ |
-| Custom | User-defined | User selects |
-
-**Default Provisions**:
-- **Agents**: research-assistant, documentation-specialist, agent-git-manager
-- **Commands**: update_doc, agent_reflect
-
-**Invoke With**:
-```bash
-/project_init                    # Initialize current directory
-/project_init /path/to/project   # Initialize specific path
-```
-
-**Workflow**:
-1. DISCOVER - Check existing files
-2. CLASSIFY - Select project type
-3. DEFINE - Gather project info
-4. STRUCTURE - Create .agent/ folders
-5. DOCUMENT - Create CLAUDE.md, README.md
-6. PROVISION - Sync agents from hub
-7. CONFIRM - Execute after approval
-
-**Key Features**:
-- Creates only folders that will be used (no empty templates)
-- Always includes injection-history.md (100% usage in analyzed projects)
-- Reads existing files before proposing changes
-- Asks before modifying existing content
-
-**Documentation**:
-- Command: `.claude/commands/project_init.md`
-
----
-
-### agent-optimizer (v1.0.0) - Production
-
-**ID**: `agent-optimizer`
-
-**Purpose**: Expert agent optimization specialist that analyzes existing agents using structural analysis and telemetry data from cross-project usage to improve token efficiency and answer quality while maintaining 100% test pass rate.
-
-**Use When**:
-- Analyzing agents for optimization opportunities
-- Applying proven patterns from testimony data (template externalization, lazy loading)
-- Measuring token usage and tracking improvements over time
-- Validating quality gates before optimization
-- Generating hub-wide optimization status reports
-
-**Location**: `.claude/agents/agent-optimizer.md`
-
-**Key Files**:
-- `.claude/agents/agent-optimizer.md` - Agent definition
-- `.claude/commands/optimize.md` - Command interface
-- `agents/agent-optimizer/README.md` - Detailed usage guide
-- `agents/agent-optimizer/test-cases.md` - 12 validation test cases
-
-**Workflow (5 Phases)**:
-1. MEASURE - Capture structural + telemetry metrics
-2. ANALYZE - Apply proven patterns from reflection_pool
-3. RECOMMEND - Generate optimization plan with estimates
-4. VALIDATE - Enforce quality gates (100% test pass, constraints preserved)
-5. TRACK - Record before/after metrics for time-series analysis
-
-**Optimization Patterns**:
-| Pattern | Expected Reduction | When to Apply |
-|---------|-------------------|---------------|
-| Template Externalization | 51-65% | Embedded content > 100 words |
-| Lazy Loading | 5% overhead | Templates loaded unconditionally |
-| Output Modes | Control | No verbosity options |
-| Section Compression | 15-30% | Similar agent is smaller |
-
-**Quality Gates**:
-- QG-1: 100% test pass rate maintained
-- QG-2: No fabrication constraints removed
-- QG-3: Uncertainty acknowledgment preserved
-- QG-4: All referenced templates exist
-- QG-5: Critical constraints intact
-
-**Invoke With**:
-```bash
-/optimize                        # Analyze all agents
-/optimize agent-git-manager      # Optimize specific agent
-/optimize status                 # Hub-wide dashboard
-```
-
-**Data Sources**:
-- `.agent/metrics/` - Token usage, optimization logs
-- `.agent/telemetry/` - Cross-project usage data
-- `.agent/reflection_pool/` - Proven patterns and insights
-
-**Documentation**:
-- User Guide: `agents/agent-optimizer/README.md`
-- Test Cases: `agents/agent-optimizer/test-cases.md`
-
----
-
-## Agent Repository Tools
-
-### agent-architect (Meta-Agent)
-
-Use this specialized agent to help design new agents:
-
-**Purpose**: Guide comprehensive agent design and specification
-
-**Use When**:
-- Planning a new specialized agent
-- Need help defining agent scope and boundaries
-- Designing system prompts for agents
-- Establishing test cases and quality standards
-
-**Invoke With**:
-```bash
-@agent-architect: [Your agent design request]
-```
-
-**Capabilities**:
-- Requirements gathering and clarification
-- Agent specification design
-- System prompt engineering
-- Test case development
-- Quality standard definition
-- Integration guidance
-
----
-
-## Available Commands
-
-### /agent_reflect - Project Journey Testimony Generator
-
-**Purpose**: Generate comprehensive reflection documents that capture a project's evolution, lessons learned, and insights by analyzing the `.agent/` knowledge base.
-
-**Use When**:
-- Documenting project journey for retrospectives
-- Capturing lessons learned before project handoff
-- Generating cross-project analysis
-- Creating testimony documents for research
-
-**Invocation**:
-```bash
-/agent_reflect                    # Analyze current project
-/agent_reflect /path/to/project   # Analyze specific project
-```
-
-**Output**:
-- Testimony document at `/home/askeox/IntoData/Internal/AI_Research_Initiative/Agent_Testimony/`
-- Format: `{project-name}_testimony_{YYYY-MM-DD}.md`
-
-**Agent Used**: `documentation-specialist`
-
-**Data Sources**:
-- `.agent/injection-history.md` - Chronological audit trail
-- `.agent/PHASE*_COMPLETE.md` - Milestone narratives
-- `.agent/metrics/` - Quantitative data
-- `.agent/sops/common-mistakes.md` - Documented failures
-
-**Location**: `.claude/commands/agent_reflect.md`
-
----
-
-### /project_init - Project Initialization Command
-
-**Purpose**: Initialize new projects with type-appropriate structure, documentation, and provisioned agents.
-
-**Use When**:
-- Starting a new project from scratch
-- Converting existing directory to agent-enabled project
-- Setting up .agent/ knowledge base structure
-
-**Invocation**:
-```bash
-/project_init                    # Initialize current directory
-/project_init /path/to/project   # Initialize specific path
-```
-
-**Workflow**:
-1. Discovers existing files (README.md, CLAUDE.md, .agent/)
-2. Asks project type (Integration, Development, Research, Optimization, Custom)
-3. Gathers project info (name, goals, resources, constraints)
-4. Creates type-appropriate .agent/ structure
-5. Generates CLAUDE.md and README.md
-6. Provisions default agents and commands from hub
-7. Executes after user confirmation
-
-**Default Provisions**:
-- Agents: research-assistant, documentation-specialist, agent-git-manager
-- Commands: update_doc, agent_reflect
-
-**Agent Used**: `agent-project-init`
-
-**Location**: `.claude/commands/project_init.md`
-
----
-
-### /optimize - Agent Optimization Command
-
-**Purpose**: Analyze and optimize agents using structural analysis and telemetry data from cross-project usage.
-
-**Use When**:
-- Analyzing agents for optimization opportunities
-- Applying proven patterns (template externalization, lazy loading)
-- Tracking token efficiency improvements over time
-- Generating hub-wide optimization status reports
-
-**Invocation**:
-```bash
-/optimize                        # Analyze all agents
-/optimize agent-git-manager      # Optimize specific agent
-/optimize status                 # Hub-wide dashboard
-/optimize --dry-run              # Preview without recording
-```
-
-**Workflow**:
-1. MEASURE - Capture structural + telemetry metrics
-2. ANALYZE - Apply proven patterns from reflection_pool
-3. RECOMMEND - Generate optimization plan with estimates
-4. VALIDATE - Enforce quality gates
-5. TRACK - Record before/after metrics
-
-**Agent Used**: `agent-optimizer`
-
-**Data Sources**:
-- `.agent/metrics/` - Token usage, optimization logs
-- `.agent/telemetry/` - Cross-project usage data
-- `.agent/reflection_pool/` - Proven patterns
-
-**Location**: `.claude/commands/optimize.md`
-
----
-
-## Knowledge Base & Agent Context
-
-The project includes a comprehensive knowledge management system at `.agent/` that serves as the centralized context for all agents.
-
-### Knowledge Base Structure
+## Hub Architecture
 
 ```
-.agent/
-├── README.md                    ← Overview & navigation
-├── injection-history.md         ← Log of all documentation added
-├── tasks/                       ← PRDs & Implementation Plans
-├── system/                      ← Project Structure, Schemas, APIs
-└── sops/                        ← Standard Operating Procedures
-```
-
-### What Agents Use
-
-**Tasks Folder** (`tasks/`):
-- Product Requirements Documents (PRDs)
-- Implementation plans (created before coding)
-- User stories and acceptance criteria
-- Referenced when starting new features
-
-**System Folder** (`system/`):
-- Project structure and organization
-- Data schemas and entity models
-- API documentation and endpoints
-- Integration specifications
-- Grows continuously as project evolves
-
-**SOPs Folder** (`sops/`):
-- Standard Operating Procedures for common tasks
-- Step-by-step instructions for consistency
-- Common mistakes log (what to avoid)
-- Templates for repeated work
-- Created after completing tasks
-
-### How Agents Use Knowledge Base
-
-```
-Agent Workflow:
-1. Read: tasks/[feature]/prd.md          (understand requirements)
-2. Review: tasks/[feature]/implementation-plan.md  (understand approach)
-3. Check: system/[domain]/ documentation (understand systems & APIs)
-4. Reference: sops/[category]/[process].md  (follow standard procedures)
-5. Execute: Following knowledge as context
-6. Create: SOP for the process after completion
-```
-
-### Adding to Knowledge Base
-
-After completing a task:
-```
-1. Document new schemas in: system/schemas/
-2. Document new APIs in: system/apis/
-3. Document new integrations in: system/integrations/
-4. Create SOP in: sops/[category]/
-5. Log discoveries in: sops/common-mistakes.md
-6. Update: injection-history.md
-```
-
-### Quick Links
-
-- **Knowledge Base Home**: `.agent/README.md`
-- **Tasks Guide**: `.agent/tasks/README.md`
-- **System Guide**: `.agent/system/README.md`
-- **SOPs Guide**: `.agent/sops/README.md`
-- **What's Been Added**: `.agent/injection-history.md`
-
----
-
-## Repository Structure
-
-```
-/Agentic
-├── agents/
-│   └── agent-sap-businesspartner-integration/
-│       ├── agent.yml
-│       ├── system-prompt.md
+Agentic/                          # The Hub
+├── CLAUDE.md                     # This file (config)
+├── agents-registry.json          # Machine-readable registry
+│
+├── .claude/
+│   ├── agents/                   # Agent definitions
+│   └── commands/                 # Command definitions
+│
+├── .agent/
+│   ├── injection-history.md      # Documentation audit trail
+│   ├── reflection_pool/          # Cross-project insights
+│   ├── metrics/                  # Usage analytics
+│   ├── telemetry/                # OTEL integration
+│   ├── memory/                   # Agent persistent memory
+│   └── tests/                    # Validation infrastructure
+│
+├── agents/                       # Agent documentation + examples
+│   └── {agent-name}/
 │       ├── README.md
 │       ├── test-cases.md
 │       └── examples/
-├── docs/
-│   └── sap-integration/
-│       └── businesspartner/
-│           ├── bp-create-flow.md
-│           ├── bp-update-patterns.md
-│           └── [generated docs]
-├── AGENTS_REGISTRY.md          # Central registry of all agents
-├── AGENTS_REPOSITORY_GUIDE.md  # How to create new agents
-└── CLAUDE.md                   # This file
+│
+├── deployments/                  # Deployment tracking
+│   ├── registry.json
+│   └── by-project/
+│
+└── docs/                         # Reference documentation
 ```
-
----
-
-## How to Use This Repository
-
-### 1. Finding an Agent
-
-**Check AGENTS_REGISTRY.md** for:
-- Complete list of available agents
-- Quick reference table
-- Agent descriptions and capabilities
-- Status and version information
-
-### 2. Using an Agent
-
-**Step 1**: Read the agent's README
-- Understand trigger conditions
-- Review usage examples
-- Check output format
-
-**Step 2**: Invoke the agent
-```bash
-@agent-sap-businesspartner-integration: [Your specific request]
-```
-
-**Step 3**: Review generated output
-- Verify accuracy in sandbox
-- Check for fabricated functionality
-- Validate against documentation
-- Test procedures before production use
-
-### 3. Creating a New Agent
-
-**Use the AGENTS_REPOSITORY_GUIDE.md** which provides:
-- 7-phase creation workflow
-- Agent anatomy and file structure
-- System prompt templates
-- Test case examples
-- Quality standards and checklists
-
-**Quick Start**:
-1. Read AGENTS_REPOSITORY_GUIDE.md
-2. Use `@agent-architect` to help design
-3. Follow the 7-phase workflow
-4. Validate with test cases
-5. Add to AGENTS_REGISTRY.md
-6. Update CLAUDE.md
-
-### 4. Reporting Issues
-
-**Found a problem?**
-1. Document the issue with specific examples
-2. Check if it's documented behavior or unexpected
-3. Report to Agent Architecture Team
-4. Include: agent ID, request, actual output, expected output
-
----
-
-## Workflows
-
-### Workflow 1: Document BusinessPartner Integration
-
-**Goal**: Create comprehensive guide for BusinessPartner OData integration
-
-**Steps**:
-1. Review `agents/agent-sap-businesspartner-integration/README.md`
-2. Invoke with specific scope (create, update, sub-entities, etc.)
-3. Review generated Markdown documentation
-4. Verify accuracy in SAP sandbox
-5. Add to docs/sap-integration/businesspartner/
-6. Share with team
-
-**Example**:
-```bash
-@agent-sap-businesspartner-integration: Create documentation for the
-complete BusinessPartner onboarding flow: person entity with employee role,
-home address, work address, phone, email, and bank details. Include
-step-by-step procedures, validation rules, error handling, and escalation.
-```
-
-### Workflow 2: Create New Agent
-
-**Goal**: Design and implement a new specialized agent
-
-**Steps**:
-1. Read AGENTS_REPOSITORY_GUIDE.md (complete workflow)
-2. Use `@agent-architect` for requirements analysis
-3. Follow 7-phase creation process
-4. Implement configuration files
-5. Develop and run test cases
-6. Document in AGENTS_REGISTRY.md
-7. Update CLAUDE.md
-8. Notify team
-
-**Time Estimate**: 4-6 hours for comprehensive agent
-
-### Workflow 3: Update Existing Agent
-
-**Goal**: Refine agent based on feedback or changes
-
-**Steps**:
-1. Identify what needs updating
-2. Update system prompt (system-prompt.md)
-3. Add test cases if needed (test-cases.md)
-4. Run validation tests
-5. Update README if behavior changed
-6. Update version in agent.yml
-7. Document change in AGENTS_REGISTRY.md
-
----
 
 ## Quality Gates
 
-### Before Using Agent Output
+All agents must pass before deployment:
 
-- [ ] Verified accuracy (spot-checked against authoritative source)
-- [ ] Tested procedures in sandbox
-- [ ] No fabricated functionality detected
-- [ ] Uncertainties are clearly called out
-- [ ] SAP API endpoints and entity names are correct
-- [ ] Examples are realistic and complete
+| Gate | Requirement |
+|------|-------------|
+| QG-1 | 100% test pass rate |
+| QG-2 | No fabrication constraints removed |
+| QG-3 | Uncertainty acknowledgment preserved |
+| QG-4 | All referenced templates exist |
+| QG-5 | Critical constraints intact |
+| QG-6 | Quality score >= 4.0/5 (from feedback) |
 
-### Before Deploying Agent to Production
+**Run tests**: `/agent-test {agent-id}`
 
-- [ ] All test cases pass (100%)
-- [ ] System prompt is comprehensive and clear
-- [ ] Documentation is complete and accurate
-- [ ] README provides clear trigger conditions
-- [ ] Examples demonstrate key capabilities
-- [ ] Quality standards checklist is satisfied
-- [ ] Team has reviewed and approved
-- [ ] AGENTS_REGISTRY.md is updated
+## Knowledge Base
 
----
+The `.agent/` directory is the knowledge base for all agents:
 
-## Best Practices
+| Folder | Purpose |
+|--------|---------|
+| `tasks/` | PRDs, implementation plans |
+| `system/` | Schemas, APIs, integrations |
+| `sops/` | Standard operating procedures |
+| `metrics/` | Usage data, optimization logs |
+| `telemetry/` | OTEL metrics collection |
+| `reflection_pool/` | Cross-project insights |
 
-### For Users
+**Details**: See `.agent/README.md`
 
-✅ **Do**:
-- Read agent README before using
-- Verify outputs in sandbox before production
-- Report inaccuracies to improve agents
-- Use agents proactively for relevant tasks
-- Provide feedback on usefulness
+## Telemetry & Feedback
 
-❌ **Don't**:
-- Assume outputs are production-ready without review
-- Ignore agent limitations
-- Use agents for out-of-scope purposes
-- Bypass validation and testing
-- Expect agents to replace domain experts
-
-### For Maintainers
-
-✅ **Do**:
-- Keep system prompts current and accurate
-- Test agents quarterly
-- Document limitations transparently
-- Incorporate team feedback
-- Version control carefully
-- Acknowledge uncertainty rather than guess
-
-❌ **Don't**:
-- Fabricate functionality
-- Include proprietary content verbatim
-- Skip test cases
-- Leave uncertainties undocumented
-- Forget to update AGENTS_REGISTRY.md
-- Ignore maintenance triggers
-
----
-
-## Integration with Projects
-
-### Using This Agent Hub in Other Projects
-
-**In a project's CLAUDE.md**, reference available agents:
-
-```yaml
-# Pull agents from centralized hub
-agents:
-  - id: agent-sap-businesspartner-integration
-    source: /IntoData/Internal/Agentic/agents/
-    version: "1.0.0"
-    use_for: "SAP BusinessPartner OData integration documentation"
-```
-
-**Then invoke normally**:
+**OTEL Telemetry** (automated):
 ```bash
-@agent-sap-businesspartner-integration: [Your request]
+# Start collector
+cd .agent/telemetry/otel && docker compose up -d
+
+# Enable in shell
+export CLAUDE_CODE_ENABLE_TELEMETRY=1
+export OTEL_EXPORTER_OTLP_ENDPOINT="http://localhost:4317"
 ```
 
-### Versioning
+**User Feedback** (after agent use):
+```bash
+.agent/telemetry/hooks/feedback_capture.sh {agent-id} {rating-1-5} "comment"
+```
 
-Agents follow semantic versioning:
-- `1.0.0` - Major version, breaking changes possible
-- `1.1.0` - Minor version, new features backward compatible
-- `1.0.1` - Patch version, bug fixes only
+## Provisioning Agents
 
-Check AGENTS_REGISTRY.md for current versions before using.
+**To another project**:
+```bash
+@agent-provisioner: sync /path/to/project
+```
 
----
+**Interactive workflow**:
+1. Compare versions between hub and target
+2. Select agents to sync
+3. Backup existing files
+4. Copy agents, commands, merge hooks
+5. Update deployment registry
 
-## Maintenance Schedule
+## Creating New Agents
 
-### Quarterly Review (Each Quarter)
+1. **Design**: `@agent-architect: I need an agent for...`
+2. **Create**: Add `.claude/agents/{agent-id}.md`
+3. **Test**: Create `agents/{agent-id}/test-cases.md`
+4. **Register**: Update `agents-registry.json`
+5. **Validate**: `/agent-test {agent-id}`
 
-- [ ] Verify agent outputs remain accurate
-- [ ] Check for new API versions or standards
-- [ ] Review team feedback
-- [ ] Update system prompts if needed
-- [ ] Run validation tests
-- [ ] Update version if changes made
-- [ ] Document any improvements
+**Guide**: See `AGENTS_REPOSITORY_GUIDE.md` for full workflow.
 
-### Annual Audit (Annually)
+## Maintenance
 
-- [ ] Comprehensive accuracy review
-- [ ] Check usage patterns across projects
-- [ ] Gather feedback from all users
-- [ ] Assess ROI and deprecation candidates
-- [ ] Plan improvements for next year
-- [ ] Update AGENTS_REPOSITORY_GUIDE.md
-
-### On-Demand (As Needed)
-
-- **SAP API Update**: Test and update agent if APIs change
-- **Team Feedback**: Address reported issues quickly
-- **New Feature Request**: Evaluate feasibility
-- **Deprecation**: Plan sunset for obsolete agents
-
----
+| Schedule | Tasks |
+|----------|-------|
+| **Weekly** | Review telemetry, address feedback |
+| **Monthly** | `/optimize` analysis, update agents |
+| **Quarterly** | Full validation, accuracy review |
 
 ## Support
 
-### Getting Help
+**Get help**:
+1. Check agent definition: `.claude/agents/{agent-id}.md`
+2. Check agent docs: `agents/{agent-id}/README.md`
+3. Check registry: `agents-registry.json`
 
-**For agent questions**:
-1. Check agent README first
-2. Review examples in agent directory
-3. Check AGENTS_REGISTRY.md
-4. Ask Agent Architecture Team
-
-**For repository questions**:
-1. Read AGENTS_REPOSITORY_GUIDE.md
-2. Check AGENTS_REGISTRY.md
-3. Review this CLAUDE.md
-4. Ask Agent Architecture Team
-
-### Reporting Issues
-
-Report issues with:
-1. Agent ID
-2. Exact request you made
-3. What you expected
-4. What actually happened
-5. Evidence (screenshots, logs, etc.)
-
----
+**Report issues**:
+- Agent ID, request, expected vs actual output
 
 ## Document References
 
-| Document | Purpose | Audience |
-|----------|---------|----------|
-| AGENTS_REGISTRY.md | Central hub of all agents | Everyone |
-| AGENTS_REPOSITORY_GUIDE.md | How to create new agents | Agent creators |
-| CLAUDE.md (this file) | Agent configuration | Everyone |
-| agents/*/README.md | Agent-specific usage | Agent users |
-| agents/*/system-prompt.md | Agent personality/behavior | Maintainers |
-| agents/*/test-cases.md | Validation framework | QA/Maintainers |
+| Document | Purpose |
+|----------|---------|
+| `agents-registry.json` | Machine-readable agent registry |
+| `AGENTS_REPOSITORY_GUIDE.md` | How to create agents |
+| `.agent/README.md` | Knowledge base guide |
+| `deployments/README.md` | Deployment tracking |
+| `.agent/telemetry/otel/README.md` | Telemetry setup |
+
+## Status
+
+**Hub Version**: 2.1.0
+**Registry Version**: 2.1.0
+**Last Updated**: 2026-01-25
+
+**Agent Count**: 12 (5 meta-agents, 7 deployable)
 
 ---
 
-## Contact & Contributions
-
-**Agent Architecture Team**: Maintains this repository hub
-
-**Contributing**:
-- Suggest new agents with detailed requirements
-- Report issues with specific examples
-- Provide feedback on agent accuracy/usefulness
-- Contribute test cases and examples
-- Help document improvements
-
-**Questions?**
-- Review AGENTS_REPOSITORY_GUIDE.md
-- Check AGENTS_REGISTRY.md
-- Ask Agent Architecture Team
-
----
-
-## Project Status
-
-**Repository Status**: Active
-**Version**: 1.6.0
-**Last Updated**: 2026-01-24
-
-**Current Agents**:
-- 8 production-ready agents
-  - agent-sap-businesspartner-integration (v1.0.0)
-  - agent-ansible-automation (v1.0.0)
-  - agent-robotarm-tester (v1.0.0)
-  - agent-git-manager (v1.0.0)
-  - agent-provisioner (v1.0.0) - Now with telemetry-sync
-  - agent-cv-optimizer (v1.0.0)
-  - agent-project-init (v1.0.0)
-  - agent-optimizer (v1.0.0) - NEW: Telemetry-driven optimization
-- 0 beta agents
-- 0 deprecated agents
-
-**Roadmap**: See AGENTS_REGISTRY.md for planned future agents
-
----
-
-## Next Steps
-
-### To Get Started
-
-1. **Read AGENTS_REGISTRY.md** - See what agents are available
-2. **Explore existing agents** - Examples of production agents:
-   - agent-sap-businesspartner-integration - SAP OData API integration
-   - agent-ansible-automation - DevOps automation development
-   - agent-git-manager - Secure git commits with security scanning
-   - agent-provisioner - Sync agents to other projects
-   - agent-cv-optimizer - CV tailoring and interview prep for Data/AI roles
-3. **Try an agent** - Invoke it with a specific request
-4. **Provide feedback** - Help improve the agents
-
-### To Create a New Agent
-
-1. **Read AGENTS_REPOSITORY_GUIDE.md** - Full 7-phase process
-2. **Use @agent-architect** - Get help designing
-3. **Follow the workflow** - Build, test, validate
-4. **Register and deploy** - Make available to team
-
----
-
-**This repository hub is designed to scale. As you create and refine agents, update these documents to reflect your growing library of specialized tools.**
+*This hub tracks agents deployed across projects. Use `/agent-status` for dashboard.*
