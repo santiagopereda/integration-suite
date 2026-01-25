@@ -1,0 +1,79 @@
+{
+  "optimizations": [
+    {
+      "agent": "agent-cv-optimizer",
+      "date": "2026-01-25",
+      "before": {
+        "lines": 443,
+        "words": 2251,
+        "tokens_estimated": 16642
+      },
+      "after": {
+        "lines": 316,
+        "words": 1624,
+        "tokens_estimated": 12000
+      },
+      "reduction": {
+        "lines": 127,
+        "lines_pct": 28.7,
+        "tokens_pct": 27.9
+      },
+      "pattern_applied": "PAT-01-template-externalization",
+      "templates_created": [
+        ".agent/templates/cv-optimizer/interactions-template.md",
+        ".agent/templates/cv-optimizer/resources-template.md",
+        ".agent/templates/cv-optimizer/tracker-template.md",
+        ".agent/templates/cv-optimizer/workflow-examples.md"
+      ],
+      "quality_gates": {
+        "QG-1": "pending-test-run",
+        "QG-2": "passed",
+        "QG-3": "passed",
+        "QG-4": "passed",
+        "QG-5": "passed"
+      }
+    },
+    {
+      "agent": "agent-project-init",
+      "date": "2026-01-25",
+      "before": {
+        "lines": 456,
+        "words": 1650,
+        "tokens_estimated": 11000
+      },
+      "after": {
+        "lines": 298,
+        "words": 1310,
+        "tokens_estimated": 8700
+      },
+      "reduction": {
+        "lines": 158,
+        "lines_pct": 34.6,
+        "words_pct": 20.6,
+        "tokens_pct": 20.9
+      },
+      "command_optimized": {
+        "before_words": 1020,
+        "after_words": 947,
+        "reduction_pct": 7.2
+      },
+      "pattern_applied": "PAT-01-template-externalization",
+      "templates_created": [
+        ".agent/templates/project-init/folder-structures.md",
+        ".agent/templates/project-init/claude-md-template.md",
+        ".agent/templates/project-init/readme-md-template.md",
+        ".agent/templates/project-init/agent-readme-template.md",
+        ".agent/templates/project-init/injection-history-template.md"
+      ],
+      "backup_location": ".agent/backups/project-init-pre-optimization/",
+      "quality_gates": {
+        "QG-1": "pending-test-run",
+        "QG-2": "passed",
+        "QG-3": "passed",
+        "QG-4": "passed",
+        "QG-5": "passed"
+      },
+      "notes": "Templates loaded on-demand during Step 5 (DOCUMENT), reducing per-invocation token usage"
+    }
+  ]
+}

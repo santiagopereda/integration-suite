@@ -108,14 +108,57 @@ Shows summary of all changes, executes only after user approval.
 
 ## Project Type Structures
 
-Detailed folder structures are in: `.agent/templates/project-init/folder-structures.md`
+### Integration Projects
 
-| Type | Key Folders | Best For |
-|------|-------------|----------|
-| Integration | sops/, system/, workflows/ | API integrations, ETL, data sync |
-| Development | decisions/, schemas/, testing/ | Web apps, CLI tools, libraries |
-| Research | findings/, hypotheses/, gaps/ | Spikes, POCs, learning |
-| Optimization | templates/, metrics/, experiments/ | Refactoring, performance, migrations |
+Best for: API integrations, ETL pipelines, data synchronization
+
+```
+.agent/
+├── README.md
+├── injection-history.md
+├── sops/              # Repeatable procedures
+├── system/            # Schemas, APIs, mappings
+└── workflows/         # Integration flow docs
+```
+
+### Development Projects
+
+Best for: Web apps, CLI tools, libraries, features
+
+```
+.agent/
+├── README.md
+├── injection-history.md
+├── decisions/         # Architecture Decision Records
+├── schemas/           # Data models
+└── testing/           # Test strategies
+```
+
+### Research Projects
+
+Best for: Spikes, POCs, learning projects, investigations
+
+```
+.agent/
+├── README.md
+├── injection-history.md
+├── findings/          # What was discovered
+├── hypotheses/        # Assumptions to test
+└── gaps/              # What's still unknown
+```
+
+### Optimization Projects
+
+Best for: Refactoring, performance tuning, migrations
+
+```
+.agent/
+├── README.md
+├── injection-history.md
+├── templates/         # Externalized content
+├── metrics/           # Baselines and tracking
+└── experiments/       # What was tried
+```
 
 ---
 

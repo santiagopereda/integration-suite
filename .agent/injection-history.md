@@ -921,6 +921,93 @@ Claude Code (native OTel) → OTel Collector → telemetry.jsonl (rich metrics)
 
 ---
 
+### 2026-01-25 - Infrastructure: OTEL Real-Time Tool Telemetry
+- **Added By**: Claude Opus 4.5
+- **Location**: `.agent/telemetry/hooks/otel_hook.sh`
+- **Purpose**: Send tool usage traces directly to OTEL collector for real-time telemetry
+- **Links**: `.agent/telemetry/README.md`, `.claude/settings.local.json`
+- **Status**: Complete
+
+**New Infrastructure**:
+- `otel_hook.sh` - Bash script that sends OTLP traces to collector on port 4318
+- PostToolUse hooks for: Bash, Read, Glob, Grep, Edit, Write, NotebookEdit, Task, WebSearch, WebFetch
+
+**Data Captured Per Tool**:
+- `service.name` - From OTEL_SERVICE_NAME env var
+- `session.id` - Links related tool calls within session
+- `tool.name` - Tool type (Bash, Read, Edit, etc.)
+- `project.name` - Project identifier
+- `hook.type` - PostToolUse
+- `startTimeUnixNano` - Timestamp
+
+**Configuration Changes**:
+- `.claude/settings.local.json` - Added 7 new PostToolUse hook matchers
+- `.agent/telemetry/otel/docker-compose.yml` - Added `user: "1000:1000"` for host file access
+
+**Impact**: Real-time tool usage patterns now visible in telemetry.jsonl
+
+---
+
+### 2026-01-25 - Templates: cv-optimizer Externalization
+- **Added By**: Claude Opus 4.5
+- **Location**: `.agent/templates/cv-optimizer/`
+- **Purpose**: Externalize agent-cv-optimizer static content for token reduction
+- **Links**: Loaded by `.claude/agents/agent-cv-optimizer.md`
+- **Status**: Complete
+
+**Templates Created** (4 files):
+1. `tracker-template.md` - Application tracking format
+2. `workflow-examples.md` - Mode-specific workflow examples
+3. `interactions-template.md` - Agent coordination patterns
+4. `resources-template.md` - Career resource links
+
+---
+
+### 2026-01-25 - Templates: project-init Externalization
+- **Added By**: Claude Opus 4.5
+- **Location**: `.agent/templates/project-init/`
+- **Purpose**: Externalize agent-project-init folder structures and templates
+- **Links**: Loaded by `.claude/agents/agent-project-init.md`
+- **Status**: Complete
+
+**Templates Created** (5 files):
+1. `folder-structures.md` - Project type folder definitions (Integration, Development, Research, Optimization)
+2. `claude-md-template.md` - CLAUDE.md template for new projects
+3. `readme-md-template.md` - README.md template for new projects
+4. `injection-history-template.md` - injection-history.md starter
+5. `agent-readme-template.md` - .agent/README.md template
+
+**Agent Backups**:
+- `.agent/backups/project-init-pre-optimization/` - Pre-optimization versions preserved
+
+---
+
+### 2026-01-25 - Documentation: Telemetry README Update
+- **Modified By**: Claude Opus 4.5
+- **Location**: `.agent/telemetry/README.md`
+- **Changes**:
+  - Added otel_hook.sh documentation section
+  - Updated directory structure to include new hook
+  - Added hooks configuration examples
+  - Updated version to 2.1.0
+- **Purpose**: Document real-time tool telemetry infrastructure
+- **Status**: Complete
+
+---
+
+### 2026-01-25 - Documentation: Templates README Update
+- **Modified By**: Claude Opus 4.5
+- **Location**: `.agent/templates/README.md`
+- **Changes**:
+  - Added cv-optimizer/ directory to structure
+  - Added project-init/ directory to structure
+  - Added provisioner/ directory to structure
+  - Updated version to 1.1.0
+- **Purpose**: Document new externalized template directories
+- **Status**: Complete
+
+---
+
 ## 🔄 Maintenance Schedule
 
 ### Weekly
@@ -959,8 +1046,8 @@ Claude Code (native OTel) → OTel Collector → telemetry.jsonl (rich metrics)
 
 ---
 
-**Version**: 1.7.0
-**Last Updated**: 2026-01-24
-**Total Documents**: 65
+**Version**: 1.8.0
+**Last Updated**: 2026-01-25
+**Total Documents**: 74
 **Maintained By**: System
 **Status**: Active

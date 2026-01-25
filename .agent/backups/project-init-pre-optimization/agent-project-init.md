@@ -123,15 +123,52 @@ Create the `.agent/` directory with type-appropriate folders.
 
 **Structure by Project Type**:
 
-Load folder structure from template: `.agent/templates/project-init/folder-structures.md`
+#### Integration Projects
+```
+.agent/
+├── README.md
+├── injection-history.md
+├── sops/              # Repeatable procedures (33% usage, but 100% for integration projects)
+├── system/            # Schemas, APIs, mappings
+└── workflows/         # Integration flow documentation
+```
 
-| Type | Key Folders |
-|------|-------------|
-| Integration | sops/, system/, workflows/ |
-| Development | decisions/, schemas/, testing/ |
-| Research | findings/, hypotheses/, gaps/ |
-| Optimization | templates/, metrics/, experiments/ |
-| Custom | User selects from above |
+#### Development Projects
+```
+.agent/
+├── README.md
+├── injection-history.md
+├── decisions/         # Architecture Decision Records
+├── schemas/           # Data models
+└── testing/           # Test strategies
+```
+
+#### Research Projects
+```
+.agent/
+├── README.md
+├── injection-history.md
+├── findings/          # What was discovered
+├── hypotheses/        # Assumptions to test
+└── gaps/              # What's still unknown
+```
+
+#### Optimization Projects
+```
+.agent/
+├── README.md
+├── injection-history.md
+├── templates/         # Externalized content
+├── metrics/           # Baselines and tracking
+└── experiments/       # What was tried
+```
+
+#### Custom Projects
+Ask user which folders they want from the full list:
+- sops/, system/, workflows/ (Integration)
+- decisions/, schemas/, testing/ (Development)
+- findings/, hypotheses/, gaps/ (Research)
+- templates/, metrics/, experiments/ (Optimization)
 
 ### Step 5: DOCUMENT
 
@@ -143,22 +180,94 @@ Create or update CLAUDE.md and README.md.
 3. Show diff-style preview
 4. Ask: "Apply these changes?"
 
-**If creating new CLAUDE.md**:
+**If creating new CLAUDE.md**, use this template:
 
-Load template from: `.agent/templates/project-init/claude-md-template.md`
+```markdown
+# CLAUDE.md - {Project Name}
 
-Fill placeholders: `{project_name}`, `{project_type}`, `{project_goals}`, `{key_resources}`, `{known_constraints}`, `{date}`
+## Project Overview
+
+**Type**: {project_type}
+**Purpose**: {project_goals}
+**Technologies**: {key_resources}
+
+## Project Goals
+
+{detailed_goals}
+
+## Constraints
+
+{known_constraints}
+
+## Available Agents
+
+{list of provisioned agents with brief descriptions}
+
+## Available Commands
+
+- `/update_doc` - Update project documentation
+- `/agent_reflect` - Generate project journey testimony
+
+## Knowledge Base
+
+Project documentation lives in `.agent/`:
+
+```
+.agent/
+├── README.md                 # Knowledge base overview
+├── injection-history.md      # Audit trail of all changes
+{type_specific_folders}
+```
+
+### Using the Knowledge Base
+
+1. **Before starting work**: Check injection-history.md for recent changes
+2. **During work**: Reference relevant documentation in .agent/
+3. **After completing work**: Update injection-history.md
+
+---
+
+**Initialized**: {date}
+**Project Type**: {project_type}
+```
 
 **If README.md exists**:
 1. Read current content
 2. Propose adding project structure section
 3. Ask: "Apply these changes?"
 
-**If creating new README.md**:
+**If creating new README.md**, use this template:
 
-Load template from: `.agent/templates/project-init/readme-md-template.md`
+```markdown
+# {Project Name}
 
-Fill placeholders: `{project_name}`, `{project_goals}`, `{date}`
+{project_goals}
+
+## Quick Start
+
+[To be filled based on project type]
+
+## Project Structure
+
+```
+{project_name}/
+├── .agent/                   # Agent knowledge base
+├── .claude/                  # Agent and command definitions
+│   ├── agents/
+│   └── commands/
+├── CLAUDE.md                 # Project configuration
+└── README.md                 # This file
+```
+
+## Documentation
+
+- **Knowledge Base**: See `.agent/README.md`
+- **Agent Configuration**: See `CLAUDE.md`
+
+---
+
+**Created**: {date}
+```
 
 ### Step 6: PROVISION
 
@@ -234,14 +343,63 @@ Only execute after user confirmation.
 
 ## File Templates
 
-Templates are externalized to reduce agent size. Load when needed during Step 5 (DOCUMENT).
+### .agent/README.md Template
 
-| Template | Path | When to Load |
-|----------|------|--------------|
-| .agent/README.md | `.agent/templates/project-init/agent-readme-template.md` | Step 5: Creating .agent/README.md |
-| injection-history.md | `.agent/templates/project-init/injection-history-template.md` | Step 5: Creating initial entry |
+```markdown
+# Knowledge Base - {Project Name}
 
-Use the Read tool to load template content, then fill placeholders based on user input.
+This directory contains project documentation and context for agent-assisted development.
+
+## Structure
+
+```
+.agent/
+├── README.md                 # This file
+├── injection-history.md      # Audit trail of all changes
+{type_specific_structure}
+```
+
+## Quick Reference
+
+| Need | Location |
+|------|----------|
+| What changed recently | `injection-history.md` |
+{type_specific_references}
+
+## Adding Documentation
+
+After completing work:
+1. Document what was done
+2. Add entry to `injection-history.md`
+
+---
+
+**Initialized**: {date}
+**Project Type**: {project_type}
+```
+
+### .agent/injection-history.md Initial Entry
+
+```markdown
+# Injection History
+
+Chronological audit trail of all documentation added to the knowledge base.
+
+---
+
+## {date} - Project Initialization
+
+- **Added By**: agent-project-init
+- **Type**: Project Setup
+- **Changes**:
+  - Created .agent/ knowledge base structure
+  - Initialized for {project_type} project type
+  - Provisioned default agents and commands
+- **Project Goals**: {project_goals}
+- **Status**: Complete
+
+---
+```
 
 ## Critical Constraints
 

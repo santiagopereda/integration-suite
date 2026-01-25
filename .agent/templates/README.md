@@ -54,15 +54,25 @@ templates/
 │   └── sap-agiloft-context.md     ← Project-specific context (conditional)
 ├── ansible/                       ← Ansible-specific templates
 │   ├── playbook-doc.md            ← Playbook documentation template
-│   ├── role-structure.yml         ← Role directory structure
-│   ├── task-pattern.yml           ← Task implementation patterns
-│   ├── vars-pattern.yml           ← Variable management patterns
-│   ├── jinja2-pattern.j2          ← Jinja2 templating examples
-│   ├── inventory-patterns.yml     ← Inventory examples (static & dynamic)
-│   ├── testing-config.yml         ← Testing framework (molecule, ansible-lint)
-│   ├── security-patterns.yml      ← Security best practices (Vault, no_log)
-│   ├── cloud-patterns.yml         ← Cloud provider integration (AWS, Azure, GCP)
+│   ├── best-practices.md          ← Ansible best practices guide
 │   └── quality-checklist.md       ← Quality assurance checklist
+├── cv-optimizer/                  ← CV/Career optimization templates (NEW)
+│   ├── tracker-template.md        ← Application tracking format
+│   ├── workflow-examples.md       ← Mode-specific workflow examples
+│   ├── interactions-template.md   ← Agent coordination patterns
+│   └── resources-template.md      ← Career resource links
+├── project-init/                  ← Project initialization templates (NEW)
+│   ├── folder-structures.md       ← Project type folder structures
+│   ├── claude-md-template.md      ← CLAUDE.md template for projects
+│   ├── readme-md-template.md      ← README.md template for projects
+│   ├── injection-history-template.md ← injection-history.md template
+│   └── agent-readme-template.md   ← Agent README template
+├── provisioner/                   ← Agent provisioning templates
+│   ├── sync-workflow.md           ← Hub-to-target sync workflow
+│   ├── sync-back-workflow.md      ← Target-to-hub reverse sync
+│   ├── registry-templates.md      ← CLAUDE.md/AGENTS_REGISTRY templates
+│   ├── hook-merge-logic.md        ← Hook merging rules
+│   └── workflow-examples.md       ← Complete workflow examples
 └── shared/                        ← Cross-agent templates
     ├── output-structure.md        ← General output formatting
     └── markdown-formatting.md     ← Markdown best practices
@@ -338,5 +348,6 @@ Record externalization in `.agent/metrics/optimization-log.md`:
 ---
 
 **Created**: 2025-11-28
-**Version**: 1.0.0
+**Updated**: 2026-01-25
+**Version**: 1.1.0
 **Maintained By**: Agent Architecture Team

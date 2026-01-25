@@ -39,7 +39,8 @@ The telemetry system uses a **hybrid approach**:
 telemetry/
 ├── README.md                      ← This file
 ├── hooks/
-│   └── log_invocation.sh          ← Lightweight agent attribution hook
+│   ├── log_invocation.sh          ← Lightweight agent attribution hook
+│   └── otel_hook.sh               ← OTLP trace sender (NEW)
 ├── otel/                          ← OpenTelemetry infrastructure
 │   ├── docker-compose.yml         ← OTel collector deployment
 │   ├── otel-config.yaml           ← Collector configuration
@@ -73,22 +74,82 @@ export OTEL_SERVICE_NAME="claude-code-agentic"
 
 Or source the project's `.envrc`.
 
-### 3. The Hook is Already Active
+### 3. Hooks Are Already Active
 
-The `log_invocation.sh` hook is configured in `.claude/settings.local.json`:
+Two hooks are configured in `.claude/settings.local.json`:
 
+#### Agent Attribution Hook (Edit/Write only)
 ```json
 {
-  "hooks": {
-    "PostToolUse": [{
-      "matcher": "Edit|Write|NotebookEdit",
-      "hooks": [{
-        "type": "command",
-        "command": ".agent/telemetry/hooks/log_invocation.sh"
-      }]
-    }]
-  }
+  "matcher": "Edit|Write|NotebookEdit",
+  "hooks": [
+    {"type": "command", "command": ".agent/telemetry/hooks/log_invocation.sh"},
+    {"type": "command", "command": ".agent/telemetry/hooks/otel_hook.sh Edit"}
+  ]
 }
+```
+
+#### OTEL Trace Hook (All Tools)
+```json
+{
+  "matcher": "Read|Glob|Grep|Bash|Task|WebSearch|WebFetch",
+  "hooks": [
+    {"type": "command", "command": ".agent/telemetry/hooks/otel_hook.sh <ToolName>"}
+  ]
+}
+```
+
+**Tools with OTEL telemetry**: Bash, Read, Glob, Grep, Edit, Write, NotebookEdit, Task, WebSearch, WebFetch
+
+## otel_hook.sh - Real-Time Tool Telemetry
+
+The `otel_hook.sh` script sends tool usage data directly to the OTEL collector as traces.
+
+### How It Works
+
+```
+PostToolUse Hook Fires
+        │
+        ▼
+┌─────────────────────────┐
+│   otel_hook.sh <Tool>   │
+│                         │
+│ 1. Get session ID       │
+│ 2. Generate trace/span  │
+│ 3. Build OTLP JSON      │
+│ 4. POST to :4318        │
+└─────────────────────────┘
+        │
+        ▼
+   OTEL Collector
+        │
+        ▼
+  telemetry.jsonl
+```
+
+### Data Captured Per Tool Invocation
+
+| Field | Example | Description |
+|-------|---------|-------------|
+| `service.name` | `claude-code-agentic` | From OTEL_SERVICE_NAME |
+| `session.id` | `3d968ed7-...` | Links related tool calls |
+| `name` | `tool.Bash` | Tool type |
+| `tool.name` | `Bash` | Tool identifier |
+| `project.name` | `agentic-hub` | Project context |
+| `hook.type` | `PostToolUse` | When captured |
+| `startTimeUnixNano` | `1769337047...` | Timestamp |
+
+### Viewing Real-Time Tool Usage
+
+```bash
+# Watch telemetry arrive
+tail -f .agent/telemetry/otel/data/telemetry.jsonl | jq '.resourceSpans[].scopeSpans[].spans[].name'
+
+# Count tool usage
+grep -ao '"name":"tool\.[^"]*"' .agent/telemetry/otel/data/telemetry.jsonl | sort | uniq -c
+
+# Filter by tool type
+grep '"tool.Bash"' .agent/telemetry/otel/data/telemetry.jsonl | jq .
 ```
 
 ## Metrics Available
@@ -223,7 +284,7 @@ Check `.claude/settings.local.json` has the PostToolUse hook configured.
 
 ---
 
-**Version**: 2.0.0 (OTel-based)
+**Version**: 2.1.0 (OTel hooks)
 **Created**: 2026-01-24
-**Updated**: 2026-01-24
-**Approach**: Anthropic-aligned OpenTelemetry
+**Updated**: 2026-01-25
+**Approach**: Anthropic-aligned OpenTelemetry with PostToolUse hooks

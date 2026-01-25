@@ -199,125 +199,25 @@ When a recruiter reaches out (LinkedIn, email) before user actively applies:
 
 ## File Templates
 
+Templates are stored in `.agent/templates/cv-optimizer/` for reuse. Load with Read tool when creating application directories.
+
 ### interactions.md Template
-Track all communications chronologically:
 
-```markdown
-# Interactions Log - {Company}
-
-## Contacts
-| Name | Role | Email | LinkedIn | Notes |
-|------|------|-------|----------|-------|
-
-## Communication Timeline
-<!-- Add entries in reverse chronological order (newest first) -->
-
-### YYYY-MM-DD - [Email/LinkedIn/Call/Interview]
-**With**: {contact name and role}
-**Channel**: Email / LinkedIn DM / Phone / Video Call
-**Direction**: Inbound / Outbound
-
-**Summary**: {1-2 sentence summary}
-
-**Key Points**:
-- Point 1
-- Point 2
-
-**Action Items**:
-- [ ] {Next step}
-
-<details>
-<summary>Full Content</summary>
-{Paste full message here}
-</details>
-
----
-```
+Use template at `.agent/templates/cv-optimizer/interactions-template.md`
 
 ### resources.md Template
-Collect all application materials and compensation info:
 
-```markdown
-# Resources - {Company}
-
-## Job Posting
-- **URL**: {link}
-- **Captured**: {date}
-- **Status**: Active / Closed
-
-## Company Research
-### Official Sources
-- [ ] Company website:
-- [ ] Careers page:
-- [ ] Engineering blog:
-- [ ] GitHub org:
-
-### External Research
-- [ ] LinkedIn company page:
-- [ ] Glassdoor reviews:
-- [ ] Glassdoor interviews:
-
-## Key People
-| Name | Role | LinkedIn | Notes |
-|------|------|----------|-------|
-
-## Compensation
-
-| Stage | Amount | Notes |
-|-------|--------|-------|
-| **JD Range** | {if posted} | From job posting |
-| **Market Rate** | {researched} | Glassdoor/Levels.fyi |
-| **Recruiter Quote** | {if shared} | Initial discussion |
-| **Offer** | {if received} | Final offer |
-| **Negotiated** | {if applicable} | After negotiation |
-
-### Expectations
-- **Minimum acceptable**:
-- **Target**:
-- **Stretch**:
-
-## Notes
-{Observations, red flags, highlights}
-```
+Use template at `.agent/templates/cv-optimizer/resources-template.md`
 
 ## Application Tracker Format
 
 **File**: `applications/tracker.md`
 
-```markdown
-# Application Tracker
+Use template at `.agent/templates/cv-optimizer/tracker-template.md`
 
-Last Updated: {timestamp}
+**Status values**: Recruiter Outreach, Researching, Preparing, Applied, Screening, Technical, Onsite/Final, Offer, Rejected, Withdrawn
 
-## Active Applications
-
-| Company | Role | Status | Applied | Next Step | Priority | Intent | Comp Range |
-|---------|------|--------|---------|-----------|----------|--------|------------|
-| {company} | {role} | {status} | {date} | {action} | {H/M/L} | {Target/Practice/Exploratory} | {range} |
-
-## Status Legend
-- **Recruiter Outreach**: Recruiter contacted, initial response pending
-- **Researching**: Gathering company info, analyzing JD
-- **Preparing**: Tailoring CV, writing cover letter
-- **Applied**: Application submitted
-- **Screening**: Recruiter screen scheduled/completed
-- **Technical**: Technical interview stage
-- **Onsite/Final**: Final round interviews
-- **Offer**: Received offer
-- **Rejected**: Application rejected
-- **Withdrawn**: Withdrew application
-
-## Intent Categories
-- **Target**: Serious interest, would accept offer
-- **Practice**: Low stakes, for interview practice & market intel
-- **Exploratory**: Curious but uncertain about fit
-
-## Statistics
-- Total Applications: {count}
-- Active: {count}
-- Offers: {count}
-- Rejection Rate: {percent}
-```
+**Intent categories**: Target (serious), Practice (low stakes), Exploratory (uncertain fit)
 
 ## Agent Coordination
 
@@ -395,39 +295,12 @@ Last Updated: {timestamp}
 
 ## Workflow Examples
 
-### Example 1: Full Application Workflow
+Detailed workflows at `.agent/templates/cv-optimizer/workflow-examples.md`
 
-User: "Here's a JD for a Senior Data Engineer at Airbnb. Help me apply."
-
-1. Parse JD and create `applications/airbnb/jd.md`
-2. Analyze requirements to `applications/airbnb/jd-analysis.md`
-3. Run skills gap analysis against user's base CV
-4. Create tailored CV: `applications/airbnb/cv-airbnb.yaml`
-5. Generate cover letter: `applications/airbnb/cover-letter.md`
-6. Add entry to `applications/tracker.md`
-7. Offer interview prep when ready
-
-### Example 2: Career Coaching Session
-
-User: "I'm a software engineer wanting to move to ML Engineering. Help me position myself."
-
-1. Ask about current tech stack and projects
-2. Identify ML-adjacent experience (data processing, APIs, etc.)
-3. Find blindspots (missing: ML frameworks, math, MLOps)
-4. Create positioning strategy
-5. Suggest skill development priorities
-6. Recommend entry points (ML-focused projects, courses)
-
-### Example 3: Interview Preparation
-
-User: "I have a system design interview at Meta for a Data Engineer role."
-
-1. Research Meta's data infrastructure (web search)
-2. Identify likely system design topics (data pipelines, real-time processing)
-3. Generate 5-10 practice questions
-4. Provide framework for answering each
-5. Suggest questions to ask interviewer
-6. Create `applications/meta/interview-notes.md`
+**Quick Reference**:
+- **Full Application**: Parse JD → Analyze → Gap analysis → Tailor CV → Cover letter → Track
+- **Career Coaching**: Mine experience → Find blindspots → Build narrative → Plan development
+- **Interview Prep**: Research company → Analyze JD → Generate questions → Coach on STAR
 
 ## Web Research Guidelines
 
