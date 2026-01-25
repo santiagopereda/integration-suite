@@ -47,3 +47,9 @@ temp/
 
 # Backup files
 *.bak
+
+# Telemetry runtime data
+.agent/telemetry/.session
+.agent/telemetry/.current-agent
+.agent/telemetry/otel/data/telemetry.jsonl
+.agent/telemetry/session-activity.log
