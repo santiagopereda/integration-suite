@@ -1,12 +1,42 @@
 {
   "registry_version": "1.0.0",
-  "last_updated": "2026-01-25",
-  "projects": [],
-  "deployment_history": [],
+  "last_updated": "2026-01-28",
+  "projects": [
+    {
+      "name": "ai-integration-content",
+      "path": "/home/askeox/Documents/ai-integration-content",
+      "type": "content-creation",
+      "created": "2026-01-28",
+      "agents_deployed": [
+        "research-assistant",
+        "documentation-specialist",
+        "agent-git-manager"
+      ],
+      "commands_deployed": [
+        "update_doc",
+        "agent_reflect"
+      ],
+      "status": "active"
+    }
+  ],
+  "deployment_history": [
+    {
+      "date": "2026-01-28",
+      "action": "project_init",
+      "project": "ai-integration-content",
+      "agents": ["research-assistant", "documentation-specialist", "agent-git-manager"],
+      "commands": ["update_doc", "agent_reflect"],
+      "initiated_by": "user"
+    }
+  ],
   "statistics": {
-    "total_projects": 0,
-    "total_deployments": 0,
-    "agents_deployed": {},
-    "most_deployed_agent": null
+    "total_projects": 1,
+    "total_deployments": 1,
+    "agents_deployed": {
+      "research-assistant": 1,
+      "documentation-specialist": 1,
+      "agent-git-manager": 1
+    },
+    "most_deployed_agent": "research-assistant"
   }
 }
