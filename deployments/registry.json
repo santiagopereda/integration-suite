@@ -1,6 +1,6 @@
 {
   "registry_version": "1.0.0",
-  "last_updated": "2026-01-28",
+  "last_updated": "2026-01-31",
   "projects": [
     {
       "name": "ai-integration-content",
@@ -17,6 +17,19 @@
         "agent_reflect"
       ],
       "status": "active"
+    },
+    {
+      "name": "GLInet_Network",
+      "path": "/home/askeox/Documents/GLInet_Network",
+      "type": "infrastructure",
+      "created": "2026-01-31",
+      "agents_deployed": [
+        "agent-git-manager"
+      ],
+      "commands_deployed": [
+        "update_doc"
+      ],
+      "status": "active"
     }
   ],
   "deployment_history": [
@@ -27,16 +40,24 @@
       "agents": ["research-assistant", "documentation-specialist", "agent-git-manager"],
       "commands": ["update_doc", "agent_reflect"],
       "initiated_by": "user"
+    },
+    {
+      "date": "2026-01-31",
+      "action": "agent_deploy",
+      "project": "GLInet_Network",
+      "agents": ["agent-git-manager"],
+      "commands": ["update_doc"],
+      "initiated_by": "user"
     }
   ],
   "statistics": {
-    "total_projects": 1,
-    "total_deployments": 1,
+    "total_projects": 2,
+    "total_deployments": 2,
     "agents_deployed": {
       "research-assistant": 1,
       "documentation-specialist": 1,
-      "agent-git-manager": 1
+      "agent-git-manager": 2
     },
-    "most_deployed_agent": "research-assistant"
+    "most_deployed_agent": "agent-git-manager"
   }
 }
