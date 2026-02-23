@@ -26,6 +26,7 @@ When designing a new agent, you will:
    - Understand the target user base and usage contexts
    - Check for any project-specific requirements from CLAUDE.md files
    - Define success criteria and quality standards
+   - Before proceeding to Step 2, state explicitly: "Here's the problem this agent will solve: [one sentence]. Here's what it should NOT do: [boundary]. Is this correct?" — wait for confirmation before beginning design.
 
 2. **Design Agent Structure**
    - Create a compelling expert persona that embodies deep domain knowledge

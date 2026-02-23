@@ -111,7 +111,7 @@ Gather project information using AskUserQuestion or conversation:
 1. **Project Name**: What should this project be called?
 2. **Project Goals**: Describe the project goals (1-3 sentences)
 3. **Key Resources/Technologies**: What technologies or systems are involved?
-4. **Known Constraints**: Any limitations or requirements to consider?
+4. **Known Constraints** (captured in CLAUDE.md as a dedicated section): Ask explicitly: "What constraints exist for this project? Include: timeline, tech stack limits, existing systems to integrate or avoid, team size and skills, budget/licensing, compliance requirements." Store all responses under a `## Constraints` section in CLAUDE.md as a named list — not a one-liner. Constraints discovered later should be added here.
 
 ### Step 4: STRUCTURE
 

@@ -1,7 +1,22 @@
 {
   "registry_version": "1.0.0",
-  "last_updated": "2026-01-31",
+  "last_updated": "2026-02-23",
   "projects": [
+    {
+      "name": "content-creation",
+      "path": "/home/askeox/Documents/content-creation",
+      "type": "content-creation",
+      "created": "2026-02-23",
+      "purpose": "Central content workspace for creating all marketing, thought leadership, and brand content across projects using a unified personal brand voice",
+      "agents_deployed": [
+        "agent-brand-voice"
+      ],
+      "commands_deployed": [
+        "communication-reflect"
+      ],
+      "status": "active",
+      "notes": "Content workspace using personal brand voice profile from Agentic hub"
+    },
     {
       "name": "ai-integration-content",
       "path": "/home/askeox/Documents/ai-integration-content",
@@ -30,9 +45,132 @@
         "update_doc"
       ],
       "status": "active"
+    },
+    {
+      "name": "Talend-Reviewer",
+      "path": "/home/askeox/Documents/Talend-Reviewer",
+      "type": "integration",
+      "created": "2026-02-14",
+      "agents_deployed": [
+        "agent-integration-analyzer",
+        "agent-integration-assessor",
+        "agent-integration-scorer",
+        "agent-integration-designer",
+        "agent-integration-reviewer",
+        "research-assistant",
+        "documentation-specialist",
+        "agent-git-manager"
+      ],
+      "commands_deployed": [
+        "analyze-integration",
+        "assess-integration",
+        "score-integration",
+        "review-integration",
+        "summarize-integration",
+        "update_doc",
+        "agent_reflect"
+      ],
+      "status": "active"
+    },
+    {
+      "name": "Survival",
+      "path": "/home/askeox/Documents/Survival",
+      "type": "research",
+      "created": "2026-01-16",
+      "agents_deployed": [
+        "agent-git-manager",
+        "documentation-specialist",
+        "research-assistant",
+        "survival-research-assistant"
+      ],
+      "commands_deployed": [
+        "update_doc",
+        "agent_reflect"
+      ],
+      "status": "active",
+      "notes": "survival-research-assistant is a custom project-specific agent, not provisioned from hub"
+    },
+    {
+      "name": "CV_Generator_Agent",
+      "path": "/home/askeox/Documents/CV_Generator_Agent",
+      "type": "career",
+      "created": "2026-01-18",
+      "agents_deployed": [
+        "agent-cv-optimizer",
+        "agent-git-manager",
+        "research-assistant"
+      ],
+      "commands_deployed": [
+        "update_doc",
+        "agent_reflect",
+        "application_init"
+      ],
+      "status": "active"
+    },
+    {
+      "name": "N8N-Obsidian",
+      "path": "/home/askeox/Documents/N8N-Obsidian",
+      "type": "automation",
+      "created": "2026-01-26",
+      "agents_deployed": [
+        "documentation-specialist",
+        "research-assistant",
+        "agent-obsidian-processor"
+      ],
+      "commands_deployed": [
+        "update_doc"
+      ],
+      "status": "active",
+      "notes": "agent-obsidian-processor is a custom project-specific agent, not provisioned from hub"
+    },
+    {
+      "name": "Zimaboard",
+      "path": "/home/askeox/Documents/Zimaboard",
+      "type": "infrastructure",
+      "created": "2026-01-26",
+      "agents_deployed": [
+        "agent-ansible-automation",
+        "agent-git-manager",
+        "documentation-specialist",
+        "research-assistant"
+      ],
+      "commands_deployed": [
+        "update_doc",
+        "agent_reflect"
+      ],
+      "status": "active"
+    },
+    {
+      "name": "tmc-api-mcp-server",
+      "path": "/home/askeox/Documents/tmc-api-mcp-server",
+      "type": "development",
+      "created": "2026-02-16",
+      "agents_deployed": [
+        "agent-architect",
+        "agent-git-manager",
+        "documentation-specialist",
+        "research-assistant"
+      ],
+      "commands_deployed": [
+        "update_doc",
+        "agent_reflect",
+        "inspect",
+        "lint",
+        "run-tests"
+      ],
+      "status": "active"
     }
   ],
   "deployment_history": [
+    {
+      "date": "2026-02-23",
+      "action": "project_init",
+      "project": "content-creation",
+      "agents": ["agent-brand-voice"],
+      "commands": ["communication-reflect"],
+      "initiated_by": "user",
+      "notes": "Content workspace with 32 brand-voice templates and personal voice profile"
+    },
     {
       "date": "2026-01-28",
       "action": "project_init",
@@ -48,16 +186,81 @@
       "agents": ["agent-git-manager"],
       "commands": ["update_doc"],
       "initiated_by": "user"
+    },
+    {
+      "date": "2026-02-14",
+      "action": "project_init",
+      "project": "Talend-Reviewer",
+      "agents": ["agent-integration-analyzer", "agent-integration-assessor", "agent-integration-scorer", "agent-integration-designer", "agent-integration-reviewer", "research-assistant", "documentation-specialist", "agent-git-manager"],
+      "commands": ["analyze-integration", "assess-integration", "score-integration", "review-integration", "summarize-integration", "update_doc", "agent_reflect"],
+      "initiated_by": "user"
+    },
+    {
+      "date": "2026-02-21",
+      "action": "backfill_registration",
+      "project": "Survival",
+      "agents": ["agent-git-manager", "documentation-specialist", "research-assistant", "survival-research-assistant"],
+      "commands": ["update_doc", "agent_reflect"],
+      "initiated_by": "user",
+      "notes": "Project existed since 2026-01-16, backfilled into registry"
+    },
+    {
+      "date": "2026-02-21",
+      "action": "backfill_registration",
+      "project": "CV_Generator_Agent",
+      "agents": ["agent-cv-optimizer", "agent-git-manager", "research-assistant"],
+      "commands": ["update_doc", "agent_reflect", "application_init"],
+      "initiated_by": "user",
+      "notes": "Project existed since 2026-01-18, backfilled into registry"
+    },
+    {
+      "date": "2026-02-21",
+      "action": "backfill_registration",
+      "project": "N8N-Obsidian",
+      "agents": ["documentation-specialist", "research-assistant", "agent-obsidian-processor"],
+      "commands": ["update_doc"],
+      "initiated_by": "user",
+      "notes": "Project existed since 2026-01-26, backfilled into registry"
+    },
+    {
+      "date": "2026-02-21",
+      "action": "backfill_registration",
+      "project": "Zimaboard",
+      "agents": ["agent-ansible-automation", "agent-git-manager", "documentation-specialist", "research-assistant"],
+      "commands": ["update_doc", "agent_reflect"],
+      "initiated_by": "user",
+      "notes": "Project existed since 2026-01-26, backfilled into registry"
+    },
+    {
+      "date": "2026-02-21",
+      "action": "backfill_registration",
+      "project": "tmc-api-mcp-server",
+      "agents": ["agent-architect", "agent-git-manager", "documentation-specialist", "research-assistant"],
+      "commands": ["update_doc", "agent_reflect", "inspect", "lint", "run-tests"],
+      "initiated_by": "user",
+      "notes": "Project existed since 2026-02-16, backfilled into registry"
     }
   ],
   "statistics": {
-    "total_projects": 2,
-    "total_deployments": 2,
+    "total_projects": 9,
+    "total_deployments": 9,
     "agents_deployed": {
-      "research-assistant": 1,
-      "documentation-specialist": 1,
-      "agent-git-manager": 2
+      "research-assistant": 7,
+      "documentation-specialist": 6,
+      "agent-git-manager": 7,
+      "agent-integration-analyzer": 1,
+      "agent-integration-assessor": 1,
+      "agent-integration-scorer": 1,
+      "agent-integration-designer": 1,
+      "agent-integration-reviewer": 1,
+      "agent-cv-optimizer": 1,
+      "agent-ansible-automation": 1,
+      "agent-architect": 1,
+      "agent-brand-voice": 1,
+      "agent-obsidian-processor": 1,
+      "survival-research-assistant": 1
     },
-    "most_deployed_agent": "agent-git-manager"
+    "most_deployed_agent": "research-assistant",
+    "custom_agents_detected": ["agent-obsidian-processor", "survival-research-assistant"]
   }
 }

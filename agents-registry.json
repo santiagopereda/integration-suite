@@ -89,7 +89,7 @@
       "id": "agent-robotarm-tester",
       "name": "Raspberry Pi Robot Arm Testing Engineer",
       "version": "1.0.0",
-      "prompt_version": "1.0.0",
+      "prompt_version": "1.1.0",
       "status": "production",
       "category": "robotics",
       "domain": "Robotics",
@@ -100,18 +100,21 @@
         "examples": "agents/agent-robotarm-tester/examples/"
       },
       "metrics": {
-        "token_usage_baseline": null,
-        "token_usage_optimized": null,
-        "optimization_reduction": null,
+        "token_usage_baseline": 3909,
+        "token_usage_optimized": 3673,
+        "optimization_reduction": "6%",
+        "optimization_date": "2026-02-22",
         "test_cases_count": 12,
         "invocations_30d": 0,
         "success_rate": null,
-        "quality_score": null
+        "quality_score": 5.0
       },
       "dependencies": {
         "commands": [],
         "hooks": [],
-        "templates": []
+        "templates": [
+          ".agent/templates/robotics/"
+        ]
       },
       "deployments": [],
       "constraints": [
@@ -125,10 +128,12 @@
       "name": "Git Repository Manager",
       "version": "1.0.0",
       "prompt_version": "1.0.0",
-      "status": "production",
+      "status": "deprecated",
+      "deprecated_date": "2026-02-23",
+      "replacement": "/commit-secure and /pr-secure skills",
       "category": "utility",
       "domain": "Developer Tools",
-      "description": "Expert git repository manager specializing in secure commit workflows with mandatory pre-commit security scanning, SSH/GitHub integration, and documentation workflow coordination.",
+      "description": "DEPRECATED: Replaced by /commit-secure and /pr-secure skills for better token efficiency. Agent functionality converted to lightweight skills.",
       "location": {
         "definition": ".claude/agents/agent-git-manager.md",
         "test_cases": "agents/agent-git-manager/test-cases.md",
@@ -443,6 +448,241 @@
         "Respect individual agent constraints"
       ],
       "is_meta_agent": true
+    },
+    {
+      "id": "agent-integration-analyzer",
+      "name": "Integration Code Analyzer",
+      "version": "1.0.0",
+      "prompt_version": "1.0.0",
+      "status": "production",
+      "category": "integration",
+      "domain": "Integration/iPaaS",
+      "description": "Parses integration platform workspace exports (Workato, Talend) to extract schemas, mappings, transformations, connectors, and data lineage.",
+      "location": {
+        "definition": ".claude/agents/agent-integration-analyzer.md",
+        "test_cases": "agents/agent-integration-analyzer/test-cases.md",
+        "examples": "agents/agent-integration-analyzer/examples/"
+      },
+      "metrics": {
+        "token_usage_baseline": null,
+        "token_usage_optimized": 8000,
+        "optimization_reduction": null,
+        "test_cases_count": 0,
+        "invocations_30d": 0,
+        "success_rate": null,
+        "quality_score": null
+      },
+      "dependencies": {
+        "commands": [
+          "analyze-integration.md"
+        ],
+        "hooks": [],
+        "templates": [
+          ".agent/templates/integration/"
+        ]
+      },
+      "deployments": [],
+      "constraints": [
+        "Never fabricates schemas or mappings - only documents what's in code",
+        "Acknowledges when parsing is incomplete",
+        "Does not modify source files"
+      ]
+    },
+    {
+      "id": "agent-integration-assessor",
+      "name": "Integration Assessment Specialist",
+      "version": "1.0.0",
+      "prompt_version": "1.0.0",
+      "status": "production",
+      "category": "integration",
+      "domain": "Integration/iPaaS",
+      "description": "Guides structured discovery and evaluation of integration scenarios across 8 dimensions of the integration maturity framework.",
+      "location": {
+        "definition": ".claude/agents/agent-integration-assessor.md",
+        "test_cases": "agents/agent-integration-assessor/test-cases.md",
+        "examples": "agents/agent-integration-assessor/examples/"
+      },
+      "metrics": {
+        "token_usage_baseline": null,
+        "token_usage_optimized": 7000,
+        "optimization_reduction": null,
+        "test_cases_count": 0,
+        "invocations_30d": 0,
+        "success_rate": null,
+        "quality_score": null
+      },
+      "dependencies": {
+        "commands": [
+          "assess-integration.md",
+          "score-integration.md"
+        ],
+        "hooks": [],
+        "templates": [
+          ".agent/templates/integration/"
+        ]
+      },
+      "deployments": [],
+      "constraints": [
+        "Never fabricates platform capabilities",
+        "Acknowledges when requirements need validation",
+        "Does not score maturity (scorer's role)"
+      ]
+    },
+    {
+      "id": "agent-integration-scorer",
+      "name": "Integration Maturity Scorer",
+      "version": "1.0.0",
+      "prompt_version": "1.0.0",
+      "status": "production",
+      "category": "integration",
+      "domain": "Integration/iPaaS",
+      "description": "Applies 8-dimension maturity scoring framework to produce scorecards with red flags, quick wins, and industry benchmarks.",
+      "location": {
+        "definition": ".claude/agents/agent-integration-scorer.md",
+        "test_cases": "agents/agent-integration-scorer/test-cases.md",
+        "examples": "agents/agent-integration-scorer/examples/"
+      },
+      "metrics": {
+        "token_usage_baseline": null,
+        "token_usage_optimized": 7500,
+        "optimization_reduction": null,
+        "test_cases_count": 0,
+        "invocations_30d": 0,
+        "success_rate": null,
+        "quality_score": null
+      },
+      "dependencies": {
+        "commands": [
+          "score-integration.md"
+        ],
+        "hooks": [],
+        "templates": [
+          ".agent/templates/integration/"
+        ]
+      },
+      "deployments": [],
+      "constraints": [
+        "Scores based on evidence, not potential",
+        "Uses rubric criteria strictly",
+        "Marks insufficient evidence as Needs Assessment"
+      ]
+    },
+    {
+      "id": "agent-integration-designer",
+      "name": "Integration Architecture Designer",
+      "version": "1.0.0",
+      "prompt_version": "1.0.0",
+      "status": "production",
+      "category": "integration",
+      "domain": "Integration/iPaaS",
+      "description": "Creates implementation-ready integration designs or improvement roadmaps with pattern-based architectures and 8-dimension coverage.",
+      "location": {
+        "definition": ".claude/agents/agent-integration-designer.md",
+        "test_cases": "agents/agent-integration-designer/test-cases.md",
+        "examples": "agents/agent-integration-designer/examples/"
+      },
+      "metrics": {
+        "token_usage_baseline": null,
+        "token_usage_optimized": 8000,
+        "optimization_reduction": null,
+        "test_cases_count": 0,
+        "invocations_30d": 0,
+        "success_rate": null,
+        "quality_score": null
+      },
+      "dependencies": {
+        "commands": [
+          "assess-integration.md"
+        ],
+        "hooks": [],
+        "templates": [
+          ".agent/templates/integration/"
+        ]
+      },
+      "deployments": [],
+      "constraints": [
+        "Designs for actual requirements, not theoretical ideals",
+        "Never fabricates platform capabilities",
+        "Acknowledges trade-offs explicitly"
+      ]
+    },
+    {
+      "id": "agent-integration-reviewer",
+      "name": "Integration Design Reviewer",
+      "version": "1.0.0",
+      "prompt_version": "1.0.0",
+      "status": "production",
+      "category": "integration",
+      "domain": "Integration/iPaaS",
+      "description": "Validates integration designs against best practices, security standards, and the 8-dimension maturity framework with structured findings.",
+      "location": {
+        "definition": ".claude/agents/agent-integration-reviewer.md",
+        "test_cases": "agents/agent-integration-reviewer/test-cases.md",
+        "examples": "agents/agent-integration-reviewer/examples/"
+      },
+      "metrics": {
+        "token_usage_baseline": null,
+        "token_usage_optimized": 7000,
+        "optimization_reduction": null,
+        "test_cases_count": 0,
+        "invocations_30d": 0,
+        "success_rate": null,
+        "quality_score": null
+      },
+      "dependencies": {
+        "commands": [
+          "review-integration.md"
+        ],
+        "hooks": [],
+        "templates": [
+          ".agent/templates/integration/"
+        ]
+      },
+      "deployments": [],
+      "constraints": [
+        "Constructive over critical - provides rationale and alternatives",
+        "Never fabricates security vulnerabilities",
+        "Findings based on evidence in the design"
+      ]
+    },
+    {
+      "id": "agent-brand-voice",
+      "name": "Brand Voice Consistency Agent",
+      "version": "1.0.0",
+      "prompt_version": "1.0.0",
+      "status": "production",
+      "category": "content",
+      "domain": "Brand/Content Strategy",
+      "description": "Brand voice strategist with 5 modes: Assessor (discover voice), Generator (create on-brand content), Reviewer (audit consistency), Analyst (study creator style), Reconciler (align stakeholders).",
+      "location": {
+        "definition": ".claude/agents/agent-brand-voice.md",
+        "test_cases": "agents/agent-brand-voice/test-cases.md",
+        "examples": "agents/agent-brand-voice/examples/"
+      },
+      "metrics": {
+        "token_usage_baseline": 21943,
+        "token_usage_optimized": 3746,
+        "optimization_reduction": "83%",
+        "test_cases_count": 19,
+        "invocations_30d": 0,
+        "success_rate": null,
+        "quality_score": null
+      },
+      "dependencies": {
+        "commands": [
+          "communication-reflect"
+        ],
+        "hooks": [],
+        "templates": [
+          ".agent/templates/brand-voice/"
+        ]
+      },
+      "deployments": [],
+      "constraints": [
+        "Never fabricates brand guidelines - works from documented profiles or builds through discovery",
+        "Never overrides documented brand decisions without stakeholder approval",
+        "Acknowledges when voice profile is incomplete and flags gaps"
+      ]
     }
   ],
   "commands": [
@@ -494,6 +734,41 @@
       "description": "Run validation tests for agents",
       "location": ".claude/commands/agent-test.md",
       "agent": null
+    },
+    {
+      "id": "analyze-integration",
+      "name": "/analyze-integration",
+      "description": "Parse integration platform code exports into structured inventory",
+      "location": ".claude/commands/analyze-integration.md",
+      "agent": "agent-integration-analyzer"
+    },
+    {
+      "id": "assess-integration",
+      "name": "/assess-integration",
+      "description": "Full integration assessment lifecycle (assess, score, design, review)",
+      "location": ".claude/commands/assess-integration.md",
+      "agent": "agent-integration-assessor"
+    },
+    {
+      "id": "score-integration",
+      "name": "/score-integration",
+      "description": "Quick integration maturity scoring with red flags and quick wins",
+      "location": ".claude/commands/score-integration.md",
+      "agent": "agent-integration-scorer"
+    },
+    {
+      "id": "review-integration",
+      "name": "/review-integration",
+      "description": "Review integration design against best practices and security standards",
+      "location": ".claude/commands/review-integration.md",
+      "agent": "agent-integration-reviewer"
+    },
+    {
+      "id": "summarize-integration",
+      "name": "/summarize-integration",
+      "description": "Generate customer-facing summary from assessment data",
+      "location": ".claude/commands/summarize-integration.md",
+      "agent": "documentation-specialist"
     }
   ],
   "quality_gates": [

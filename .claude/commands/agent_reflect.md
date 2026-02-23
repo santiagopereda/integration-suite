@@ -22,6 +22,7 @@ This command creates "project journey testimony" documents that synthesize:
 | **Output Path (Project)** | `{project}/.agent/testimony/` |
 | **Output Path (Central)** | `/home/askeox/Documents/Agentic/.agent/testimony/` |
 | **Output Format** | `{project-name}_testimony_{YYYY-MM-DD}.md` |
+| **Memory Output** | `/home/askeox/Documents/Agentic/.agent/memory/agents/` |
 | **Project Tracker** | `/home/askeox/Documents/Agentic/.agent/tracked-projects.md` |
 
 ---
@@ -352,6 +353,274 @@ Using `documentation-specialist`:
    - Update the "Last Testimony" date for that project
 7. Confirm success with both paths
 
+### Step 9: Extract Patterns from Testimony
+
+After the testimony is written, extract actionable patterns for agent memory:
+
+1. Read the testimony just generated (from the project-local path)
+2. Parse each extractable section:
+   - **"What Failed and Corrections Made"** → failure patterns (extract: Initial Assumption, Lesson Learned)
+   - **"What Worked Well"** → success patterns (extract: Transferable Insight)
+   - **"Lessons Learned"** → technical/process/collaboration patterns
+   - **"Initial Assumptions That Needed Clarification"** → assumption-correction patterns (extract: Assumption, Reality)
+   - **"Recommendations for Future Projects"** → do/avoid/consider patterns
+   - **"Metrics and Outcomes"** → quantitative validation patterns (extract: significant deltas)
+3. For each extracted pattern:
+   - Assign a category ID (see Pattern ID Convention below)
+   - Route to the appropriate agent memory file(s) using the Extraction Routing table
+   - Format using the Pattern Template
+4. Deduplicate against existing patterns in the target memory file:
+   - If same insight already exists from another project, add this project as additional source
+   - If genuinely new, append with next sequence number in the category
+
+**Extraction Routing** (content-based keyword matching):
+
+| Keywords in pattern | Route to agent memory |
+|---|---|
+| parsing, export, workspace, XML, artifact count, recycle bin, call graph | `agent-integration-analyzer` |
+| assessment, dimension, methodology, walkthrough, data source, interview | `agent-integration-assessor` |
+| score, weighted, maturity, red flag, quick win, benchmark, calculation | `agent-integration-scorer` |
+| security, OWASP, review finding, credential, encryption, audit | `agent-integration-reviewer` |
+| architecture, pattern, design, improvement, roadmap, migration | `agent-integration-designer` |
+| documentation, customer summary, deliverable, template, artifact | `documentation-specialist` |
+| pipeline, agent, process, collaboration, verification, first-pass | `_shared-patterns` |
+
+Patterns can route to multiple agents if they span domains.
+
+### Step 10: Write Agent Memory Updates
+
+1. For each agent with new patterns, read its memory file from hub:
+   `/home/askeox/Documents/Agentic/.agent/memory/agents/{agent-id}-memory.md`
+2. If the file doesn't exist, create it with the Memory File Template (see below)
+3. Append new patterns under the appropriate category section
+4. Update the header metadata:
+   - `Last Updated` → current date
+   - `Patterns From` → increment project count, add project name to list
+   - `Total Patterns` → increment count
+5. Update `_shared-patterns.md` with universal patterns
+6. Log pattern extraction summary to console:
+   ```
+   Pattern extraction complete:
+   - [N] patterns extracted from testimony
+   - Agents updated: [list of agent-ids]
+   - New patterns: [count], Deduplicated: [count]
+   ```
+
+### Step 11: Update Reflection Pool
+
+After memory updates complete, update the two reflection pool files that must stay current with every new testimony.
+
+#### 11a. Update `key-insights.md`
+
+File: `/home/askeox/Documents/Agentic/.agent/reflection_pool/key-insights.md`
+
+1. Read the testimony's "What Worked Well" and "Lessons Learned" sections
+2. Extract **2–4 quotable insights** that are:
+   - Clear and transferable (applies beyond this specific project)
+   - Evidence-backed (tied to a concrete outcome or metric in the testimony)
+   - Not already present in key-insights.md (check for semantic duplicates, not just string matches)
+3. Format each using the standard blockquote format:
+   ```markdown
+   > **"[Insight as a concise, quotable statement.]"**
+   > — [Project Name]
+   >
+   > *[One sentence of context — what situation produced this insight and why it matters.]*
+   ```
+4. Assign each to the most relevant section:
+   - "On Workflows & Process" — how the work was done
+   - "On Architecture & Design" — structural/technical decisions
+   - "On Documentation" — recording and communicating work
+   - "On Validation & Testing" — confirming correctness
+   - "On Completeness" — coverage and readiness
+   - "On Structure" — project organization
+   - Create a new section only if none of the above fit
+5. Append each insight to its section (add after the last existing `>` block in the section, before the `---`)
+6. Update the metadata footer:
+   - Increment the project count in "Extracted From: N project testimonies"
+   - Add the project name to the Projects list if not already present
+   - Update "last updated" date
+
+**If no new quotable insights** (testimony confirms existing patterns without adding new ones): add a note to the project name in the footer only — do not force quotes.
+
+#### 11b. Update `directory-usage-analysis.md`
+
+File: `/home/askeox/Documents/Agentic/.agent/reflection_pool/directory-usage-analysis.md`
+
+1. Scan the reflected project's `.agent/` directory:
+   ```bash
+   ls -la {project}/.agent/
+   ```
+2. For each tracked directory type, classify as:
+   - **Used** — directory exists AND contains files beyond README.md
+   - **Template** — directory exists but contains ONLY README.md
+   - **N/A** — directory does not exist
+3. Add the project as a new column to the Usage Matrix table
+4. Recalculate usage rates (%) for each directory type:
+   - Rate = (count of "Used" entries) / (total projects in matrix) × 100
+5. Update the "Projects Analyzed: N" count in the file header
+6. If the project type (integration, development, research, optimization) is represented for the first time: update the relevant "Usage Patterns by Project Type" section to confirm or correct the hypothesized pattern with actual evidence
+
+**Do not** rewrite the analysis text — only update the matrix data and project count. The analysis text is updated manually when patterns shift.
+
+#### 11c. Update `value-unlock-index.md`
+
+File: `/home/askeox/Documents/Agentic/.agent/reflection_pool/value-unlock-index.md`
+
+1. Read the testimony's "What Worked Well," "What Failed and Corrections Made," and "Lessons Learned" sections
+2. Identify moments where **one action produced a disproportionate outcome** — a blocker removed, a wrong assumption corrected, a significant effort saved, or a framework established that changed everything downstream
+3. For each qualifying moment, check if it fits an existing situation category in the index:
+   - If yes: add the entry under that category
+   - If no: create a new situation category only if it's clearly distinct from existing ones
+4. Format each entry:
+   ```markdown
+   ### [Situation title — specific enough to match when you're in it]
+   **Intervention**: [What was done — specific and actionable, not a category label]
+   **Outcome**: [What resulted — quantified if possible]
+   **Project**: [Name] ([YYYY-MM])
+   ```
+5. After adding entries, check the Meta-Patterns section — does the new entry strengthen an existing meta-pattern or suggest a new one? Update M1–M4 sources list if applicable.
+6. Update the header: increment entry count and update "Last Updated" date
+
+**If no qualifying unlock moment** (testimony documents steady progress without a single high-leverage pivot): skip this update. Not every project has a value unlock; don't force entries.
+
+#### 11d. Update `eureka-moments.md`
+
+File: `/home/askeox/Documents/Agentic/.agent/reflection_pool/eureka-moments.md`
+
+1. Read the testimony's "What Failed and Corrections Made," "Evolution of Thinking," and "Lessons Learned" sections
+2. Identify moments where **a wrong mental model was replaced by a correct one** — a realization that changed how the entire problem was framed, not just what action was taken. Three signals:
+   - There is a clear **Before** state (a wrong assumption that was actively in use)
+   - A specific **trigger** forced the realization (not gradual learning — a moment)
+   - The new understanding **generalizes** beyond the specific technology or project
+3. For each qualifying moment, check the "Why it generalizes" fields in existing entries:
+   - If a new entry strengthens an existing entry: add the new project as a source in that entry, don't create a duplicate
+   - If genuinely new: add under the closest domain category
+4. Format:
+   ```markdown
+   ### [Insight title — what the new mental model is, stated positively]
+
+   **Before**: [The wrong assumption that was actively in use]
+   **The realization**: [The specific understanding that replaced it]
+   **Why it generalizes**: [What other domains or situations this applies to]
+   **Trigger**: [What evidence or event forced the realization]
+   **Projects**: [Name] ([YYYY-MM])
+   ```
+5. Update the header: increment entry count and update "Last Updated" date
+
+**If no qualifying eureka moment** (testimony shows steady learning without a frame-breaking realization): skip this update. Eureka moments are rare — most testimonies will have 0–1.
+
+#### 11e. Update `decision-journal.md`
+
+File: `/home/askeox/Documents/Agentic/.agent/reflection_pool/decision-journal.md`
+
+1. Read the testimony's "Timeline of Key Events," "Evolution of Thinking," and "What Failed and Corrections Made" sections
+2. Identify **1–3 significant decision forks** — moments where multiple approaches were viable, one was chosen, and the reasoning is documented. Qualifying signals:
+   - Alternatives were explicitly compared before a path was selected
+   - A design choice could have gone a different direction (architecture, scope, tool selection)
+   - A path was abandoned after being tried, with a stated reason for switching
+3. For each qualifying fork, reconstruct the entry as accurately as the testimony allows:
+   ```markdown
+   ## [Decision label — verb + noun, specific enough to find later]
+   **Context**: [1-2 sentences — what was being built and what created the fork]
+   **Options**: A) [option] / B) [option] / C) [option if applicable]
+   **Chosen**: [A/B/C] — [primary reason in one sentence]
+   **Reasoning**: [Why this over the alternatives — 2-3 sentences]
+   **Reversal condition**: [What evidence or constraint change would justify switching]
+   **Date**: YYYY-MM-DD | **Project**: [name] | **Source**: Reconstructed
+   ```
+4. Append entries before the file's footer section
+5. Update the `Entries` count in the file header
+
+**If no qualifying fork** (project followed a single clear path throughout): skip this update. Not every project has a documented decision fork.
+
+**Note**: Entries marked `Reconstructed` have lower fidelity than live entries written during sessions. The `Source` field tracks this distinction.
+
+#### 11f. Log Reflection Pool Summary
+
+After all updates, output:
+```
+Reflection pool updated:
+- key-insights.md: [N] new insights added to [section names]
+- directory-usage-analysis.md: [project] added to matrix ([used dirs] used, [template dirs] template)
+- value-unlock-index.md: [N] new entries added to [situation categories] / no qualifying unlock moments
+- eureka-moments.md: [N] new entries added / [N] existing entries strengthened / no qualifying moments
+- decision-journal.md: [N] new entries added (Reconstructed) / no qualifying forks
+- Note: Cross-project testimony-analysis files are updated in batches — run manually when 3+ new testimonies accumulate
+```
+
+---
+
+## Pattern Format Specification
+
+### Pattern Template
+
+Each extracted pattern follows this structure:
+
+```markdown
+### [ID]: [Title]
+- **Pattern**: [What was observed — 1-2 sentences]
+- **Source**: [Project name] ([YYYY-MM-DD])
+- **Action**: [What the agent should do about it — imperative]
+- **Tags**: [platform], [category]
+```
+
+### Pattern ID Convention
+
+3-letter category prefix + 3-digit sequence number.
+
+| Agent | Prefix | Category |
+|-------|--------|----------|
+| analyzer | `EXT-` | Extraction |
+| analyzer | `PRS-` | Parsing |
+| analyzer | `INV-` | Inventory |
+| assessor | `ASM-` | Assessment methodology |
+| assessor | `DIM-` | Dimension-specific |
+| assessor | `SRC-` | Data sources |
+| scorer | `SCA-` | Scoring accuracy |
+| scorer | `WGT-` | Weighting |
+| scorer | `BNC-` | Benchmarking |
+| reviewer | `SEC-` | Security |
+| reviewer | `DRV-` | Design review |
+| reviewer | `APT-` | Anti-patterns |
+| designer | `ARC-` | Architecture |
+| designer | `PAT-` | Patterns |
+| designer | `IMP-` | Improvement roadmap |
+| documentation | `DOC-` | Documentation |
+| documentation | `TMY-` | Testimony |
+| documentation | `DLV-` | Deliverables |
+| _shared | `UNI-` | Universal |
+
+### Memory File Template
+
+```markdown
+# Agent Memory: [agent-id]
+
+**Last Updated**: [YYYY-MM-DD]
+**Patterns From**: [N] projects ([comma-separated project names])
+**Total Patterns**: [count]
+
+---
+
+## [Category Name]
+
+### [ID]: [Title]
+- **Pattern**: [observation]
+- **Source**: [project] ([date])
+- **Action**: [what to do]
+- **Tags**: [platform], [category]
+
+---
+```
+
+### Deduplication Rules
+
+1. **Same insight, new project**: Add project as additional source
+   ```
+   - **Source**: Talend-Reviewer (2026-02-20), UniQure (2026-01-23)
+   ```
+2. **Refined insight**: Update the Pattern and Action text, keep all sources
+3. **Genuinely new**: Append with next sequence number in category
+
 ---
 
 ## Integration with documentation-specialist
@@ -370,17 +639,28 @@ This command delegates to `documentation-specialist` for testimony generation.
 ```
 /agent_reflect
     |
-    +-> Command gathers data from .agent/
+    +-> Steps 1-7: Gather data from .agent/, synthesize
     |
-    +-> Command prepares context summary:
-    |   - Timeline overview
-    |   - Key files found
-    |   - Entry counts and types
+    +-> Step 8: Dual-write testimony (project-local + central hub)
     |
-    +-> documentation-specialist generates:
-        - Narrative synthesis
-        - Template population
-        - Quality assurance
+    +-> Step 9: Extract patterns from testimony
+    |   - Parse sections for transferable insights
+    |   - Route patterns to agent memory files by content keywords
+    |   - Deduplicate against existing patterns
+    |
+    +-> Step 10: Write agent memory updates
+    |   - Update per-agent memory files in hub
+    |   - Update _shared-patterns.md for universal patterns
+    |   - Log extraction summary
+    |
+    +-> Step 11: Update reflection pool (enforced on every run)
+        - key-insights.md: 2-4 new quotable insights extracted and appended
+        - directory-usage-analysis.md: project added to usage matrix, rates recalculated
+        - value-unlock-index.md: high-leverage interventions added by situation type
+        - eureka-moments.md: frame-breaking realizations added or existing entries strengthened
+        - decision-journal.md: significant decision forks reconstructed from testimony
+        - Log what was updated (value unlocks, eureka, and decisions skipped if no qualifying moments)
+        - Note: testimony-analysis files are batched manually (not per-run)
 ```
 
 ### Context to Provide
@@ -548,6 +828,10 @@ After generating testimonies for multiple projects, you can synthesize patterns:
 | 1.0.0 | 2026-01-23 | Initial release |
 | 1.1.0 | 2026-01-23 | Dual-write: project-local + central hub; added project tracker |
 | 1.2.0 | 2026-01-24 | Added telemetry integration: Agent Usage Telemetry section with quantitative metrics |
+| 1.3.0 | 2026-02-20 | Pattern extraction: auto-extracts patterns from testimony to per-agent memory files in hub |
+| 1.4.0 | 2026-02-21 | Reflection pool enforcement: Step 11 updates key-insights.md and directory-usage-analysis.md on every run |
+| 1.5.0 | 2026-02-21 | Extended Step 11: value-unlock-index.md (situation→intervention) and eureka-moments.md (mental model shifts) |
+| 1.6.0 | 2026-02-21 | Step 11e: decision-journal.md (reconstructed decision forks from testimony); live entries via CLAUDE.md rule |
 
 ---
 

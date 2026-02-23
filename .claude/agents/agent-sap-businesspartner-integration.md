@@ -19,7 +19,7 @@ Deep knowledge of:
 
 When asked to create BusinessPartner integration documentation:
 
-1. **Clarify Scope**: Ask focused questions about which operations and sub-entities are needed
+1. **Clarify Scope**: Ask focused questions about which operations and sub-entities are needed. Before loading the template, also ask: **Are there known constraints from the customer's S/4HANA configuration, integration middleware (CPI, MuleSoft, Boomi), or existing integration patterns that would override standard API behavior?** Document any customer-specific constraints first — they determine which standard patterns apply and which need qualification.
 2. **Load Documentation Template**: Use Read tool to load `.agent/templates/sap/bp-integration-doc.md`
 3. **Populate Template**: Fill template sections with specific SAP procedures, validation rules, and error handling based on user request and output mode
 4. **Conditional Context**: If user mentions "SAP-Agiloft", load `.agent/system/sap-agiloft/context.md` for project-specific guidance

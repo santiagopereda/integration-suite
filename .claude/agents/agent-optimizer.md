@@ -115,15 +115,9 @@ For each agent, capture:
 
 ### Phase 2: ANALYZE (Apply Patterns)
 
-Load proven patterns from `.agent/reflection_pool/key-insights.md`:
-
-| Pattern ID | Pattern | Trigger | Expected Reduction |
-|------------|---------|---------|-------------------|
-| PAT-01 | Template Externalization | Embedded content > 100 words | 51-65% |
-| PAT-02 | Lazy Loading | Templates loaded unconditionally | 5% overhead |
-| PAT-03 | Output Modes | No verbosity control | N/A (control) |
-| PAT-04 | Section Compression | Similar agent has fewer lines | 15-30% |
-| PAT-05 | Verification-First | No verification constraint | Quality |
+Load proven patterns from:
+- `.agent/reflection_pool/key-insights.md` - Quick reference insights
+- `.agent/templates/optimization/pattern-library.md` - Pattern definitions (PAT-01 through PAT-05)
 
 **Pattern Matching Algorithm**:
 ```
@@ -151,6 +145,13 @@ FOR each agent:
 
     score = potential * (telemetry.invocations / 100)  # Weight by usage
 ```
+
+### Before Phase 3: State the Optimization Hypothesis
+
+Before generating the full optimization plan, state:
+"The optimization goal for [agent-id] is: [specific goal]. The evidence for this is: [specific Phase 2 finding]. Confirm before proceeding? [Y/n]"
+
+Proceed to Phase 3 only after confirmation.
 
 ### Phase 3: RECOMMEND (Generate Optimization Plan)
 
@@ -196,28 +197,11 @@ For each agent with optimization potential, generate plan:
 
 ### Phase 4: VALIDATE (Quality Gates)
 
-Before approving any optimization:
+Before approving any optimization, verify all quality gates pass.
 
-| Gate | Criterion | Verification Method |
-|------|-----------|---------------------|
-| QG-1 | 100% test pass rate | Structural analysis against test cases |
-| QG-2 | No fabrication constraints removed | Check "Never fabricate" preserved |
-| QG-3 | Uncertainty acknowledgment preserved | Check section exists |
-| QG-4 | Templates valid | Verify referenced files exist |
-| QG-5 | Critical constraints intact | Compare count before/after |
+**Gate Definitions**: See `.agent/templates/optimization/quality-gates.md` for complete criteria (QG-1 through QG-6).
 
-**Validation Matrix**:
-```markdown
-| Gate | Status | Evidence |
-|------|--------|----------|
-| QG-1 | PASS | 10/10 test cases validated |
-| QG-2 | PASS | Line 31 "Never fabricate" preserved |
-| QG-3 | PASS | Lines 37-40 "Acknowledge Limitations" present |
-| QG-4 | PASS | 3 templates exist at specified paths |
-| QG-5 | PASS | 7 constraints before, 7 after |
-
-**Result**: APPROVED for optimization
-```
+Apply validation matrix format to document results for each optimization.
 
 ### Phase 5: TRACK (Record for Time-Series)
 
@@ -283,49 +267,15 @@ Records current metrics to tracking history (for before/after comparison).
 
 ## Output Modes
 
-**Analysis Mode**:
-```
-Agent Optimization Analysis
+Support multiple output modes for different use cases:
 
-| Agent | Tokens | Invocations | Score | Priority |
-|-------|--------|-------------|-------|----------|
-| agent-cv-optimizer | 12,400 | 234 | 85 | High |
-| agent-git-manager | 5,230 | 847 | 72 | High |
-| agent-robotarm-tester | 8,900 | 156 | 45 | Medium |
+- **Analysis Mode**: Cross-agent comparison table with optimization scores
+- **Optimization Mode**: Full plan with recommendations and implementation steps
+- **Status Mode**: Hub-wide dashboard with metrics and progress
+- **Validation Mode**: Quality gate results for specific optimizations
+- **Brief Mode**: Quick status for single agents
 
-Top Recommendations:
-1. agent-cv-optimizer: Template externalization (45-55% reduction)
-2. agent-git-manager: Output modes (user control)
-```
-
-**Optimization Mode**:
-- Full plan with specific recommendations
-- Quality gate pre-check
-- Step-by-step implementation guidance
-- Risk assessment for each change
-
-**Status Mode** (Dashboard):
-```markdown
-# Hub Optimization Status
-
-**Last Updated**: 2026-01-24
-**Total Agents**: 7
-**Optimized**: 3 (43%)
-**Pending**: 4
-
-## Summary
-
-| Agent | Baseline | Current | Reduction | Last Optimized |
-|-------|----------|---------|-----------|----------------|
-| agent-sap-bp | 15,000 | 6,300 | 58% | 2025-11-28 |
-| agent-ansible | 16,000 | 6,493 | 59% | 2025-11-28 |
-| agent-git-manager | 6,300 | - | - | Never |
-| agent-cv-optimizer | 12,400 | - | - | Never |
-
-## Next Actions
-1. Optimize agent-cv-optimizer (highest potential)
-2. Optimize agent-git-manager (highest usage)
-```
+**Format Templates**: See `.agent/templates/optimization/output-modes.md` for detailed formats and examples.
 
 ## Quality Assurance
 

@@ -11,13 +11,18 @@ Central hub for designing, creating, and deploying specialized Claude Code agent
 | `agent-sap-businesspartner-integration` | SAP/ERP | BusinessPartner OData API documentation |
 | `agent-ansible-automation` | DevOps | Ansible playbooks, roles, testing |
 | `agent-robotarm-tester` | Robotics | Robot arm validation via SSH |
-| `agent-git-manager` | Utility | Secure commits with security scanning |
 | `agent-cv-optimizer` | Career | CV tailoring, interview prep for Data/AI |
+| `agent-brand-voice` | Content | Brand voice discovery, content generation, voice compliance |
 | `agent-provisioner` | Hub | Sync agents to other projects |
 | `agent-project-init` | Hub | Initialize new projects with agents |
 | `agent-optimizer` | Hub | Analyze and optimize agents |
 | `agent-architect` | Hub | Design new agents |
 | `agent-hub-orchestrator` | Hub | Coordinate multi-agent workflows |
+| `agent-integration-analyzer` | Integration | Parse code exports, extract schemas/mappings |
+| `agent-integration-assessor` | Integration | Structured integration assessment (8 dimensions) |
+| `agent-integration-scorer` | Integration | Maturity scoring with red flags/quick wins |
+| `agent-integration-designer` | Integration | Architecture design or improvement roadmap |
+| `agent-integration-reviewer` | Integration | Design validation & security review |
 | `research-assistant` | Support | Research and information gathering |
 | `documentation-specialist` | Support | Documentation generation |
 
@@ -32,10 +37,28 @@ Central hub for designing, creating, and deploying specialized Claude Code agent
 | `/project_init` | Initialize new projects | agent-project-init |
 | `/optimize` | Analyze/optimize agents | agent-optimizer |
 | `/agent_reflect` | Generate project testimony | documentation-specialist |
+| `/communication-reflect` | Extract content patterns from intent log | agent-brand-voice |
+| `/commit-secure` | Secure git commit with scanning | - |
+| `/pr-secure` | Secure PR creation with scanning | - |
 | `/agent-status` | Hub-wide dashboard | - |
 | `/agent-test` | Run validation tests | - |
 | `/agent-deploy` | One-command deployment | - |
 | `/update_doc` | Update documentation | - |
+| `/analyze-integration` | Parse integration code exports | agent-integration-analyzer |
+| `/assess-integration` | Full integration assessment lifecycle | agent-integration-assessor |
+| `/score-integration` | Quick maturity scoring | agent-integration-scorer |
+| `/review-integration` | Design review & validation | agent-integration-reviewer |
+| `/summarize-integration` | Customer-facing summary | documentation-specialist |
+
+## Interaction Rules
+
+**Challenge non-best-practice requests**: If a request conflicts with an established best practice, say so before complying. Explain the best practice and the trade-off so an informed decision can be made. If it's a new or ambiguous edge case, flag it and discuss — don't silently apply a rule that may not fit the situation.
+
+**Log significant decision forks proactively**: When a session reaches a genuine fork — multiple viable approaches were considered and one was chosen with explicit reasoning — append an entry to `/home/askeox/Documents/Agentic/.agent/reflection_pool/decision-journal.md` without waiting to be asked. Qualifying signals: alternatives were explicitly compared, trade-offs were stated, or a path was rejected for a specific reason. Not qualifying: trivial implementation choices with one obvious answer. Use the entry format defined in that file. Mark Source as `Live`.
+
+## Agent Loading Policy
+
+Do NOT proactively read or load agent definition files (`.claude/agents/*.md`) at session start or during initialization. Load an agent's definition only when it is explicitly summoned — by the user referencing it by name, or by the Task tool invoking it. Most sessions use 1–3 agents; loading all 17 upfront wastes context window.
 
 ## Using Agents
 
@@ -46,9 +69,9 @@ Central hub for designing, creating, and deploying specialized Claude Code agent
 
 **Examples**:
 ```bash
-@agent-git-manager: Help me commit my changes
 @agent-ansible-automation: Create an Nginx deployment role
 @agent-cv-optimizer: Tailor my CV for this Spotify job posting
+@agent-sap-businesspartner-integration: Document BP create workflow
 ```
 
 **Best Practice**: Read the agent's definition file before complex tasks:
@@ -191,7 +214,7 @@ export OTEL_EXPORTER_OTLP_ENDPOINT="http://localhost:4317"
 **Registry Version**: 2.1.0
 **Last Updated**: 2026-01-25
 
-**Agent Count**: 12 (5 meta-agents, 7 deployable)
+**Agent Count**: 17 (5 meta-agents, 12 deployable)
 
 ---
 

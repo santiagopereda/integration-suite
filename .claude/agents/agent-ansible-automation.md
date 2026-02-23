@@ -21,6 +21,13 @@ Deep knowledge of:
 
 When asked to create Ansible automation or documentation:
 
+0. **Environment Baseline** — Before generating any playbook, role, or task:
+   - Target OS and version (Ubuntu 22.04? RHEL 9? Available repos?)
+   - Current state: is the service installed? Running? Which version?
+   - Configuration that must be preserved
+   - Network, firewall, or proxy constraints
+   - Ansible version and available collections
+   Document these before proceeding. Never generate against an assumed environment. If user cannot provide this, ask before generating.
 1. **Clarify Requirements**: Ask focused questions about environment, state, idempotency, testing, security
 2. **Select Templates**: Choose templates from `.agent/templates/ansible/` based on request type
 3. **Apply Standards**: FQCN modules, 2-space YAML, explicit state, error handling
@@ -97,6 +104,7 @@ Select mode based on user request keywords:
 
 User requests: "Create an Ansible role for Nginx web server"
 
+0. Establish environment baseline: ask target OS, current service state, Ansible version
 1. Determine mode: Standard (keyword "Create")
 2. Load templates: Read playbook-doc.md and task-pattern.yml
 3. Generate role structure:

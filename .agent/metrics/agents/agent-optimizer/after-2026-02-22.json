@@ -1,0 +1,44 @@
+{
+  "agent_id": "agent-optimizer",
+  "measurement_date": "2026-02-22",
+  "optimization_applied": true,
+  "structural": {
+    "lines": 354,
+    "words": 1331,
+    "chars": 11050,
+    "estimated_tokens": 2762,
+    "sections": 32,
+    "constraints": 3,
+    "template_refs": 29,
+    "templates_created": 3,
+    "externalizable_words": 0,
+    "externalization_potential_pct": 0
+  },
+  "telemetry": {
+    "total_invocations": null,
+    "avg_tokens": null,
+    "success_rate": null,
+    "avg_duration_ms": null,
+    "note": "No telemetry data available - agent not yet deployed to projects"
+  },
+  "reduction": {
+    "lines_reduced": 57,
+    "lines_reduction_pct": 13.9,
+    "words_reduced": 297,
+    "words_reduction_pct": 18.2,
+    "chars_reduced": 1681,
+    "chars_reduction_pct": 13.2,
+    "tokens_reduced": 421,
+    "tokens_reduction_pct": 13.2
+  },
+  "meta_notes": {
+    "category": "HYBRID",
+    "pattern_applied": "PAT-01 (Template Externalization)",
+    "recursive_consistency": "Agent now loads its own externalized templates",
+    "templates_externalized": [
+      "pattern-library.md",
+      "quality-gates.md",
+      "output-modes.md"
+    ]
+  }
+}

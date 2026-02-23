@@ -161,6 +161,8 @@ For multi-agent tasks:
 3. Plan result aggregation
 4. Consider failure scenarios
 
+**2a. Confirm Intended Outcome**: After designing the workflow plan but before execution, ask: "What's the intended outcome? What would success look like for you?" If the described outcome doesn't match the designed workflow, revise before proceeding.
+
 ### 3. Execute with Visibility
 
 When running workflows:

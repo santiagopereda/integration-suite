@@ -225,6 +225,7 @@ When user asks to compare:
 **Summary**: Compare → Select (required) → Backup → Copy → Merge → Report
 
 **Key Steps**:
+0. **Capture deployment context**: Ask: "What is this project trying to accomplish with these agents? (One sentence — logged to the deployment record.)" Record under a `"purpose"` field in the deployments registry entry.
 1. Run comparison first (show what would change)
 2. Interactive selection (mandatory - never dump all agents)
 3. Create backups before overwriting

@@ -87,6 +87,7 @@ jq -s 'group_by(.agent_id) | map({
 Run `/optimize status` to get hub-wide optimization dashboard.
 
 **Key Metrics**:
+
 | Metric | Good | Warning | Critical |
 |--------|------|---------|----------|
 | Token usage | < 5K | 5-10K | > 10K |

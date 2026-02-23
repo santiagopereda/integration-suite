@@ -1,0 +1,149 @@
+{
+  "agent_id": "agent-robotarm-tester",
+  "analysis_date": "2026-02-22",
+  "phase": "pattern_matching",
+  "pattern_library_version": "key-insights.md (2026-02-21)",
+
+  "pattern_matching": {
+    "PAT-01_template_externalization": {
+      "triggered": true,
+      "reason": "730 words of externalizable content (>100 word threshold)",
+      "candidates": [
+        {
+          "section": "Configuration File Management",
+          "lines": "306-353",
+          "words": 280,
+          "target_template": ".agent/templates/robotics/workspace-config-template.yml",
+          "reduction_potential": "280 words → 15 words (reference)"
+        },
+        {
+          "section": "Test Session Logging",
+          "lines": "163-199",
+          "words": 185,
+          "target_template": ".agent/templates/robotics/test-session-log-format.md",
+          "reduction_potential": "185 words → 15 words (reference)"
+        },
+        {
+          "section": "Error Recovery Strategy",
+          "lines": "201-217",
+          "words": 145,
+          "target_template": ".agent/templates/robotics/error-recovery-workflow.md",
+          "reduction_potential": "145 words → 15 words (reference)"
+        },
+        {
+          "section": "SSH Command Patterns",
+          "lines": "220-241",
+          "words": 120,
+          "target_template": ".agent/templates/robotics/ssh-command-patterns.md",
+          "reduction_potential": "120 words → 15 words (reference)"
+        }
+      ],
+      "total_reduction_potential": "730 words → 60 words = 670 word reduction (92% reduction in externalized sections)",
+      "overall_agent_reduction": "32.5% of total agent (670/2061)"
+    },
+
+    "PAT-02_lazy_loading": {
+      "triggered": false,
+      "reason": "No templates currently referenced, so lazy loading not applicable yet",
+      "post_optimization_applicability": true,
+      "recommendation": "Apply after PAT-01 externalization"
+    },
+
+    "PAT-03_output_modes": {
+      "triggered": false,
+      "reason": "Output modes already implemented (lines 143-161)",
+      "status": "present",
+      "modes": ["Quick Test Mode", "Standard Test Sequence", "Comprehensive Test Suite"]
+    },
+
+    "PAT-04_section_compression": {
+      "triggered": true,
+      "reason": "Repetitive structure in capabilities sections (lines 101-141)",
+      "candidates": [
+        {
+          "section": "Testing Capabilities (Movement/Workspace/Calibration/etc.)",
+          "current_approach": "6 sub-sections with bullet lists",
+          "compression_potential": "Consolidate into single capability matrix",
+          "reduction_estimate": "40 lines → 20 lines (50% reduction in this section)"
+        }
+      ],
+      "reduction_potential": "moderate (5-8%)"
+    },
+
+    "PAT-05_verification_first": {
+      "triggered": false,
+      "reason": "Verification constraints already present",
+      "evidence": [
+        "Lines 77-80: Accuracy Over Assumption (Never fabricate)",
+        "Lines 82-88: What You Don't Assume",
+        "Lines 68-75: Safety First constraints"
+      ],
+      "status": "compliant"
+    }
+  },
+
+  "optimization_score": {
+    "total": 78,
+    "calculation": "Base(40) + PAT-01(35) + PAT-04(3) = 78",
+    "breakdown": {
+      "baseline_potential": 40,
+      "pat_01_template_externalization": 35,
+      "pat_02_lazy_loading": 0,
+      "pat_03_output_modes": 0,
+      "pat_04_section_compression": 3,
+      "pat_05_verification_first": 0
+    }
+  },
+
+  "estimated_token_reduction": {
+    "current_tokens": 3909,
+    "pat_01_reduction": 1675,
+    "pat_04_reduction": 100,
+    "total_reduction": 1775,
+    "projected_tokens": 2134,
+    "reduction_percentage": "45.4%"
+  },
+
+  "priority_assessment": {
+    "usage_data": "no_telemetry",
+    "priority": "medium",
+    "justification": "High optimization potential (45%) but no usage data to confirm ROI. Prioritize if robot arm testing becomes active."
+  },
+
+  "quality_gate_pre_check": {
+    "QG-1_test_cases": {
+      "status": "ready",
+      "count": 12,
+      "location": "agents/agent-robotarm-tester/test-cases.md",
+      "preservation_plan": "All test cases validate against agent capabilities, not implementation details"
+    },
+    "QG-2_fabrication_prevention": {
+      "status": "ready",
+      "current_location": "lines 77-80",
+      "preservation_plan": "Move to Critical Constraints section (unchanged)"
+    },
+    "QG-3_uncertainty_acknowledgment": {
+      "status": "ready",
+      "current_location": "lines 82-88",
+      "preservation_plan": "Keep 'What You Don't Assume' section intact"
+    },
+    "QG-4_template_validity": {
+      "status": "pending",
+      "action_required": "Create 4 templates in .agent/templates/robotics/"
+    },
+    "QG-5_critical_constraints": {
+      "status": "ready",
+      "current_count": 106,
+      "preservation_plan": "All safety constraints preserved, templates add references but don't remove constraints"
+    }
+  },
+
+  "risks": {
+    "low": [
+      "Template externalization is well-proven (51-65% reduction in similar agents)",
+      "Templates contain reference content, not behavioral logic"
+    ],
+    "medium": [],
+    "high": []
+  }
+}

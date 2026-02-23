@@ -1,0 +1,130 @@
+{
+  "agent_id": "agent-robotarm-tester",
+  "measurement_date": "2026-02-22",
+  "optimization_status": "optimized",
+  "optimization_date": "2026-02-22",
+  "optimization_version": "1.0",
+
+  "metrics": {
+    "lines": 285,
+    "words": 1889,
+    "characters": 14693,
+    "estimated_tokens": 3673,
+    "sections": 38,
+    "constraints": 113,
+    "template_refs": 4
+  },
+
+  "baseline_comparison": {
+    "baseline_lines": 386,
+    "baseline_words": 2061,
+    "baseline_characters": 15637,
+    "baseline_tokens": 3909,
+    "baseline_constraints": 106,
+
+    "lines_reduction": 101,
+    "lines_reduction_pct": 26.2,
+    "words_reduction": 172,
+    "words_reduction_pct": 8.3,
+    "characters_reduction": 944,
+    "characters_reduction_pct": 6.0,
+    "tokens_reduction": 236,
+    "tokens_reduction_pct": 6.0,
+    "constraints_change": 7,
+    "constraints_change_pct": 6.6
+  },
+
+  "optimization_details": {
+    "patterns_applied": ["PAT-01", "PAT-02"],
+    "templates_created": 4,
+    "content_externalized_words": 730,
+    "documentation_added_words": 558,
+    "net_content_reduction_words": 172,
+
+    "estimated_reduction_pct": 45.4,
+    "actual_reduction_pct": 6.0,
+    "discrepancy_pct": 39.4,
+    "discrepancy_reason": "Documentation overhead for Template Usage section and context-rich template references"
+  },
+
+  "quality_gates": {
+    "QG-1_test_pass_rate": "PASS",
+    "QG-1_tests_passing": 12,
+    "QG-1_tests_total": 12,
+    "QG-1_pass_rate_pct": 100,
+
+    "QG-2_fabrication_prevention": "PASS",
+    "QG-2_constraints_preserved": true,
+
+    "QG-3_uncertainty_acknowledgment": "PASS",
+    "QG-3_section_preserved": true,
+
+    "QG-4_template_validity": "PASS",
+    "QG-4_templates_exist": 4,
+    "QG-4_templates_required": 4,
+
+    "QG-5_critical_constraints": "PASS",
+    "QG-5_baseline_count": 106,
+    "QG-5_current_count": 113,
+    "QG-5_all_preserved": true,
+
+    "overall_status": "PASS",
+    "overall_gates_passed": 5,
+    "overall_gates_total": 5
+  },
+
+  "templates": {
+    "test-session-log-format.md": {
+      "path": ".agent/templates/robotics/test-session-log-format.md",
+      "size_bytes": 709,
+      "words_externalized": 185,
+      "purpose": "Structured Markdown logging format"
+    },
+    "error-recovery-workflow.md": {
+      "path": ".agent/templates/robotics/error-recovery-workflow.md",
+      "size_bytes": 1228,
+      "words_externalized": 145,
+      "purpose": "Automatic recovery process and decision tree"
+    },
+    "ssh-command-patterns.md": {
+      "path": ".agent/templates/robotics/ssh-command-patterns.md",
+      "size_bytes": 1098,
+      "words_externalized": 120,
+      "purpose": "Common SSH command structures"
+    },
+    "workspace-config-template.yml": {
+      "path": ".agent/templates/robotics/workspace-config-template.yml",
+      "size_bytes": 872,
+      "words_externalized": 280,
+      "purpose": "YAML structure for discovered workspace limits"
+    }
+  },
+
+  "roi_analysis": {
+    "development_time_minutes": 60,
+    "token_savings_per_invocation": 236,
+    "net_savings_after_template_load": 150,
+    "template_load_overhead_avg": 86,
+    "break_even_invocations": 1,
+    "estimated_annual_invocations": 50,
+    "estimated_annual_savings_tokens": 7500,
+    "note": "Low usage expected - specialized robotics testing"
+  },
+
+  "agent_health": {
+    "capabilities_preserved": true,
+    "safety_constraints_intact": true,
+    "output_modes_count": 3,
+    "test_coverage_pct": 100,
+    "documentation_quality": "high",
+    "template_discoverability": "high"
+  },
+
+  "metadata": {
+    "last_updated": "2026-02-22",
+    "updated_by": "agent-optimizer",
+    "optimization_campaign": "tier-1-high-token-agents",
+    "next_review_date": "2026-03-22",
+    "status": "production_ready"
+  }
+}

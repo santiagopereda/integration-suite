@@ -73,6 +73,27 @@ templates/
 │   ├── registry-templates.md      ← CLAUDE.md/AGENTS_REGISTRY templates
 │   ├── hook-merge-logic.md        ← Hook merging rules
 │   └── workflow-examples.md       ← Complete workflow examples
+├── integration/                   ← Integration analyst framework templates
+│   ├── scoring-rubric.md          ← 8 dimensions x 5 maturity levels
+│   ├── assessment-questionnaire.md ← Guided interview questions
+│   ├── assessment-document.md     ← Assessment output format
+│   ├── scorecard-template.md      ← Scorecard output + radar chart JSON
+│   ├── design-document.md         ← Architecture design template
+│   ├── improvement-roadmap.md     ← Phased improvement plan template
+│   ├── pattern-library.md         ← Integration patterns catalog (7 patterns)
+│   ├── design-quality-checklist.md ← Pre-delivery design validation
+│   ├── review-checklist.md        ← Structured review framework
+│   ├── security-review-checklist.md ← OWASP API Top 10 + security
+│   ├── review-report-template.md  ← Review output format
+│   ├── anti-patterns.md           ← Anti-pattern library + remediation
+│   ├── inventory-document.md      ← Code analysis inventory format
+│   ├── extraction-guide.md        ← Universal extraction checklist
+│   ├── industry-benchmarks.md     ← Benchmarks by sector/complexity
+│   ├── red-flags-library.md       ← Common red flags + remediation
+│   ├── customer-summary-template.md ← Customer-facing report format
+│   └── platform-parsers/          ← Platform-specific parsing guides
+│       ├── workato.md             ← Workato JSON recipe parsing
+│       └── talend.md              ← Talend XML/Java job parsing
 └── shared/                        ← Cross-agent templates
     ├── output-structure.md        ← General output formatting
     └── markdown-formatting.md     ← Markdown best practices
@@ -119,6 +140,28 @@ templates/
 - `sap/sap-agiloft-context.md` - SAP-Agiloft integration context
 
 **Usage**: Loaded conditionally when specific keywords detected
+
+### 5. Evaluation Frameworks
+
+**Purpose**: Structured assessment, scoring, and review frameworks
+
+**Examples**:
+- `integration/scoring-rubric.md` - 8-dimension x 5-level maturity scoring
+- `integration/assessment-questionnaire.md` - Guided interview for discovery
+- `integration/review-checklist.md` - Design validation framework
+- `integration/security-review-checklist.md` - OWASP API Top 10 security review
+
+**Usage**: Integration agents load during assessment, scoring, design, and review phases
+
+### 6. Platform Parsers
+
+**Purpose**: Platform-specific code parsing instructions for workspace export analysis
+
+**Examples**:
+- `integration/platform-parsers/workato.md` - Workato JSON recipe structure and extraction
+- `integration/platform-parsers/talend.md` - Talend XML/Java job structure and extraction
+
+**Usage**: Analyzer agent loads when parsing code exports from specific platforms
 
 ## Using Templates in Agents
 
@@ -348,6 +391,6 @@ Record externalization in `.agent/metrics/optimization-log.md`:
 ---
 
 **Created**: 2025-11-28
-**Updated**: 2026-01-25
-**Version**: 1.1.0
+**Updated**: 2026-02-14
+**Version**: 1.2.0
 **Maintained By**: Agent Architecture Team

@@ -19,7 +19,7 @@ You will conduct thorough research by:
 
 **Research Methodology:**
 
-1. **Clarify Scope**: First, understand exactly what aspect needs research. If the request is ambiguous, identify the key questions that need answering.
+1. **Clarify Scope**: First, understand exactly what aspect needs research. If the request is ambiguous, identify the key questions that need answering. Before researching, also ask: **What decision will this research inform?** and **What would change your approach if a key assumption turned out to be false?** — These ground the research toward actionable output.
 
 2. **Systematic Analysis**: Structure your research to cover:
    - Overview of the technology/feature/implementation
