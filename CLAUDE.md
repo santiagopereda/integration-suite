@@ -56,6 +56,8 @@ Central hub for designing, creating, and deploying specialized Claude Code agent
 
 **Log significant decision forks proactively**: When a session reaches a genuine fork — multiple viable approaches were considered and one was chosen with explicit reasoning — append an entry to `/home/askeox/Documents/Agentic/.agent/reflection_pool/decision-journal.md` without waiting to be asked. Qualifying signals: alternatives were explicitly compared, trade-offs were stated, or a path was rejected for a specific reason. Not qualifying: trivial implementation choices with one obvious answer. Use the entry format defined in that file. Mark Source as `Live`.
 
+**Customer name anonymization (MANDATORY)**: Never use real customer or company names in any file in this project. All customer references must use anonymized identifiers (e.g., Client-A, Client-B, Integration-Project-1). This applies to all files including testimonies, memory, metrics, agent definitions, documentation, and reflection pool entries. When ingesting new testimony or external content that contains customer names, replace them with the appropriate anonymized identifier before writing. Current mappings are maintained privately and must not appear in this repository.
+
 ## Agent Loading Policy
 
 Do NOT proactively read or load agent definition files (`.claude/agents/*.md`) at session start or during initialization. Load an agent's definition only when it is explicitly summoned — by the user referencing it by name, or by the Task tool invoking it. Most sessions use 1–3 agents; loading all 17 upfront wastes context window.
@@ -102,11 +104,39 @@ Agentic/                          # The Hub
 │       ├── test-cases.md
 │       └── examples/
 │
+├── plugins/                      # Distributable plugin packages
+│   └── integration-suite/        # git subtree → own repo
+│       ├── .claude-plugin/       # Plugin manifest
+│       ├── agents/               # 5 integration agents
+│       ├── commands/             # 5 integration commands
+│       ├── templates/            # 19 templates (source of truth)
+│       ├── hooks/                # SessionStart auto-copy
+│       ├── skills/               # Manual setup fallback
+│       └── scripts/              # setup + hub sync
+│
 ├── deployments/                  # Deployment tracking
 │   ├── registry.json
 │   └── by-project/
 │
 └── docs/                         # Reference documentation
+```
+
+### Plugin Subtree Workflow
+
+The `plugins/integration-suite/` directory is managed as a git subtree and pushed to its own repo for distribution:
+
+```bash
+# Initial push to remote repo
+git subtree push --prefix=plugins/integration-suite origin-plugin main
+
+# Pull upstream changes back
+git subtree pull --prefix=plugins/integration-suite origin-plugin main
+
+# Sync hub changes to plugin
+bash plugins/integration-suite/scripts/sync-from-hub.sh
+
+# Local testing
+claude --plugin-dir plugins/integration-suite
 ```
 
 ## Quality Gates
