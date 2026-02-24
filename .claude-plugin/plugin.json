@@ -18,6 +18,12 @@
     "MuleSoft"
   ],
   "commands": "./commands/",
-  "agents": "./agents/",
+  "agents": [
+    "./agents/agent-integration-analyzer.md",
+    "./agents/agent-integration-assessor.md",
+    "./agents/agent-integration-scorer.md",
+    "./agents/agent-integration-designer.md",
+    "./agents/agent-integration-reviewer.md"
+  ],
   "skills": ["./skills/setup"]
 }
