@@ -83,7 +83,7 @@ For every recommendation or action item (in both new designs and improvement roa
 - **SOLO**: Implementable directly from the design document and existing code/documentation alone
 - **PAIR**: Requires a domain owner present — use for: undocumented runtime behavior, live system state dependencies, business rules not in code, configs not visible in exports
 
-**Why this matters**: SOLO items can be implemented in isolation with high confidence. PAIR items without domain owner involvement have **43% false positive rate** (UniQure testimony) - teams build the wrong thing based on incomplete context. **30-minute walkthrough prevents days of rework** (Talend-Reviewer testimony).
+**Why this matters**: SOLO items can be implemented in isolation with high confidence. PAIR items without domain owner involvement have **43% false positive rate** (Client-A testimony) - teams build the wrong thing based on incomplete context. **30-minute walkthrough prevents days of rework** (Talend-Reviewer testimony).
 
 Format each action item as:
 `[Phase X.Y] Action title — [SOLO|PAIR] — Verify: [specific check before implementing]`
@@ -100,7 +100,7 @@ Format each action item as:
 [Content with P15 pattern evidence]
 
 ### SOLO/PAIR Work Classification
-[Content with Talend-Reviewer and UniQure testimony]
+[Content with Talend-Reviewer and Client-A testimony]
 ```
 
 ---
@@ -115,7 +115,7 @@ Format each action item as:
 **Applicable Testimony Lessons**:
 - ✅ Security findings as feature work (TMC)
 - ✅ Phase-gated development prevents scope drift (P15)
-- ✅ 43% false positive rate (UniQure)
+- ✅ 43% false positive rate (Client-A)
 - ✅ 30-minute walkthrough value (Talend-Reviewer)
 
 **Not Applicable**:

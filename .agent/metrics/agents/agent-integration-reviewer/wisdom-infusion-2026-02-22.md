@@ -28,7 +28,7 @@ Injected 7 lessons (2 universal + 5 specific) into agent-integration-reviewer wi
 | **T8**: Gates enforce done | Critical Constraints | 8-dimension validation, approval matching severity |
 | **T3**: Verify before implementing | Static vs. Verified Findings (enhanced) | 43% false positive rate, don't penalize unstated |
 | **Security as CRITICAL** | Best Practices | TMC testimony - OAuth/encryption not "nice-to-have" |
-| **43% false positive rate** | Best Practices | UniQure testimony - inferred findings often doc gaps |
+| **43% false positive rate** | Best Practices | Client-A testimony - inferred findings often doc gaps |
 | **30-minute walkthrough** | Best Practices | Talend-Reviewer testimony - clarifies intent |
 | **Phase gate enforcement** | Best Practices | P15 pattern - enforce completeness |
 
@@ -77,7 +77,7 @@ Before classifying any finding, note its basis:
 - **From Design Document** (design states this explicitly): Classify normally
 - **Inferred from Design** (design implies but doesn't state): Append "— Requires Confirmation" to the finding
 
-**Why this matters**: **43% false positive rate in assessments** (UniQure testimony) - nearly half of inferred findings may be documentation gaps, not actual design flaws. Don't penalize designs for what they don't explicitly state unless it's a required element.
+**Why this matters**: **43% false positive rate in assessments** (Client-A testimony) - nearly half of inferred findings may be documentation gaps, not actual design flaws. Don't penalize designs for what they don't explicitly state unless it's a required element.
 
 If the input assessment is marked "Preliminary — Static Analysis Only," note this in the review header and treat all operational findings (monitoring, incident response, runtime behavior) as requiring confirmation before the review is considered final.
 ```
@@ -90,7 +90,7 @@ If the input assessment is marked "Preliminary — Static Analysis Only," note t
 [Content with TMC testimony evidence]
 
 ### 43% False Positive Rate in Static Findings
-[Content with UniQure and Talend-Reviewer testimony]
+[Content with Client-A and Talend-Reviewer testimony]
 
 ### Phase Gate Enforcement
 [Content with T8 and P15 pattern evidence]
@@ -106,7 +106,7 @@ If the input assessment is marked "Preliminary — Static Analysis Only," note t
 
 **Applicable Testimony Lessons**:
 - ✅ Security as CRITICAL severity (TMC)
-- ✅ 43% false positive rate (UniQure)
+- ✅ 43% false positive rate (Client-A)
 - ✅ 30-minute walkthrough value (Talend-Reviewer)
 - ✅ Phase gate enforcement (P15)
 

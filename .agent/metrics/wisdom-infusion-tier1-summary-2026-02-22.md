@@ -19,7 +19,7 @@ Successfully injected accumulated wisdom from 11+ project testimonies into the I
 - ✅ Zero quality regressions (all constraints preserved)
 
 **Expected Impact**:
-- **30-40% reduction in false positive work** (43% baseline from UniQure testimony)
+- **30-40% reduction in false positive work** (43% baseline from Client-A testimony)
 - **10% accuracy improvement** when runtime data added (from Talend-Reviewer 4-of-8 dimension shift)
 - **80%+ walkthrough consultation rate** (30-minute sessions prevent days of rework)
 - **100% security severity calibration** (security gaps classified as CRITICAL, not Medium)
@@ -62,14 +62,14 @@ Successfully injected accumulated wisdom from 11+ project testimonies into the I
 
 | Lesson | Source | Agents Receiving |
 |--------|--------|------------------|
-| **43% false positive rate** | UniQure | Assessor, Designer, Reviewer |
+| **43% false positive rate** | Client-A | Assessor, Designer, Reviewer |
 | **10% score swing (static → runtime)** | Talend-Reviewer | Assessor, Scorer |
 | **30-minute walkthrough value** | Talend-Reviewer | Assessor, Analyzer, Designer, Reviewer (80%) |
 | **API quirks (8-12 undocumented)** | TMC | Assessor |
-| **Recipes = source of truth** | UniQure | Analyzer |
+| **Recipes = source of truth** | Client-A | Analyzer |
 | **Security as feature work (P16)** | TMC | Designer, Reviewer |
 | **Phase-gated development (P15)** | Multiple | Designer, Reviewer |
-| **Parsing boundaries (custom components)** | Vaxxinova | Analyzer |
+| **Parsing boundaries (custom components)** | Client-B | Analyzer |
 
 ---
 
@@ -132,7 +132,7 @@ Successfully injected accumulated wisdom from 11+ project testimonies into the I
 - T8: Verification gate (don't finalize without evidence/inference distinction)
 
 **Best Practices Section**:
-- API Documentation Reliability (UniQure: 1 of 7 fields worked, TMC: 8-12 quirks)
+- API Documentation Reliability (Client-A: 1 of 7 fields worked, TMC: 8-12 quirks)
 - Static vs Runtime Analysis (4 of 8 dimensions changed, 10% score swing)
 - Domain Owner Consultation Value (30-min walkthrough corrects 4 assumptions)
 
@@ -305,7 +305,7 @@ Successfully injected accumulated wisdom from 11+ project testimonies into the I
 
 ### What Worked Well
 
-1. **Testimony evidence is compelling**: Including project names (UniQure, TMC, Talend-Reviewer, Vaxxinova) adds credibility
+1. **Testimony evidence is compelling**: Including project names (Client-A, TMC, Talend-Reviewer, Client-B) adds credibility
 2. **T3 and T8 are universally applicable**: 80% injection rate across diverse agent types validates their utility
 3. **Best Practices sections don't bloat agents**: +45% of token increase, but organized as reference material
 4. **Existing capabilities enhanced, not replaced**: Zero functionality regressions, pure additive value

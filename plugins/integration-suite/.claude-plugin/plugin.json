@@ -2,6 +2,9 @@
   "name": "integration-suite",
   "version": "1.0.0",
   "description": "Integration assessment, scoring, design, and review suite. 5 agents + 5 commands + 19 templates for end-to-end integration maturity evaluation using the 8-Dimension Integration Maturity Framework.",
+  "author": {
+    "name": "Agentic Hub"
+  },
   "keywords": [
     "integration",
     "assessment",
@@ -13,5 +16,8 @@
     "Workato",
     "Talend",
     "MuleSoft"
-  ]
+  ],
+  "commands": "./commands/",
+  "agents": "./agents/",
+  "skills": ["./skills/setup"]
 }

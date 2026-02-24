@@ -8,7 +8,7 @@ Cross-project pattern synthesis from 3 new project testimonies. Picks up from [t
 
 | Project | Dates | Domain | Primary Output |
 |---------|-------|--------|----------------|
-| Vaxxinova Debug | Feb 4–12, 2026 | Talend OSGi debugging | tJavaFlex + java.net.http.HttpClient pattern for PATCH method |
+| Client-B Debug | Feb 4–12, 2026 | Talend OSGi debugging | tJavaFlex + java.net.http.HttpClient pattern for PATCH method |
 | Talend-Reviewer | Feb 14–20, 2026 | Integration assessment lifecycle | Full maturity assessment: static + runtime + walkthrough methodology |
 | TMC API MCP Server | Feb 16–17, 2026 | MCP server development | 39 tools, 4 resources, 390 tests, 3 security hardening iterations |
 
@@ -63,7 +63,7 @@ Patterns not identified in the Jan 23 batch.
 **Pattern**: When a configuration-level fix fails due to runtime isolation (OSGi, container boundaries, classloader scoping), drop to code using JDK primitives that bypass the embedded framework entirely.
 
 **Evidence**:
-- Vaxxinova: tRESTClient silently converts PATCH → POST on Karaf Runtime. Root cause: CXF/HttpURLConnection limitation; each OSGi bundle embeds its own CXF copy — you cannot override it via configuration.
+- Client-B: tRESTClient silently converts PATCH → POST on Karaf Runtime. Root cause: CXF/HttpURLConnection limitation; each OSGi bundle embeds its own CXF copy — you cannot override it via configuration.
 - Solution: tJavaFlex using `java.net.http.HttpClient` (Java 17 JDK built-in). Bypasses bundle CXF entirely. HTTP method sent correctly.
 - Failed alternatives: JVM arguments (OSGi bundle isolation), HTTP tunneling (server doesn't honor X-HTTP-Method-Override), CXF transport bundle swap (jobs embed own CXF)
 
@@ -122,7 +122,7 @@ Failure patterns not identified in the Jan 23 batch.
 **Pattern**: Assuming all fields in a visual ETL component share the same expression context, leading to silent failures or wrong output.
 
 **Evidence**:
-- Vaxxinova Debug: In Talend tRouteOutput, Header Name field uses raw Java (no expression evaluation), while Body uses Talend expressions. Treating Header Name as an expression context caused silent mismatch.
+- Client-B Debug: In Talend tRouteOutput, Header Name field uses raw Java (no expression evaluation), while Body uses Talend expressions. Treating Header Name as an expression context caused silent mismatch.
 - Discovery required testing from route context, not standalone component testing
 
 **Mitigation**: When debugging visual ETL components, test each field's expression context independently. Do not assume consistency across fields in the same component. Test from route context, not standalone.
@@ -133,10 +133,10 @@ Failure patterns not identified in the Jan 23 batch.
 
 | Jan 23 Pattern | New Evidence | Status |
 |----------------|-------------|--------|
-| P1: Knowledge Base Structure (injection-history.md 100% usage) | Both Vaxxinova and Talend-Reviewer maintained injection-history throughout | Confirmed |
+| P1: Knowledge Base Structure (injection-history.md 100% usage) | Both Client-B and Talend-Reviewer maintained injection-history throughout | Confirmed |
 | P3: Verification Before Implementation (43% false positive rate) | Static scoring 10%+ swing strengthens this — verification rate now extends to assessments | Strengthened |
 | P5: Always Test Against Production APIs | 12 TMC API quirks quantifies the magnitude: budget for 8-12 quirks per integration | Quantified |
-| P8: Document During Troubleshooting | Vaxxinova: real-time experiment documentation prevented repeated failures — "what didn't work and why" | Reinforced |
+| P8: Document During Troubleshooting | Client-B: real-time experiment documentation prevented repeated failures — "what didn't work and why" | Reinforced |
 | P9: Defense-in-Depth Security | TMC security: 3-iteration structure with tests and ADRs extends the defense-in-depth principle to security hardening workflow | Extended |
 
 ---
@@ -145,7 +145,7 @@ Failure patterns not identified in the Jan 23 batch.
 
 | Metric | Jan 23 Value | Feb 2026 Update |
 |--------|-------------|-----------------|
-| False positive rate (static analysis) | 43% (UniQure, business logic) | +10%+ score correction expected for any static-only integration assessment |
+| False positive rate (static analysis) | 43% (Client-A, business logic) | +10%+ score correction expected for any static-only integration assessment |
 | Test coverage achievable | Not measured | 98% achievable with test-first approach (390 tests, 2 days, 39 tools) |
 | Security iteration yield | Not measured | ~8-10 findings per dedicated audit iteration; ~32 new tests per iteration |
 | API quirks per integration | 1 (SAP BP field behavior) | 8-12 behavioral quirks per API as realistic baseline |

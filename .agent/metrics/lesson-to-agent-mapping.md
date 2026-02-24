@@ -34,13 +34,13 @@
 
 | Priority | Pattern/Lesson | Evidence | Expected Impact |
 |----------|----------------|----------|-----------------|
-| **HIGH** | T2: Indirect evidence bias | API docs overstate (UniQure: 1 of 7 fields worked) | 30-40% false positive reduction |
-| **HIGH** | T3: Verify before implementing | 43% false positive rate (UniQure) | Prevent wasted implementation |
+| **HIGH** | T2: Indirect evidence bias | API docs overstate (Client-A: 1 of 7 fields worked) | 30-40% false positive reduction |
+| **HIGH** | T3: Verify before implementing | 43% false positive rate (Client-A) | Prevent wasted implementation |
 | **HIGH** | "Runtime changes scores" | Talend: 10% swing, 4/8 dimensions changed | Flag static-only assessments |
 | **HIGH** | "12 API quirks not in docs" | TMC testimony | Set realistic expectations |
 | **MEDIUM** | T5: Humans hold WHY | 4 assumptions corrected in 30 min (Talend) | Better recommendations |
-| **MEDIUM** | "Always test against production" | Only 1 of 7 SAP fields worked (UniQure) | Catch doc inaccuracies |
-| **LOW** | "Recipes = source of truth" | VQL files drifted (UniQure) | Verify against implementations |
+| **MEDIUM** | "Always test against production" | Only 1 of 7 SAP fields worked (Client-A) | Catch doc inaccuracies |
+| **LOW** | "Recipes = source of truth" | VQL files drifted (Client-A) | Verify against implementations |
 
 ### Injection Points
 
@@ -101,11 +101,11 @@
 
 **Applicable lessons**:
 - ✅ T2: API docs overstate
-- ✅ "Only 1 of 7 SAP blocking fields works during creation" (UniQure - **direct testimony!**)
-- ✅ "Always test against production APIs" (UniQure)
+- ✅ "Only 1 of 7 SAP blocking fields works during creation" (Client-A - **direct testimony!**)
+- ✅ "Always test against production APIs" (Client-A)
 - ⏸️ T5: Ask WHY certain fields are required
 
-**Injection**: Add SAP-specific quirks section from UniQure testimony
+**Injection**: Add SAP-specific quirks section from Client-A testimony
 
 ---
 
@@ -139,7 +139,7 @@
 **Applicable lessons**:
 - ✅ "Documentation during troubleshooting captures WHY" (GL.iNet)
 - ✅ "ADRs are institutional memory" (TMC)
-- ✅ "False positives = documentation opportunities" (UniQure)
+- ✅ "False positives = documentation opportunities" (Client-A)
 - ⏸️ T5: Ask WHY before documenting (understand intent)
 
 **Injection**: Add "Documentation Best Practices" section with testimony lessons
@@ -150,7 +150,7 @@
 
 **Applicable lessons**:
 - ✅ T2: Know bias direction of sources
-- ✅ "API docs overstate what works" (UniQure)
+- ✅ "API docs overstate what works" (Client-A)
 - ⏸️ T3: Verify claims from research
 - ⏸️ T5: Distinguish WHAT (artifacts) from WHY (humans)
 
@@ -283,7 +283,7 @@
 **Why**:
 - High impact (11 applicable lessons)
 - Clear metrics (false positive rate, static vs runtime)
-- Direct testimony evidence (UniQure, Talend-Reviewer)
+- Direct testimony evidence (Client-A, Talend-Reviewer)
 - Measurable before-after scenarios
 
 ### Step 2: Map Lessons

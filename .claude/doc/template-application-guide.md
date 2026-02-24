@@ -1,10 +1,10 @@
 # Template Application Guide
 
-This guide provides comprehensive instructions for applying universal templates across integrations in the UniQure multi-integration project.
+This guide provides comprehensive instructions for applying universal templates across integrations in the Client-A multi-integration project.
 
 ## Overview
 
-The UniQure project uses a template-driven development approach to ensure consistency across all integrations. Universal templates are stored in the `/Templates/` directory and provide the foundation for all integration components.
+The Client-A project uses a template-driven development approach to ensure consistency across all integrations. Universal templates are stored in the `/Templates/` directory and provide the foundation for all integration components.
 
 ## Universal Template Usage Pattern
 

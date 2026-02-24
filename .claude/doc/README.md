@@ -1,6 +1,6 @@
-# UniQure Project Documentation
+# Client-A Project Documentation
 
-This directory contains specialized documentation for the UniQure multi-integration project. These guides provide detailed information that complements the core guidance in [CLAUDE.md](../CLAUDE.md).
+This directory contains specialized documentation for the Client-A multi-integration project. These guides provide detailed information that complements the core guidance in [CLAUDE.md](../CLAUDE.md).
 
 ## Documentation Overview
 

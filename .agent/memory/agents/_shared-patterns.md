@@ -1,7 +1,7 @@
 # Agent Memory: Shared Patterns
 
 **Last Updated**: 2026-02-21
-**Patterns From**: 9 projects (Talend-Reviewer, Vaxxinova-Debug, UniQure, Agentic, GLInet-BE3600, RaspberryPi, CV-Generator-Agent, Survival, TMC-API)
+**Patterns From**: 9 projects (Talend-Reviewer, Client-B-Debug, Client-A, Agentic, GLInet-BE3600, RaspberryPi, CV-Generator-Agent, Survival, TMC-API)
 **Total Patterns**: 22
 
 ---
@@ -28,37 +28,37 @@
 
 ### UNI-004: Export Configs Before Debugging
 - **Pattern**: Baseline configuration exports on day 1 revealed a dual-JVM architecture (Runtime vs Remote Engine) that was not obvious from documentation. Side-by-side comparison prevented wasted effort targeting the wrong component.
-- **Source**: Vaxxinova-Debug (2026-02-12)
+- **Source**: Client-B-Debug (2026-02-12)
 - **Action**: Export and baseline all environment configurations before starting debugging or assessment. Compare configurations across instances to reveal architectural insights.
 - **Tags**: talend, process
 
 ### UNI-005: Document Experiments in Real Time
 - **Pattern**: A 200-line experiment log capturing 6 fix options (A/C/D/E/F + Studio) prevented repeated testing of failed approaches. Writing results during testing captured details lost if documented later.
-- **Source**: Vaxxinova-Debug (2026-02-12)
+- **Source**: Client-B-Debug (2026-02-12)
 - **Action**: Document each debugging attempt immediately with hypothesis, steps, and result. Failed approaches are as valuable as successes — they prevent rework and inform the next attempt.
 - **Tags**: debugging, process
 
 ### UNI-006: Create Preemptive Documentation for Patterns Not Yet Broken
 - **Pattern**: POST-Method-Fix.md was created before POST broke, providing a ready reference with decision tree for all failure modes. When the issue eventually surfaces, the team has immediate guidance.
-- **Source**: Vaxxinova-Debug (2026-02-12)
+- **Source**: Client-B-Debug (2026-02-12)
 - **Action**: After resolving an issue for one HTTP method/pattern, proactively document the equivalent fix for related methods/patterns that may break in the future.
 - **Tags**: documentation, process
 
 ### UNI-007: Verify Before Implementing — False Positive Rate Can Be High
 - **Pattern**: 43% of validated issues were false positives that would have wasted ~4 days of implementation work. Platform security features (encryption, concurrency controls, API design) often already handle flagged concerns.
-- **Source**: UniQure (2026-01-23)
+- **Source**: Client-A (2026-01-23)
 - **Action**: Before implementing fixes for identified issues, verify each against actual platform behavior. Prioritize verification of highest-severity items first. Expect significant false positive rates.
 - **Tags**: integration, verification
 
 ### UNI-008: Audit First, Then Estimate — Prevents Overestimation
 - **Pattern**: CRIT-2 documentation clarification completed in 1 day vs. 5 days planned (80% time savings). A comprehensive audit revealed documentation was mostly correct, needing only context additions rather than rewrites.
-- **Source**: UniQure (2026-01-23)
+- **Source**: Client-A (2026-01-23)
 - **Action**: Conduct a thorough audit before effort estimation. Understand the actual scope of the gap before committing to a fix plan. Audits frequently reveal less work than assumed.
 - **Tags**: integration, process
 
 ### UNI-009: Document as You Code — Prevent Drift
 - **Pattern**: SDK connector development benefited from immediate documentation updates. Resource files that weren't updated during implementation drifted from actual recipes, causing verification false failures.
-- **Source**: UniQure (2026-01-23)
+- **Source**: Client-A (2026-01-23)
 - **Action**: Make documentation updates part of the implementation checklist. Update README and guides immediately after each implementation change, not in batches.
 - **Tags**: integration, process
 

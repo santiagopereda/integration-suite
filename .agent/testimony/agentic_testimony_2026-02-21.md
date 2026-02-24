@@ -36,7 +36,7 @@ A third arc, completed in this session (Feb 21), was the expansion of the reflec
 - **Date**: 2026-02-20
 - **Objectives**: Close the testimony → agent knowledge loop; make cross-project learning accessible to agents at session start
 - **Outcomes**: agent_reflect v1.3.0 added pattern extraction (Steps 9-10). 7 agent memory files created. 62 patterns seeded from all 9 project testimonies. Three-tier memory model (hot/warm/cold) operational.
-- **Key Decision**: Route patterns by content keyword rather than by project — this ensures assessor gets assessment patterns from UniQure AND Talend-Reviewer, not just the project where the pattern was first extracted
+- **Key Decision**: Route patterns by content keyword rather than by project — this ensures assessor gets assessment patterns from Client-A AND Talend-Reviewer, not just the project where the pattern was first extracted
 
 ### Phase: Reflection Pool Expansion (Feb 21, 2026)
 - **Date**: 2026-02-21
@@ -65,7 +65,7 @@ A third arc, completed in this session (Feb 21), was the expansion of the reflec
 ### 3. Compound Knowledge Architecture — Agents That Learn Across Projects
 **Context**: Each agent session started clean. Lessons from the 9-project testimony library were available to read but not accessible without explicit loading.
 **Approach**: Extracted patterns from all 9 testimonies and routed them to per-agent memory files by content keyword. Agents load their memory file at session start (warm tier). Testimonies remain as cold storage for deep research.
-**Outcome**: 62 patterns distributed across 7 agent memory files. Assessor patterns include lessons from UniQure AND Talend-Reviewer. Pattern deduplication across projects prevented bloat — same insight from two projects appears once with both sources.
+**Outcome**: 62 patterns distributed across 7 agent memory files. Assessor patterns include lessons from Client-A AND Talend-Reviewer. Pattern deduplication across projects prevented bloat — same insight from two projects appears once with both sources.
 **Evidence**: `.agent/memory/agents/` — 7 files, combined ~6,272 tokens (well within warm tier limits); zero duplicate IDs across files confirmed during audit
 **Transferable Insight**: Cold storage (testimonies) → warm (memory files) → hot (agent context) creates sustainable compound knowledge. Each tier has different access cost and freshness tradeoff.
 

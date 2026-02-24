@@ -1,6 +1,6 @@
 # Integration Creation Guide
 
-This guide provides the complete workflow for creating new integrations in the UniQure multi-integration project.
+This guide provides the complete workflow for creating new integrations in the Client-A multi-integration project.
 
 ## Overview
 

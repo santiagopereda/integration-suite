@@ -119,7 +119,7 @@ Each pattern in a memory file represents a distilled, actionable insight extract
 
 1. **Same insight, new project**: Add project as additional source
    ```
-   - **Source**: Talend-Reviewer (2026-02-20), UniQure (2026-01-23)
+   - **Source**: Talend-Reviewer (2026-02-20), Client-A (2026-01-23)
    ```
 2. **Refined insight**: Update Pattern and Action text, keep all sources
 3. **Genuinely new**: Append with next sequence number in category

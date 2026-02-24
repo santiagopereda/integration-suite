@@ -1,3 +1,8 @@
+---
+name: setup
+description: Re-initialize or reset integration suite templates when they are missing, corrupted, or need to be restored to defaults.
+---
+
 # Integration Suite Setup
 
 Re-initialize or reset the integration suite templates in the current project.

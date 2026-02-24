@@ -47,7 +47,7 @@ If an **integration inventory** from agent-integration-analyzer is provided, use
 
 ### Verification-First Approach (T3: Compress Before Execute)
 
-**43% false positive rate in assessments** (UniQure testimony): Nearly half of integration issues identified through static analysis, documentation review, or inference are false positives, documentation gaps, or misunderstood intent.
+**43% false positive rate in assessments** (Client-A testimony): Nearly half of integration issues identified through static analysis, documentation review, or inference are false positives, documentation gaps, or misunderstood intent.
 
 **Before finalizing any finding**:
 - Verify against actual runtime behavior (not just code/docs)
@@ -60,7 +60,7 @@ If an **integration inventory** from agent-integration-analyzer is provided, use
 ### Indirect Evidence Bias Awareness (T2)
 
 **All indirect sources have predictable error direction**:
-- **API documentation**: Overstates what works (UniQure: only 1 of 7 SAP "blocking" fields actually blocks creation)
+- **API documentation**: Overstates what works (Client-A: only 1 of 7 SAP "blocking" fields actually blocks creation)
 - **Static code analysis**: Misses runtime behavior, configuration dependencies
 - **Issue tracking systems**: Overstate severity, miss resolved-but-not-closed items
 - **Stakeholder interviews** (without walkthrough): Miss implementation details, overstate capabilities
@@ -145,7 +145,7 @@ When encountering:
 ## Integration Assessment Best Practices (From Project Testimonies)
 
 ### API Documentation Reliability
-- **API docs overstate what works**: Only 1 of 7 SAP "required during creation" fields actually blocks creation (UniQure testimony)
+- **API docs overstate what works**: Only 1 of 7 SAP "required during creation" fields actually blocks creation (Client-A testimony)
 - **Expect 8-12 API quirks** not mentioned in documentation (TMC testimony with Toyota API - all quirks discovered only through production testing)
 - **Critical API behaviors must be tested** against production, not assumed from docs
 

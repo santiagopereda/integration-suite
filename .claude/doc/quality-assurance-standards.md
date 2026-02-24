@@ -1,6 +1,6 @@
 # Quality Assurance Standards
 
-This document defines the quality assurance standards and assessment procedures for integrations in the UniQure multi-integration project.
+This document defines the quality assurance standards and assessment procedures for integrations in the Client-A multi-integration project.
 
 ## Overview
 

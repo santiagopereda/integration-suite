@@ -39,7 +39,7 @@
 - **Bias awareness**: Agents apply T2 (know documentation overstates reality)
 
 ### Tertiary: Domain Expertise
-- **Integration best practices**: From UniQure, Talend-Reviewer testimonies
+- **Integration best practices**: From Client-A, Talend-Reviewer testimonies
 - **Security patterns**: From TMC, GL.iNet testimonies
 - **Assessment methodology**: From Talend-Reviewer, CV Generator
 
@@ -59,10 +59,10 @@
 
 **Integration agents** (analyzer, assessor, scorer, designer, reviewer):
 - T2: Indirect evidence bias (API docs overstate, static analysis misses runtime)
-- "Always test against production APIs" (UniQure)
+- "Always test against production APIs" (Client-A)
 - "Runtime enrichment changes scores" (Talend-Reviewer)
 - "12 API quirks survived unit tests" (TMC)
-- "43% false positive rate validates verification-first" (UniQure)
+- "43% false positive rate validates verification-first" (Client-A)
 
 **Meta-agents** (optimizer, architect, provisioner, hub-orchestrator, project-init):
 - T6: Front-load the model (methodology before execution)
@@ -77,7 +77,7 @@
 **Support agents** (research-assistant, documentation-specialist):
 - "Documentation during troubleshooting captures WHY" (GL.iNet)
 - "ADRs are institutional memory" (TMC)
-- "False positives are documentation opportunities" (UniQure)
+- "False positives are documentation opportunities" (Client-A)
 
 ### Step 2: Agent-Lesson Mapping Matrix
 
@@ -144,7 +144,7 @@ For each agent, identify existing wisdom:
 ### Verification Before Implementation (T3)
 
 - **Never implement a fix** before verifying the issue exists as described
-- **43% false positive rate** (UniQure testimony): Always confirm issue against actual system before investing effort
+- **43% false positive rate** (Client-A testimony): Always confirm issue against actual system before investing effort
 - If issue is from static analysis, documentation, or inference → **verify in runtime first**
 ```
 
@@ -203,7 +203,7 @@ If you encounter structurally identical failures 2-3 times:
 ## Integration Best Practices (From Project Testimonies)
 
 **API Documentation Bias** (T2):
-- API docs overstate what works: Only 1 of 7 SAP blocking fields worked (UniQure)
+- API docs overstate what works: Only 1 of 7 SAP blocking fields worked (Client-A)
 - Expect 8-12 API quirks not mentioned in documentation (TMC)
 - **Always verify** critical API behaviors against production
 
@@ -342,7 +342,7 @@ For each infused agent:
 **Lessons to inject**:
 - T2 (API docs overstate)
 - T3 (verify before implementing)
-- "43% false positive rate" (UniQure)
+- "43% false positive rate" (Client-A)
 - "Runtime changes 10% of scores" (Talend-Reviewer)
 - "12 API quirks not in docs" (TMC)
 
@@ -386,7 +386,7 @@ For each infused agent:
 **Lessons to inject** (examples):
 - git-manager: "Security findings = feature work" (TMC)
 - CV agent: "Front-load positioning" (CV Generator testimony)
-- SAP agent: "Only 1 of 7 blocking fields works" (UniQure)
+- SAP agent: "Only 1 of 7 blocking fields works" (Client-A)
 
 **Effort**: ~2 hours per agent = 8 hours total
 
@@ -406,7 +406,7 @@ For each infused agent:
 **Lessons to inject**:
 - "Documentation during troubleshooting captures WHY" (GL.iNet)
 - "ADRs are institutional memory" (TMC)
-- "False positives = documentation opportunities" (UniQure)
+- "False positives = documentation opportunities" (Client-A)
 
 **Effort**: ~2 hours per agent = 4 hours total
 
@@ -463,7 +463,7 @@ agent-integration-assessor conducts structured discovery and evaluation. Current
 
 ### Verification-First Approach (T3)
 
-**43% false positive rate** (UniQure testimony): In integration assessments, nearly half of identified issues are false positives, documentation gaps, or inference errors.
+**43% false positive rate** (Client-A testimony): In integration assessments, nearly half of identified issues are false positives, documentation gaps, or inference errors.
 
 - **Before flagging an issue**: Verify it exists in actual runtime behavior, not just static analysis
 - **When assessing from code alone**: Flag assessment as **"Preliminary — Static Analysis Only"**

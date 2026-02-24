@@ -164,3 +164,37 @@ Talend uses Java-based expressions in tMap:
 | `context.VARIABLE_NAME` | Access context variable |
 | `globalMap.get("key")` | Access global variable |
 | `routines.CustomRoutine.method(args)` | Custom Java routine |
+
+## Known Pitfalls and Platform-Specific Findings
+
+Lessons from production Talend integration projects. Check these during assessment and review.
+
+### Runtime Architecture
+
+**Dual-JVM Karaf Architecture**: Enterprise Talend ESB runs two separate JVM instances — Runtime (executes routes/jobs) and Remote Engine (handles deployment from TMC). Configuration changes must target the correct JVM. Export and compare both `wrapper.conf` files when diagnosing issues.
+
+**OSGi Bundle Isolation Prevents Configuration Fixes**: Talend jobs embed their own dependencies (CXF, etc.) in OSGi bundles. JVM arguments, system properties, and Karaf-level bundle changes do NOT reach embedded libraries. When configuration-level approaches fail, go directly to code-level solutions using JDK built-ins.
+
+**TMC Observability is DI-Only**: TMC component execution metrics return empty for ESB routes (Camel microservices). Only DI jobs have TMC-level observability. ESB runtime monitoring requires custom solutions (Prometheus, application logs).
+
+### Component Behavior
+
+**tDie Is Logging-Only, Not Exception Propagation**: `tDie` does not propagate its message string to the exception. `TDieException` constructor receives null. For proper error messages in DLC/ErrorQueue, use `tJava` throwing `new RuntimeException("descriptive message")` instead.
+
+**tRESTClient PATCH Method Silently Converts to POST**: On Karaf Runtime, tRESTClient converts PATCH to POST due to CXF/HttpURLConnection limitation. Each OSGi bundle embeds its own CXF copy — you cannot override it via configuration. Solution: `tJavaFlex` using `java.net.http.HttpClient` (Java 17 built-in), which bypasses CXF entirely.
+
+**tRouteOutput Is a No-Op Standalone**: `tRouteOutput` only generates actual Camel `setHeader()` code when called from a route. Standalone testing gives false confidence. Always test via route invocation.
+
+**DLC URI Must Use Registered Connection Factory**: `activemq:queue:ErrorQueue` creates an anonymous JMS connection without credentials. Talend strips underscores from component IDs in Camel registry (`cMQConnectionFactory_1` → `cMQConnectionFactory1`). Always use the registered name: `cMQConnectionFactory1:queue:ErrorQueue`.
+
+### Code Constraints
+
+**Avoid Java Generics in tJavaFlex**: Talend's code generator misinterprets angle brackets `<>` as annotation syntax. `HttpResponse<String>` causes compilation errors. Use raw types with explicit casts: `HttpResponse resp` then `(String) resp.body()`.
+
+**Component Fields Have Undocumented Expression Contexts**: Different fields in the same component use different expression languages with no visual distinction. tRouteOutput Body supports `{in.header.X}` syntax; Header Name is raw Java requiring quoted strings. Compilation errors are the only way to discover the difference.
+
+### Assessment Considerations
+
+**Static-Only Scores Are Preliminary**: Runtime enrichment changed 4 of 8 dimension scores in a Talend assessment. Expected score swing: ~10%. Operational dimensions (D3 Monitoring, D4 Incident Response, D7 Scheduling, D8 Alerting) are almost always inference without runtime data — flag as low confidence.
+
+**Developer Walkthrough Corrects Assumptions**: 4 architectural assumptions were corrected in a single 30-minute walkthrough. Code and configuration show WHAT was built; only domain owners know WHY. Conduct walkthrough before finalizing any assessment.

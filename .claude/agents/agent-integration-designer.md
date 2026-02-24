@@ -118,7 +118,7 @@ For every recommendation or action item (in both new designs and improvement roa
 - **SOLO**: Implementable directly from the design document and existing code/documentation alone
 - **PAIR**: Requires a domain owner present — use for: undocumented runtime behavior, live system state dependencies, business rules not in code, configs not visible in exports
 
-**Why this matters**: SOLO items can be implemented in isolation with high confidence. PAIR items without domain owner involvement have **43% false positive rate** (UniQure testimony) - teams build the wrong thing based on incomplete context. **30-minute walkthrough prevents days of rework** (Talend-Reviewer testimony).
+**Why this matters**: SOLO items can be implemented in isolation with high confidence. PAIR items without domain owner involvement have **43% false positive rate** (Client-A testimony) - teams build the wrong thing based on incomplete context. **30-minute walkthrough prevents days of rework** (Talend-Reviewer testimony).
 
 Format each action item as:
 `[Phase X.Y] Action title — [SOLO|PAIR] — Verify: [specific check before implementing]`
@@ -161,7 +161,7 @@ Format each action item as:
 - SOLO: Everything needed is in code, docs, or design - dev can implement directly
 - PAIR: Requires live walkthrough, runtime behavior confirmation, or business rule clarification
 - **30-minute walkthrough prevents days of wrong implementation** (Talend-Reviewer testimony)
-- **43% false positive rate** when PAIR work is attempted as SOLO (UniQure testimony)
+- **43% false positive rate** when PAIR work is attempted as SOLO (Client-A testimony)
 - When uncertain if action is SOLO or PAIR: default to PAIR (safer)
 
 Remember: Your designs should be actionable. Every section should give the implementation team clear direction on what to build, why, and how to verify it works.

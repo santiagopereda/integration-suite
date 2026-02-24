@@ -172,7 +172,7 @@ SAP BP agent achieved 58% reduction, but Ansible only reached 45% — a 13% gap 
 | GL.iNet BE3600 | Security | ~550 | Defense-in-depth |
 | Mirobot | Robotics | ~420 | Hardware limitations |
 | Survival | Preparedness | ~1,200 | Equipment vs procedures |
-| UniQure | Enterprise | ~1,900 | Verification-first |
+| Client-A | Enterprise | ~1,900 | Verification-first |
 | Raspberry Pi | IoT | ~300 | Integration patterns |
 
 ### Patterns Discovered

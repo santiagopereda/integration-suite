@@ -87,8 +87,8 @@ When generating new testimony analyses:
 | GL.iNet BE3600 | Router hardening | Defense-in-depth security patterns |
 | Mirobot | Agent optimization | Lazy loading pattern |
 | Survival | Emergency prep | 3-tier budget optimization |
-| UniQure | Enterprise integration | 43% false positive detection rate |
-| Vaxxinova Debug | Talend OSGi debugging | Code-level fix (tJavaFlex) when configuration-level approaches fail in OSGi |
+| Client-A | Enterprise integration | 43% false positive detection rate |
+| Client-B Debug | Talend OSGi debugging | Code-level fix (tJavaFlex) when configuration-level approaches fail in OSGi |
 | Talend-Reviewer | Integration assessment | Static analysis is preliminary — runtime enrichment changed 4 of 8 scores |
 | TMC API MCP Server | MCP server development | Phase gates + security as feature work + 12 API quirks found only in production |
 

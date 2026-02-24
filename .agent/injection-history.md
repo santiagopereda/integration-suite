@@ -259,8 +259,8 @@ Each entry follows this format:
 | glinet-be3600_testimony_2026-01-23.md | Complete | 2026-01-23 |
 | mirobot_testimony_2026-01-23.md | Complete | 2026-01-23 |
 | survival_testimony_2026-01-23.md | Complete | 2026-01-23 |
-| uniqure_testimony_2026-01-23.md | Complete | 2026-01-23 |
-| vaxxinova-debug_testimony_2026-02-12.md | Complete | 2026-02-12 |
+| client-a_testimony_2026-01-23.md | Complete | 2026-01-23 |
+| client-b-debug_testimony_2026-02-12.md | Complete | 2026-02-12 |
 | talend-reviewer_testimony_2026-02-20.md | Complete | 2026-02-20 |
 | raspberrypi_testimony_2026-01-23.md | Complete | 2026-01-23 |
 
@@ -413,7 +413,7 @@ Each entry follows this format:
 - /agent_reflect v1.3.0: Pattern extraction (Steps 9-10) closes testimony→memory loop
 - Compound knowledge base: 7 agent memory files with 62 patterns from 9 projects
 - Three-tier memory model (hot/warm/cold) operational
-- 2 new testimonies (talend-reviewer, vaxxinova-debug) — total now 9
+- 2 new testimonies (talend-reviewer, client-b-debug) — total now 9
 - First real-world integration assessment pipeline validated (Talend-Reviewer)
 
 ---
@@ -454,7 +454,7 @@ Each entry follows this format:
 **Recent Additions** (2026-02-20):
 - Compound knowledge base: 7 agent memory files seeded with 62 patterns from 9 projects
 - /agent_reflect v1.3.0: Pattern extraction + memory writing (Steps 9-10)
-- 2 new testimonies: talend-reviewer, vaxxinova-debug (total: 9)
+- 2 new testimonies: talend-reviewer, client-b-debug (total: 9)
 - Talend-Reviewer deployment record (first integration suite deployment)
 - Memory README rewritten for three-tier architecture (hot/warm/cold)
 
@@ -858,7 +858,7 @@ applications/
 | glinet-be3600_testimony_2026-01-23.md | ~550 | GL.iNet BE3600 |
 | mirobot_testimony_2026-01-23.md | ~420 | Mirobot |
 | survival_testimony_2026-01-23.md | ~1200 | Survival |
-| uniqure_testimony_2026-01-23.md | ~1900 | UniQure Integration |
+| client-a_testimony_2026-01-23.md | ~1900 | Client-A Integration |
 
 **Key Patterns Discovered**:
 - injection-history.md: 100% usage across all projects
@@ -1459,8 +1459,8 @@ Claude Code (native OTel) → OTel Collector → telemetry.jsonl (rich metrics)
 
 **Source Testimonies** (processed integration-first):
 1. talend-reviewer (18 patterns) — richest, exercised all 7 files
-2. vaxxinova-debug (9 patterns) — debugging lessons, anti-patterns
-3. uniqure (10 patterns) — false positive rates, CSRF, KB structure
+2. client-b-debug (9 patterns) — debugging lessons, anti-patterns
+3. client-a (10 patterns) — false positive rates, CSRF, KB structure
 4. agentic (6 patterns) — template externalization, optimization
 5. glinet-be3600 (8 patterns) — security, defense-in-depth, vendor forks
 6. mirobot (2 patterns + 1 merge) — conditional loading, cross-refs
@@ -1481,7 +1481,7 @@ Claude Code (native OTel) → OTel Collector → telemetry.jsonl (rich metrics)
 
 ---
 
-### 2026-02-20 - Testimony: talend-reviewer + vaxxinova-debug
+### 2026-02-20 - Testimony: talend-reviewer + client-b-debug
 - **Added By**: Claude Opus 4.6 via /agent_reflect
 - **Location**: `.agent/testimony/`
 - **Purpose**: New project journey testimonies for two integration projects
@@ -1493,7 +1493,7 @@ Claude Code (native OTel) → OTel Collector → telemetry.jsonl (rich metrics)
 | File | Lines | Project | Key Insights |
 |------|-------|---------|-------------|
 | `talend-reviewer_testimony_2026-02-20.md` | ~348 | Talend-Reviewer | Three-source methodology, pipeline thoroughness, TMC DI-only observability |
-| `vaxxinova-debug_testimony_2026-02-12.md` | ~299 | Vaxxinova-Debug | OSGi bundle isolation, java.net.http fallback, dual-JVM architecture |
+| `client-b-debug_testimony_2026-02-12.md` | ~299 | Client-B-Debug | OSGi bundle isolation, java.net.http fallback, dual-JVM architecture |
 
 **Impact**: Testimony count increased from 6 to 8. These were the richest integration-focused testimonies, contributing 27 of 62 seeded patterns.
 

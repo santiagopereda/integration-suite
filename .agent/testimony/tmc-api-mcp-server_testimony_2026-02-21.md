@@ -341,7 +341,7 @@ The project serves as a reference implementation for rapid, high-quality MCP ser
 
 ### Security Hardening - Iteration 2: Configurable Log Redaction (February 17, 2026)
 
-**Trigger**: RF-TMC-6 from Vaxxinova assessment - `get_execution_logs` returned raw log content containing Azure AD tenant IDs, API endpoints, Bearer tokens, company GUIDs.
+**Trigger**: RF-TMC-6 from Client-B assessment - `get_execution_logs` returned raw log content containing Azure AD tenant IDs, API endpoints, Bearer tokens, company GUIDs.
 
 **Problem**: Layer 1 (`scrub_credentials`) only handles field-level redaction by key name. Log content is free-text requiring regex-based sanitization.
 

@@ -18,7 +18,7 @@ Reasoning heuristics that emerged from working across 9 projects — not what wa
 
 **What it prevents**: Losing days to variations of a fundamentally blocked path.
 
-**Evidence**: Vaxxinova (3 config-level fixes all hit OSGi bundle isolation), GL.iNet (2 UCI approaches hit TUN device boundary), Raspberry Pi (multiple Python attempts hit version incompatibility).
+**Evidence**: Client-B (3 config-level fixes all hit OSGi bundle isolation), GL.iNet (2 UCI approaches hit TUN device boundary), Raspberry Pi (multiple Python attempts hit version incompatibility).
 
 ---
 
@@ -30,7 +30,7 @@ Reasoning heuristics that emerged from working across 9 projects — not what wa
 
 **What it prevents**: Designing integrations that fail in production, implementing fixes for problems that don't exist, finalizing assessments that runtime data would correct.
 
-**Evidence**: UniQure (only 1 of 7 SAP fields worked; docs said all worked), TMC (12 API quirks survived unit tests), Talend-Reviewer (static score off by 10%; 4 of 8 dimensions changed after runtime), UniQure (43% of issues were false positives).
+**Evidence**: Client-A (only 1 of 7 SAP fields worked; docs said all worked), TMC (12 API quirks survived unit tests), Talend-Reviewer (static score off by 10%; 4 of 8 dimensions changed after runtime), Client-A (43% of issues were false positives).
 
 ---
 
@@ -42,7 +42,7 @@ Reasoning heuristics that emerged from working across 9 projects — not what wa
 
 **What it prevents**: Implementing fixes for false positives, over-investing in issues that are documentation gaps rather than real problems.
 
-**Evidence**: UniQure (6 of 14 CRITICAL issues eliminated before implementation; 4 days saved), UniQure CRIT-2 (5-day estimate compressed to 1 day after scoping the real work).
+**Evidence**: Client-A (6 of 14 CRITICAL issues eliminated before implementation; 4 days saved), Client-A CRIT-2 (5-day estimate compressed to 1 day after scoping the real work).
 
 ---
 
@@ -66,7 +66,7 @@ Reasoning heuristics that emerged from working across 9 projects — not what wa
 
 **What it prevents**: Wrong recommendations based on plausible-but-incorrect inferences from code structure.
 
-**Evidence**: Talend-Reviewer (4 architectural assumptions corrected in 30 minutes; all were wrong from static analysis alone), UniQure (intent behind "no bidirectional sync" was documentation gap, not false claim — discoverable only by asking).
+**Evidence**: Talend-Reviewer (4 architectural assumptions corrected in 30 minutes; all were wrong from static analysis alone), Client-A (intent behind "no bidirectional sync" was documentation gap, not false claim — discoverable only by asking).
 
 ---
 

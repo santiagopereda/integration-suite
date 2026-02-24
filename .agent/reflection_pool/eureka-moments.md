@@ -24,7 +24,7 @@ Mental model shifts extracted from 9 project testimonies — moments when unders
 
 **Trigger**: Three failed fix attempts with identical error signatures despite different configurations.
 
-**Projects**: Vaxxinova Debug (2026-02)
+**Projects**: Client-B Debug (2026-02)
 
 ---
 
@@ -84,9 +84,9 @@ Mental model shifts extracted from 9 project testimonies — moments when unders
 
 **Why it generalizes**: Baseline expectation for any new API integration: 8–12 behavioral quirks not in the documentation. Budget for a production-testing phase. Unit tests against mocked responses cannot catch these — only testing against the real API can.
 
-**Trigger**: UniQure: only 1 of 7 documented SAP blocking fields works during creation. TMC: 12 API quirks survived all unit tests.
+**Trigger**: Client-A: only 1 of 7 documented SAP blocking fields works during creation. TMC: 12 API quirks survived all unit tests.
 
-**Projects**: UniQure (2025-11), TMC API MCP Server (2026-02)
+**Projects**: Client-A (2025-11), TMC API MCP Server (2026-02)
 
 ---
 
@@ -98,9 +98,9 @@ Mental model shifts extracted from 9 project testimonies — moments when unders
 
 **Why it generalizes**: Before estimating or beginning any remediation effort, verify that each issue actually exists as described. The verification cost is small; the cost of implementing fixes for non-problems is large. This applies to bug lists, security findings, integration assessment red flags, and any situation where someone else categorized the issues.
 
-**Trigger**: 6 of 14 validated CRITICAL/HIGH issues were false positives in UniQure Phase 0.
+**Trigger**: 6 of 14 validated CRITICAL/HIGH issues were false positives in Client-A Phase 0.
 
-**Projects**: UniQure (2026-01)
+**Projects**: Client-A (2026-01)
 
 ---
 

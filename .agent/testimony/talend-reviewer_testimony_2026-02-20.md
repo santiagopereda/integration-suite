@@ -10,9 +10,9 @@
 
 ## Executive Summary
 
-Talend-Reviewer is the first project deployed from the Agentic hub's Integration Analyst Agent Suite — a 5-agent, 5-command, 19-template framework for evaluating integration maturity. What began on Feb 14, 2026 as a provisioning exercise became, within 6 days, a full-lifecycle integration assessment engagement for a real customer (Vaxxinova) that produced 16 assessment artifacts, built a companion MCP server for live runtime data enrichment, guided a developer through Sprint 0-2 remediations, and drove the overall maturity score from 2.17 to 2.38 with a projection to 3.40 after Sprint 5.
+Talend-Reviewer is the first project deployed from the Agentic hub's Integration Analyst Agent Suite — a 5-agent, 5-command, 19-template framework for evaluating integration maturity. What began on Feb 14, 2026 as a provisioning exercise became, within 6 days, a full-lifecycle integration assessment engagement for a real customer (Client-B) that produced 16 assessment artifacts, built a companion MCP server for live runtime data enrichment, guided a developer through Sprint 0-2 remediations, and drove the overall maturity score from 2.17 to 2.38 with a projection to 3.40 after Sprint 5.
 
-The project validated the Integration Analyst framework under real conditions. Every agent in the suite was exercised — analyzer, assessor, scorer, reviewer, designer, and documentation-specialist — and the framework templates were refined iteratively as gaps emerged. The Vaxxinova engagement also produced 7 improvement deliverables (golden pattern guide, loop prevention docs, credential rotation policy, RACI matrix, ErrorQueue consumer design, operational runbooks, improvement roadmap) that go well beyond scoring to actionable remediation.
+The project validated the Integration Analyst framework under real conditions. Every agent in the suite was exercised — analyzer, assessor, scorer, reviewer, designer, and documentation-specialist — and the framework templates were refined iteratively as gaps emerged. The Client-B engagement also produced 7 improvement deliverables (golden pattern guide, loop prevention docs, credential rotation policy, RACI matrix, ErrorQueue consumer design, operational runbooks, improvement roadmap) that go well beyond scoring to actionable remediation.
 
 The most significant insight: static workspace analysis alone is insufficient for credible scoring. The TMC MCP server enrichment changed 4 of 8 dimension scores and uncovered an active 5-day undetected incident. The project now demonstrates a two-phase methodology — static analysis followed by runtime enrichment — that became the standard workflow documented in CLAUDE.md.
 
@@ -28,13 +28,13 @@ The most significant insight: static workspace analysis alone is insufficient fo
 
 ### Phase 2: First Assessment — Static Analysis (Feb 14)
 - **Duration**: Same day
-- **Objectives**: Full assessment lifecycle on Vaxxinova Talend ESB workspace export
+- **Objectives**: Full assessment lifecycle on Client-B Talend ESB workspace export
 - **Outcomes**: 5 artifacts produced (inventory, assessment, scorecard, review, customer summary). Overall maturity: 2.41/5.0 (later corrected to 2.17). 8 red flags, 3 critical review findings.
-- **Key Decision**: Artifacts stored in `.agent/tasks/VAXXINOVA_TALEND_ESB/` using project `technicalLabel` convention
+- **Key Decision**: Artifacts stored in `.agent/tasks/CLIENT-B_TALEND_ESB/` using project `technicalLabel` convention
 
 ### Phase 3: Parsing Guide Overhaul (Feb 15)
 - **Duration**: 1 day
-- **Objectives**: Address 11 gaps in Talend parsing guide found during Vaxxinova analysis
+- **Objectives**: Address 11 gaps in Talend parsing guide found during Client-B analysis
 - **Outcomes**: Single `talend.md` (199 lines) split into 3 files (894 lines total): core, jobs, routes. Full ESB coverage added.
 - **Key Decision**: Three-file split (DI + ESB separation) rather than monolithic guide
 
@@ -46,7 +46,7 @@ The most significant insight: static workspace analysis alone is insufficient fo
 
 ### Phase 5: TMC-Enriched Assessment (Feb 17)
 - **Duration**: 1 day
-- **Objectives**: Re-assess Vaxxinova with live TMC runtime data (127 executions, 30-day window)
+- **Objectives**: Re-assess Client-B with live TMC runtime data (127 executions, 30-day window)
 - **Outcomes**: 3 enriched artifacts (assessment, scorecard, review). Score corrected 2.41 → 2.17. Active Item_Subscription incident discovered (5-day silent failure). 6 new TMC-specific red flags. Configurable log redaction system built (3-layer architecture).
 - **Key Decision**: Score correction acknowledged publicly — transparency over face-saving
 
@@ -91,21 +91,21 @@ The most significant insight: static workspace analysis alone is insufficient fo
 **Context**: Traditional assessments end at the report. This one guided implementation.
 **Approach**: Produced implementation guides (golden pattern, ErrorQueue consumer design) and tracked fixes in the improvement roadmap
 **Outcome**: Score improved 2.17 → 2.38 in 4 days of Sprint 0-2 work. 11 of 31 backlog items completed.
-**Evidence**: `vaxxinova_improvement_roadmap.md` tracks every item with status, priority, and sprint assignment
+**Evidence**: `client-b_improvement_roadmap.md` tracks every item with status, priority, and sprint assignment
 **Transferable Insight**: Assessment artifacts should be living documents updated as remediations are applied, not static reports
 
 ### 5. Configurable Log Redaction
 **Context**: TMC execution logs contained unredacted Azure AD tenant IDs and API endpoints
 **Approach**: 3-layer architecture — field-level (MCP server built-in), regex engine (MCP server configurable), customer patterns (project-injected via `.mcp.json`)
-**Outcome**: Customer-specific patterns in `.agent/system/log-redaction-patterns/vaxxinova.json`, validated by 384 passing tests
+**Outcome**: Customer-specific patterns in `.agent/system/log-redaction-patterns/client-b.json`, validated by 384 passing tests
 **Evidence**: RF-TMC-6 resolved. Zero credential leakage in subsequent log retrievals.
 **Transferable Insight**: Log redaction must be customer-configurable. A single regex set can't cover all customer environments.
 
 ### 6. Three-File Parsing Guide Split
-**Context**: Original `talend.md` (199 lines) missed ESB structures entirely — 11 gaps found during Vaxxinova analysis
+**Context**: Original `talend.md` (199 lines) missed ESB structures entirely — 11 gaps found during Client-B analysis
 **Approach**: Split into core (shared), jobs (DI), routes (ESB) with cross-referencing
 **Outcome**: 894 lines total covering 40+ components, 14 connection types, joblets, routelets, and ESB call graphs
-**Evidence**: Validated against official Talend docs (help.qlik.com) and Vaxxinova workspace artifacts
+**Evidence**: Validated against official Talend docs (help.qlik.com) and Client-B workspace artifacts
 **Transferable Insight**: Platform-specific parsing guides should be split by artifact type, not monolithic. Each section can be loaded independently.
 
 ---
@@ -117,7 +117,7 @@ The most significant insight: static workspace analysis alone is insufficient fo
 **What Happened**: Manual verification showed the correct weighted average was 2.17/2.18
 **Correction Applied**: Score corrected in enriched scorecard with before/after comparison
 **Lesson Learned**: Always verify weighted calculations manually. Rounding and weight application order matter.
-**Source**: Feb 17 injection-history entry, `vaxxinova_scorecard_enriched.md`
+**Source**: Feb 17 injection-history entry, `client-b_scorecard_enriched.md`
 
 ### 2. Static Analysis Overconfidence
 **Initial Assumption**: Static workspace analysis provides sufficient evidence for scoring
@@ -271,11 +271,11 @@ The most significant insight: static workspace analysis alone is insufficient fo
 ## Recommendations for Future Projects
 
 ### Do This
-1. **Two-phase methodology**: Always follow static analysis with runtime data enrichment. Score changes are significant (4 of 8 dimensions changed for Vaxxinova).
+1. **Two-phase methodology**: Always follow static analysis with runtime data enrichment. Score changes are significant (4 of 8 dimensions changed for Client-B).
 2. **Developer walkthrough**: Schedule a 30-60 minute session with the developer after static analysis. It corrects assumptions and reveals intent.
 3. **Scope to one platform**: Remove references to other platforms (Workato, MuleSoft, etc.) from agents and templates when the engagement is platform-specific. This prevents confusion.
 4. **Track remediations in the assessment**: Use the improvement roadmap to track fixes. Update assessment artifacts as remediations are applied to show measurable progress.
-5. **Build customer-specific log redaction patterns**: Create a `vaxxinova.json`-style pattern file for each customer before collecting TMC logs.
+5. **Build customer-specific log redaction patterns**: Create a `client-b.json`-style pattern file for each customer before collecting TMC logs.
 
 ### Avoid This
 1. **Don't trust artifact counts from raw exports**: Filter recycle bin contents before counting. Talend exports include deleted items.
@@ -299,7 +299,7 @@ The most significant insight: static workspace analysis alone is insufficient fo
 | `.agent/injection-history.md` | 1,923 | 28 entries spanning Feb 14-20. Full chronological record of all work. |
 | `.agent/README.md` | 57 | Project structure and artifact index. |
 | `.agent/INSTRUCTIONS.md` | ~150 | Usage guide for agents and commands. |
-| `.agent/tasks/VAXXINOVA_TALEND_ESB/` (16 files) | 9,537 | Complete assessment artifacts, improvement deliverables, and designs. |
+| `.agent/tasks/CLIENT-B_TALEND_ESB/` (16 files) | 9,537 | Complete assessment artifacts, improvement deliverables, and designs. |
 | `.agent/system/log-redaction-patterns/` (3 files) | ~80 | Customer-specific log sanitization patterns. |
 | `.agent/templates/integration/` (21 files) | ~6,000 | Evaluation framework templates (19 original + 2 added). |
 | `.claude/rules/` (4 files) | 70 | Project boundary, Talend scope, anonymization, commit style. |
@@ -326,7 +326,7 @@ The most significant insight: static workspace analysis alone is insufficient fo
 ### Most Significant Entries (Chronological)
 
 1. **Feb 14 - Project Init**: 8 agents, 7 commands, 19 templates provisioned from hub
-2. **Feb 14 - Vaxxinova Full Lifecycle**: First end-to-end assessment. 5 artifacts. Score 2.41 (later corrected).
+2. **Feb 14 - Client-B Full Lifecycle**: First end-to-end assessment. 5 artifacts. Score 2.41 (later corrected).
 3. **Feb 15 - Parsing Guide Overhaul**: 199 → 894 lines across 3 files. 11 gaps addressed.
 4. **Feb 15 - TMC MCP Server Spec**: 3,225-line build specification. 36 tools across 7 categories.
 5. **Feb 17 - TMC-Enriched Assessment**: Score corrected 2.41 → 2.17. Active incident discovered.

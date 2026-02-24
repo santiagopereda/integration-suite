@@ -1,7 +1,7 @@
 # Agent Memory: documentation-specialist
 
 **Last Updated**: 2026-02-21
-**Patterns From**: 8 projects (Talend-Reviewer, UniQure, Agentic, GLInet-BE3600, Mirobot, RaspberryPi, CV-Generator-Agent, TMC-API)
+**Patterns From**: 8 projects (Talend-Reviewer, Client-A, Agentic, GLInet-BE3600, Mirobot, RaspberryPi, CV-Generator-Agent, TMC-API)
 **Total Patterns**: 12
 
 ---
@@ -16,19 +16,19 @@
 
 ### DOC-002: FAQ Sections Proactively Address Common Confusion
 - **Pattern**: 13 FAQ questions created for Veeva-Entra unidirectional architecture reduced support burden. Questions focused on "why" (rationale) rather than "what" (facts), addressing confusion before it occurred.
-- **Source**: UniQure (2026-01-23)
+- **Source**: Client-A (2026-01-23)
 - **Action**: Add FAQ sections to major workflow and architecture documentation. Focus on "why" questions that address common confusion about design decisions.
 - **Tags**: integration, documentation
 
 ### DOC-003: Naming Convention Explanations Reduce Confusion
 - **Pattern**: "Veeva-Entra" naming implied Veeva is source, but Entra is actually source. A dedicated naming convention document explaining organizational vs. technical naming resolved repeated confusion.
-- **Source**: UniQure (2026-01-23)
+- **Source**: Client-A (2026-01-23)
 - **Action**: Document naming conventions with rationale at project start. When names don't align with technical data flow, create a dedicated explanation document.
 - **Tags**: integration, documentation
 
 ### DOC-004: Recipes Are Source of Truth, Not Resource Files
 - **Pattern**: Veeva-Entra VQL resource files were outdated (missing fields) compared to actual Workato recipes. Resource files serve as reference, but actual implementations are authoritative.
-- **Source**: UniQure (2026-01-23)
+- **Source**: Client-A (2026-01-23)
 - **Action**: When verifying integrations, always verify against actual platform recipes/implementations, not resource files. Treat resource files as reference documentation only.
 - **Tags**: workato, documentation
 
@@ -71,7 +71,7 @@
 ## Deliverable Patterns
 
 ### DLV-001: Produce Improvement Roadmap Even for Quick Assessments
-- **Pattern**: Even a quick assessment benefits from a prioritized action list. The Vaxxinova roadmap (31 items across 6 sprints with P0-P4 categories) became the primary engagement driver beyond the initial scoring.
+- **Pattern**: Even a quick assessment benefits from a prioritized action list. The Client-B roadmap (31 items across 6 sprints with P0-P4 categories) became the primary engagement driver beyond the initial scoring.
 - **Source**: Talend-Reviewer (2026-02-20)
 - **Action**: Always produce an improvement roadmap with priority levels and sprint/phase assignments, even for short engagements. The roadmap often becomes more valuable than the score.
 - **Tags**: integration, deliverables

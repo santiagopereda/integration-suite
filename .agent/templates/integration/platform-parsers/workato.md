@@ -122,3 +122,25 @@ Grep: "webhook"
 4. Find entry points: recipes NOT in any called list
 5. Find terminals: recipes that don't call other recipes
 6. Trace path from entry to terminal for complete journey
+
+## Known Pitfalls and Platform-Specific Findings
+
+Lessons from production Workato integration projects. Check these during assessment and review.
+
+### Security and Authentication
+
+**CSRF Token Requires Two-Action Pattern**: SAP OData write operations require CSRF tokens tied to session cookies. Workato SDK doesn't preserve cookies between HTTP requests within a single execute block. Single-action pattern (fetch token + API call) consistently fails. Use a two-action pattern: Action 1 fetches token + cookies, Action 2 receives both as inputs.
+
+**Platform Security Features Are Often Sufficient**: Workato provides AES-256 encryption and `concurrency=1` settings that already address many common security concerns. Verify platform capabilities before flagging issues — expect 30-50% false positive rate when assessing iPaaS security from documentation alone.
+
+### API Integration
+
+**API Documentation Overstates What Works**: In SAP OData integration via Workato, only 1 of 7 fields documented as "required during creation" actually blocked creation. Critical API behaviors must be tested against production, not assumed from documentation.
+
+**Self-Terminating Pagination**: Workato recipes may use API pagination patterns that appear to lack termination conditions. Check whether the API itself returns empty results or a termination signal — the recipe may be correctly relying on API behavior rather than implementing its own stop condition.
+
+### Assessment Considerations
+
+**High False Positive Rate in Static Analysis**: 43% of issues identified in a Workato assessment Phase 0 validation (6/14) were false positives. Platform security features (AES-256, concurrency controls) and API design (self-terminating pagination) already handled flagged concerns. Always verify findings against actual platform capabilities before recommending fixes.
+
+**Recipes Are Source of Truth, Not Resource Files**: VQL/resource files can drift from actual recipe implementations. When conflicting information exists, always verify against the actual recipe JSON exports.

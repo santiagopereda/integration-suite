@@ -7,7 +7,7 @@
 
 ## Actual Usage Matrix
 
-| Directory | Agentic | CV Gen | GL.iNet | Mirobot | Survival | UniQure | Usage Rate |
+| Directory | Agentic | CV Gen | GL.iNet | Mirobot | Survival | Client-A | Usage Rate |
 |-----------|---------|--------|---------|---------|----------|---------|------------|
 | **injection-history.md** | Used | Used | Used | Used | Used | Used | **100%** |
 | **sops/** | Template | Template | 2 SOPs | Template | Template | 9 SOPs | 33% |
@@ -26,7 +26,7 @@
 - `injection-history.md` - Every project uses this effectively as audit trail
 
 ### Conditionally Used (33-50%)
-- `sops/` - Only populated when procedures are needed (UniQure: integration, GL.iNet: security)
+- `sops/` - Only populated when procedures are needed (Client-A: integration, GL.iNet: security)
 - `system/` - Used for project-specific schemas, APIs, context
 
 ### Rarely Used (17%)
@@ -78,7 +78,7 @@ The design assumes you know what you're building before you build it. In practic
 
 **2. SOPs Are Valuable Only When Procedures Repeat**
 
-Projects that used `sops/` (UniQure, GL.iNet) had genuinely repeatable procedures:
+Projects that used `sops/` (Client-A, GL.iNet) had genuinely repeatable procedures:
 - Integration workflows that run daily
 - Security configurations that must be exact
 
@@ -117,7 +117,7 @@ The successful pattern is **document what you do**, not **document before you do
 | "SOPs improve quality" | Only if procedures actually repeat |
 | "Structure helps new agents" | Empty structure misleads new agents |
 
-**What Actually Works**: The projects that needed structure used it naturally. UniQure created 9 SOPs because integration procedures genuinely needed documentation - not because a template told them to.
+**What Actually Works**: The projects that needed structure used it naturally. Client-A created 9 SOPs because integration procedures genuinely needed documentation - not because a template told them to.
 
 ### Alternative Approaches
 
@@ -161,9 +161,9 @@ Multiple projects show this pattern:
 
 ## Usage Patterns by Project Type
 
-### Integration Projects (UniQure, GL.iNet)
+### Integration Projects (Client-A, GL.iNet)
 **Actually Used**:
-- `sops/` - 9 SOPs (UniQure), 2 SOPs (GL.iNet)
+- `sops/` - 9 SOPs (Client-A), 2 SOPs (GL.iNet)
 - `system/` - Schemas, APIs, workflows
 
 **Could Add**:

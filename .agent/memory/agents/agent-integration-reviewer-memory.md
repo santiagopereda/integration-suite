@@ -1,7 +1,7 @@
 # Agent Memory: agent-integration-reviewer
 
 **Last Updated**: 2026-02-20
-**Patterns From**: 5 projects (Talend-Reviewer, Vaxxinova-Debug, UniQure, GLInet-BE3600, RaspberryPi)
+**Patterns From**: 5 projects (Talend-Reviewer, Client-B-Debug, Client-A, GLInet-BE3600, RaspberryPi)
 **Total Patterns**: 13
 
 ---
@@ -16,7 +16,7 @@
 
 ### SEC-002: CSRF Token Requires Two-Action Pattern for Session Cookie Preservation
 - **Pattern**: SAP OData write operations require CSRF tokens tied to session cookies. Workato SDK doesn't preserve cookies between HTTP requests within a single execute block. Single-action pattern consistently failed; two-action pattern succeeded.
-- **Source**: UniQure (2026-01-23)
+- **Source**: Client-A (2026-01-23)
 - **Action**: For CSRF-protected APIs on iPaaS platforms (Workato), always use a two-action pattern: Action 1 fetches token + cookies, Action 2 receives both as inputs. Never attempt single-action CSRF token fetch + API call.
 - **Tags**: sap, security
 
@@ -44,7 +44,7 @@
 
 ### DRV-002: Test Talend Components from Route Context Not Standalone
 - **Pattern**: tRouteOutput is a no-op when a job runs standalone — it only generates actual Camel `setHeader()` code when called from a route. Standalone testing gives false confidence.
-- **Source**: Vaxxinova-Debug (2026-02-12)
+- **Source**: Client-B-Debug (2026-02-12)
 - **Action**: When testing Talend components that interact with Camel routes (tRouteOutput, tRouteInput), always test via route invocation, never standalone. Standalone produces false positives.
 - **Tags**: talend, design-review
 
@@ -66,19 +66,19 @@
 
 ### APT-002: OSGi Bundle Isolation Prevents Configuration-Based Fixes
 - **Pattern**: Talend jobs embed their own dependencies (CXF, etc.) in OSGi bundles. JVM arguments, system properties, and Karaf-level bundle changes do NOT reach embedded libraries. Only code-level changes work.
-- **Source**: Vaxxinova-Debug (2026-02-12)
+- **Source**: Client-B-Debug (2026-02-12)
 - **Action**: In Karaf/OSGi environments, never attempt configuration-based fixes for embedded library behavior. Go directly to code-level solutions using JDK built-ins (e.g., tJavaFlex with java.net.http).
 - **Tags**: talend, anti-patterns
 
 ### APT-003: Avoid Java Generics in tJavaFlex
 - **Pattern**: Talend's code generator misinterprets angle brackets `<>` as annotation syntax. Using `HttpResponse<String>` causes compilation errors in tJavaFlex components.
-- **Source**: Vaxxinova-Debug (2026-02-12)
+- **Source**: Client-B-Debug (2026-02-12)
 - **Action**: Always use raw types with explicit casts in tJavaFlex code (e.g., `HttpResponse resp` then `(String) resp.body()`). Never use parameterized types.
 - **Tags**: talend, anti-patterns
 
 ### APT-004: Talend Component Fields Have Undocumented Expression Contexts
 - **Pattern**: Different fields in the same Talend component use different expression languages with no visual distinction. tRouteOutput Body supports `{in.header.X}` syntax; Header Name is raw Java requiring quoted strings.
-- **Source**: Vaxxinova-Debug (2026-02-12)
+- **Source**: Client-B-Debug (2026-02-12)
 - **Action**: When debugging Talend component compilation errors, check expression context per field. Test Body, Header, and other fields separately. Compilation errors are the only way to discover the difference.
 - **Tags**: talend, anti-patterns
 

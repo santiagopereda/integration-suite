@@ -113,7 +113,7 @@ People document what they did. They resist documenting what they might do.
 
 ### The Story
 
-During the UniQure project, we identified 7 potential issues with SAP API integration. Before implementing fixes:
+During the Client-A project, we identified 7 potential issues with SAP API integration. Before implementing fixes:
 - We verified each issue against the actual production API
 - Result: Only 4 of 7 were real issues
 - **43% were false positives** (3 out of 7)
@@ -257,7 +257,7 @@ From [key-insights.md](/.agent/reflection_pool/key-insights.md):
 > **"Travel routers are clients, not servers."** — GL.iNet BE3600
 
 ### On Validation
-> **"Recipes/implementations are source of truth; resource files are reference."** — UniQure
+> **"Recipes/implementations are source of truth; resource files are reference."** — Client-A
 
 ### On Completeness
 > **"Equipment without operational procedures = limited readiness."** — Survival

@@ -17,7 +17,7 @@ Quotable lessons extracted from 9 project journeys. Use for quick reference when
 > *Recording the debugging path creates reusable knowledge.*
 
 > **"43% false positive rate validates verification-first approach."**
-> — UniQure
+> — Client-A
 >
 > *Always verify issues before implementing fixes. Prevented ~4 days unnecessary work.*
 
@@ -70,7 +70,7 @@ Quotable lessons extracted from 9 project journeys. Use for quick reference when
 > *4 independent security layers for SSH. Multiple mechanisms = resilience.*
 
 > **"In OSGi environments, code-level fixes using JDK built-ins are more reliable than configuration."**
-> — Vaxxinova Debug
+> — Client-B Debug
 >
 > *Bundle isolation means each component embeds its own CXF — you can't override it. Drop to java.net.http.HttpClient.*
 
@@ -89,12 +89,12 @@ Quotable lessons extracted from 9 project journeys. Use for quick reference when
 ## On Documentation
 
 > **"False positives are documentation opportunities."**
-> — UniQure
+> — Client-A
 >
 > *CRIT-2 "no bidirectional sync" wasn't wrong - it was a documentation gap. Added FAQ sections, naming convention notes.*
 
 > **"Recipes/implementations are source of truth; resource files are reference."**
-> — UniQure
+> — Client-A
 >
 > *VQL files drifted from actual recipes. Always verify against actual implementations.*
 
@@ -113,7 +113,7 @@ Quotable lessons extracted from 9 project journeys. Use for quick reference when
 ## On Validation & Testing
 
 > **"Always test against actual production APIs; don't trust documentation alone."**
-> — UniQure
+> — Client-A
 >
 > *Only 1 of 7 SAP blocking fields works during creation (contrary to documentation).*
 
@@ -292,4 +292,4 @@ Should I optimize this agent?
 ---
 
 **Extracted From**: 11 project testimonies + Agent Optimization Campaign (last updated 2026-02-22)
-**Projects**: Agentic (×3), CV Generator, GL.iNet, Mirobot, Survival, UniQure + Vaxxinova Debug, Talend-Reviewer, TMC API MCP Server, Agent Optimization Campaign (Tier 1+2)
+**Projects**: Agentic (×3), CV Generator, GL.iNet, Mirobot, Survival, Client-A + Client-B Debug, Talend-Reviewer, TMC API MCP Server, Agent Optimization Campaign (Tier 1+2)

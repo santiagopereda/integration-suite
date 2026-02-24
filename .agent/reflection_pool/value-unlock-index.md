@@ -34,7 +34,7 @@ Single interventions that produced disproportionate outcomes, extracted from 9 p
 ### HTTP PATCH silently becoming POST in Talend
 **Intervention**: Replace `tRESTClient` with `tJavaFlex` using `java.net.http.HttpClient` (Java 17 JDK built-in). Bypasses the bundle-embedded CXF entirely — OSGi isolation means config-level fixes cannot reach it.
 **Outcome**: PATCH sent correctly to Business Central. 8 days of failed alternative approaches unblocked.
-**Project**: Vaxxinova Debug (2026-02)
+**Project**: Client-B Debug (2026-02)
 
 ---
 
@@ -48,7 +48,7 @@ Single interventions that produced disproportionate outcomes, extracted from 9 p
 ### SAP OData write operations failing with CSRF token errors
 **Intervention**: Split single-action into two: Action 1 fetches CSRF token + captures `Set-Cookie` header as JSON array. Action 2 receives token + cookies as inputs and sends `Cookie` header.
 **Outcome**: All SAP write operations validated against production. 380-line reusable SDK connector created.
-**Project**: UniQure (2025-12)
+**Project**: Client-A (2025-12)
 
 ---
 
@@ -57,21 +57,21 @@ Single interventions that produced disproportionate outcomes, extracted from 9 p
 ### Issues identified, fixes planned
 **Intervention**: Verify each issue against actual code/behavior before writing a single line of fix. Use recipe exports, screenshots, platform feature documentation.
 **Outcome**: 43% of planned fixes were false positives (6 of 14). ~4 days of unnecessary work prevented.
-**Project**: UniQure (2026-01)
+**Project**: Client-A (2026-01)
 
 ---
 
 ### Effort estimate feels large before you've looked closely
 **Intervention**: Audit the actual scope first — read the real artifacts, not the issue title. CRIT-2 "No Bidirectional Sync" sounded like a major fix; audit revealed it was a documentation gap.
 **Outcome**: Estimated 5 days → completed in 1 day (80% reduction). Same outcome: clarity achieved.
-**Project**: UniQure (2026-01)
+**Project**: Client-A (2026-01)
 
 ---
 
 ### API integration designed from documentation alone
 **Intervention**: Test every field/behavior against actual production API before finalizing design. Build a field availability matrix with real error messages.
 **Outcome**: Discovered only 1 of 7 documented SAP blocking fields works during entity creation. Prevented a design that would have failed in production.
-**Project**: UniQure (2025-11)
+**Project**: Client-A (2025-11)
 
 ---
 
@@ -110,7 +110,7 @@ Single interventions that produced disproportionate outcomes, extracted from 9 p
 ### Starting to debug a complex multi-component system
 **Intervention**: Export the full architecture/config before debugging. Understanding component boundaries (e.g., Runtime vs. Remote Engine dual-JVM) determines which debug paths are even possible.
 **Outcome**: Architecture export revealed OSGi bundle isolation, eliminating 3 of 4 planned debug paths before trying them.
-**Project**: Vaxxinova Debug (2026-02)
+**Project**: Client-B Debug (2026-02)
 
 ---
 
@@ -126,14 +126,14 @@ Single interventions that produced disproportionate outcomes, extracted from 9 p
 ### Long issue list, unclear where to start
 **Intervention**: Verify all issues before triaging by severity. False positives are common (43% observed). Severity labels on unverified issues waste prioritization effort.
 **Outcome**: Eliminated 6 of 14 CRITICAL/HIGH issues as false positives before any implementation began.
-**Project**: UniQure (2026-01)
+**Project**: Client-A (2026-01)
 
 ---
 
 ### Documentation spread across many files with duplication
 **Intervention**: Identify all files covering the same topic, consolidate into one SOP with clear procedures, delete the rest.
 **Outcome**: RESOURCE_INDEX guidance: 3 files (~900 lines) → 1 SOP (175 lines), 80% reduction. 13 duplicate files eliminated across the project.
-**Project**: UniQure (2025-11)
+**Project**: Client-A (2025-11)
 
 ---
 
@@ -169,8 +169,8 @@ Single interventions that produced disproportionate outcomes, extracted from 9 p
 
 ### One framework blocking a required operation
 **Intervention**: Identify the boundary the framework cannot cross (OSGi bundle, CXF classloader, Python version). Go below it using JDK primitives or explicit version pinning.
-**Outcome**: Applied in Vaxxinova (CXF → HttpClient) and Raspberry Pi (system Python → pyenv). Both unblocked immediately.
-**Projects**: Vaxxinova Debug, Raspberry Pi (2026-02, 2025-11)
+**Outcome**: Applied in Client-B (CXF → HttpClient) and Raspberry Pi (system Python → pyenv). Both unblocked immediately.
+**Projects**: Client-B Debug, Raspberry Pi (2026-02, 2025-11)
 
 ---
 
@@ -188,10 +188,10 @@ Four patterns appear across multiple situations and domains. These are the struc
 ### M1: Verify Before You Implement
 
 The same intervention type prevented wasted work across four projects in four different domains:
-- UniQure: 43% of issues were false positives
+- Client-A: 43% of issues were false positives
 - Talend-Reviewer: 4 architectural assumptions were wrong
-- UniQure (CRIT-2): effort estimate was 5× too high
-- UniQure (API fields): documentation was wrong about which fields worked
+- Client-A (CRIT-2): effort estimate was 5× too high
+- Client-A (API fields): documentation was wrong about which fields worked
 
 **Signal that you need this**: You have a list of things to fix, or a plan to implement, but haven't tested the assumptions yet.
 
@@ -212,7 +212,7 @@ One conceptual pivot restructured the entire project:
 
 Across three projects, configuration-level fixes failed due to runtime isolation:
 - GL.iNet: UCI interface binding blocked by Tailscale TUN → moved to firewall zones
-- Vaxxinova: tRESTClient blocked by OSGi CXF → moved to java.net.http.HttpClient
+- Client-B: tRESTClient blocked by OSGi CXF → moved to java.net.http.HttpClient
 - Raspberry Pi: system Python blocked by version constraints → moved to pyenv
 
 **Signal that you need this**: You've tried 2–3 configuration approaches and all fail with the same class of error.
@@ -222,8 +222,8 @@ Across three projects, configuration-level fixes failed due to runtime isolation
 ### M4: Audit Actual Scope Before Estimating Effort
 
 Two cases where auditing before estimating changed the trajectory:
-- UniQure CRIT-2: reading the actual artifacts first revealed 80% less work than estimated
-- UniQure false positives: verifying against code first eliminated 43% of the issue list
+- Client-A CRIT-2: reading the actual artifacts first revealed 80% less work than estimated
+- Client-A false positives: verifying against code first eliminated 43% of the issue list
 
 **Signal that you need this**: Your effort estimate came from reading issue titles or summaries, not the actual artifacts.
 

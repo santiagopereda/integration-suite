@@ -1,7 +1,7 @@
-# Project Journey Testimony: Vaxxinova Talend ESB Debug
+# Project Journey Testimony: Client-B Talend ESB Debug
 
 **Generated**: 2026-02-12 15:18:18
-**Project Path**: /home/askeox/IntoData/Vaxxinova/Debug
+**Project Path**: /home/askeox/IntoData/Client-B/Debug
 **Command Version**: 1.2.0
 **Knowledge Base Version**: 7 entries (2026-02-04 to 2026-02-11)
 **Total Documentation Entries**: 7
@@ -10,7 +10,7 @@
 
 ## Executive Summary
 
-This testimony documents the debugging journey for the Vaxxinova Talend ESB integration project over an 8-day period (2026-02-04 to 2026-02-12). The project focuses on resolving critical issues in OnRamp/OffRamp data flows between Salesforce, Business Central (Dynamics 365), and BigQuery using Talend ESB 8.0.1 on Apache Karaf.
+This testimony documents the debugging journey for the Client-B Talend ESB integration project over an 8-day period (2026-02-04 to 2026-02-12). The project focuses on resolving critical issues in OnRamp/OffRamp data flows between Salesforce, Business Central (Dynamics 365), and BigQuery using Talend ESB 8.0.1 on Apache Karaf.
 
 The primary achievement was resolving TPRUN-7387 — an HTTP PATCH method 405 error on the Account OffRamp to Business Central. After systematically testing and documenting 5 failed approaches (JVM args, method tunneling, CXF transport swaps), the team implemented a successful fix using tJavaFlex with Java 17's built-in `java.net.http.HttpClient`, which supports PATCH natively without CXF or OSGi constraints.
 

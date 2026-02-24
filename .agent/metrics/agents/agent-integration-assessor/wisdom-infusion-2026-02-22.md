@@ -22,13 +22,13 @@
 
 | Lesson | Source | Injected | Location |
 |--------|--------|----------|----------|
-| **43% false positive rate** | UniQure | ✅ YES | Critical Constraints (Verification-First) |
-| **Only 1 of 7 SAP fields worked** | UniQure | ✅ YES | Best Practices (API Reliability) |
+| **43% false positive rate** | Client-A | ✅ YES | Critical Constraints (Verification-First) |
+| **Only 1 of 7 SAP fields worked** | Client-A | ✅ YES | Best Practices (API Reliability) |
 | **12 API quirks not in docs** | TMC | ✅ YES | Critical Constraints + Best Practices |
 | **Runtime changes 10% of scores** | Talend-Reviewer | ✅ YES | Critical Constraints + Best Practices |
 | **4 of 8 dimensions changed after runtime** | Talend-Reviewer | ✅ YES | Best Practices (Static vs Runtime) |
 | **30-min walkthrough corrects 4 assumptions** | Talend-Reviewer | ✅ YES | Critical Constraints (Ask WHY) + Best Practices |
-| **Always test against production APIs** | UniQure | ✅ YES | Best Practices (API Reliability) |
+| **Always test against production APIs** | Client-A | ✅ YES | Best Practices (API Reliability) |
 
 ---
 
@@ -39,13 +39,13 @@
 **Added 3 new subsections**:
 
 **Verification-First Approach (T3)**:
-- 43% false positive rate from UniQure testimony
+- 43% false positive rate from Client-A testimony
 - Expect 8-12 API quirks not in docs (TMC)
 - Flag static-only assessments as "Preliminary"
 - Note expected 10% score adjustment when runtime added
 
 **Indirect Evidence Bias Awareness (T2)**:
-- API docs overstate (UniQure: 1 of 7 SAP fields)
+- API docs overstate (Client-A: 1 of 7 SAP fields)
 - Static analysis misses runtime behavior
 - Stakeholder interviews miss implementation details
 - Apply skepticism to all indirect sources
@@ -60,7 +60,7 @@
 **New section** between Communication Style and Workflow Example:
 
 **Integration Assessment Best Practices (From Project Testimonies)**:
-- API Documentation Reliability (UniQure, TMC lessons)
+- API Documentation Reliability (Client-A, TMC lessons)
 - Static vs Runtime Analysis (Talend-Reviewer lessons)
 - Domain Owner Consultation Value (Talend-Reviewer 30-min walkthrough)
 
@@ -187,7 +187,7 @@ To:
 **Status**: ✅ **WISDOM INFUSION COMPLETE**
 
 agent-integration-assessor now embodies:
-- 43% false positive awareness from UniQure
+- 43% false positive awareness from Client-A
 - 10% score swing awareness from Talend-Reviewer
 - 12 API quirks expectation from TMC
 - 30-minute walkthrough value from Talend-Reviewer

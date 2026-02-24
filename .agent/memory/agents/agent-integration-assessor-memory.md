@@ -1,7 +1,7 @@
 # Agent Memory: agent-integration-assessor
 
 **Last Updated**: 2026-02-20
-**Patterns From**: 2 projects (Talend-Reviewer, UniQure)
+**Patterns From**: 2 projects (Talend-Reviewer, Client-A)
 **Total Patterns**: 4
 
 ---
@@ -16,7 +16,7 @@
 
 ### ASM-002: Verify Issues Before Implementing — High False Positive Rate
 - **Pattern**: 43% of validated issues (6/14) in Phase 0 validation were false positives. Platform security features (Workato AES-256, concurrency=1) and API design (self-terminating pagination) already handled flagged concerns.
-- **Source**: UniQure (2026-01-23)
+- **Source**: Client-A (2026-01-23)
 - **Action**: Always verify identified issues against actual platform capabilities before recommending fixes. Research platform security features first. Expect 30-50% false positive rate in static analysis findings.
 - **Tags**: workato, assessment-methodology
 

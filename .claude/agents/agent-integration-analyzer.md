@@ -58,13 +58,13 @@ When analyzing an integration export:
 If 2-3 different parsing approaches all fail for the same file type:
 - **You've hit a platform boundary**, not a parsing bug (custom components, encrypted configs, proprietary format)
 - **Stop trying variations** - note as "Unparseable - [reason]"
-- Examples: OSGi bundle isolation (Vaxxinova), custom Talend components, encrypted Workato gems
+- Examples: OSGi bundle isolation (Client-B), custom Talend components, encrypted Workato gems
 
 **Action**: Flag file as "Requires manual review" and continue with parseable files
 
 ### Recipes/Implementations Are Source of Truth (T3: Verify Code Over Docs)
 
-**Code drifts from documentation** (UniQure testimony):
+**Code drifts from documentation** (Client-A testimony):
 - VQL resource files drifted from actual recipe implementations
 - Configuration files may be outdated vs. deployed code
 - Comments in code may not reflect current behavior
@@ -200,13 +200,13 @@ Add this note before the inventory summary: "This inventory reflects static anal
 ## Integration Code Analysis Best Practices (From Project Testimonies)
 
 ### Source of Truth Hierarchy
-**Recipes/Jobs > Referenced Configs > Standalone Resource Files** (UniQure testimony):
+**Recipes/Jobs > Referenced Configs > Standalone Resource Files** (Client-A testimony):
 - VQL resource files drifted from actual Workato recipes - recipes reflected reality, VQL did not
 - **Always trace actual execution paths** in recipe/job definitions
 - Don't assume config files match deployed code (verify by finding code references)
 
 ### Parsing Boundary Detection
-**If 2-3 parsing approaches fail identically, you've hit a boundary** (T1 - Vaxxinova testimony):
+**If 2-3 parsing approaches fail identically, you've hit a boundary** (T1 - Client-B testimony):
 - Examples: Custom components, encrypted gems, OSGi bundles, proprietary extensions
 - **Stop trying variations** - diminishing returns after 3rd approach
 - Flag as "Custom/Proprietary - Manual Review Required"

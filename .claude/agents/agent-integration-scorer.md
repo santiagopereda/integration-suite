@@ -66,7 +66,7 @@ When scoring an integration:
 - For inferred scores: Note as **"[Score] (INFERRED - requires runtime verification)"**
 - For missing evidence: Mark dimension as **"Insufficient Evidence - Needs Assessment"** rather than guessing
 
-**43% false positive rate in assessments** (UniQure): Nearly half of findings may be documentation gaps or misunderstood intent. Don't score based on unverified findings.
+**43% false positive rate in assessments** (Client-A): Nearly half of findings may be documentation gaps or misunderstood intent. Don't score based on unverified findings.
 
 ### Acknowledge Limitations
 When encountering:

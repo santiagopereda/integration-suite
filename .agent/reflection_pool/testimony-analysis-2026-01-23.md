@@ -16,7 +16,7 @@
 | GL.iNet BE3600 | Router hardening | 3 days | 4-layer defense-in-depth, 7 configs complete |
 | Mirobot | Agent optimization | Nov 2025 | Template externalization, lazy loading |
 | Survival | Emergency prep | 3 days | 3-stage food model, EUR 5,995 procurement roadmap |
-| UniQure | Enterprise integration | 2 months | 43% false positive detection, 9 validated SOPs |
+| Client-A | Enterprise integration | 2 months | 43% false positive detection, 9 validated SOPs |
 | **raspberrypi** | **Ansible automation** | **12 days** | **5 SOPs (3,619 lines), 65% prompt reduction, 5 GitHub repos** |
 
 ---
@@ -43,7 +43,7 @@
 **Reinforcement Strength**: HIGH (3 projects, consistent 51-65% range)
 
 ### 3. Verification Before Implementation
-**Evidence**: UniQure Phase 0 found 43% false positive rate (6/14 issues)
+**Evidence**: Client-A Phase 0 found 43% false positive rate (6/14 issues)
 - Prevented ~4 days unnecessary work
 - CRIT-5 Race Condition: FALSE (Workato concurrency=1)
 - CRIT-4 Password Storage: FALSE (Workato AES-256 auto-encrypts)
@@ -53,14 +53,14 @@
 **Evidence**:
 - CV Generator: Front-loaded career narrative paid off immediately
 - GL.iNet: "Documentation during troubleshooting captures the 'why'"
-- UniQure: "Document as you code" prevented drift
+- Client-A: "Document as you code" prevented drift
 **Pattern**: Update docs immediately after implementation
 
 ### 5. Phased/Staged Approaches
 **Evidence**:
 - Survival: 3-stage food model (frozen → basement → cycling)
 - Agentic: Phase 1 (externalization) → Phase 2 (alignment)
-- UniQure: Validation phases with prioritization
+- Client-A: Validation phases with prioritization
 **Pattern**: Break complex work into distinct phases with clear objectives
 
 ### 6. Budget/Option Tiers (3-tier system)
@@ -71,7 +71,7 @@
 
 ### 7. Production Testing Reveals Documentation Gaps
 **Evidence**:
-- UniQure: Only 1 of 7 SAP blocking fields works during creation (contrary to docs)
+- Client-A: Only 1 of 7 SAP blocking fields works during creation (contrary to docs)
 - GL.iNet: UCI interface binding doesn't work with Tailscale TUN devices
 **Pattern**: Always test against actual production APIs; don't trust documentation alone
 
@@ -85,7 +85,7 @@
 
 ### 9. SOP Creation Immediately After Task Completion
 **Evidence**:
-- UniQure created 9 production-validated SOPs
+- Client-A created 9 production-validated SOPs
 - **raspberrypi created 5 comprehensive SOPs (3,619 lines total)**:
   - ansible-playbook-vagrant-testing.md (858 lines, 16 validation items)
   - ansible-user-variable-configuration.md (797 lines, 15 validation items)
@@ -97,7 +97,7 @@
 **Reinforcement Strength**: VERY HIGH (14 SOPs with validation checklists)
 
 ### 10. FAQ Sections Prevent Support Burden
-**Evidence**: UniQure created 13 FAQ questions for unidirectional architecture
+**Evidence**: Client-A created 13 FAQ questions for unidirectional architecture
 **Pattern**: Document rationale (WHY), not just facts (WHAT)
 
 ### 11. Parallel Documentation Systems (NEW from raspberrypi)
@@ -145,7 +145,7 @@
 **Lesson**: Validate journey feasibility BEFORE equipment procurement
 
 ### 3. Resource Files Drift from Implementations
-**Evidence**: UniQure VQL files missing fields present in actual recipes
+**Evidence**: Client-A VQL files missing fields present in actual recipes
 - VeevaLanguages.vql, VeevaLocales.vql missing `global_id__sys`
 **Lesson**: Recipes/implementations are source of truth; resource files are reference
 
@@ -169,7 +169,7 @@
 ### 7. Single-Point Assumptions (Invalidated by Testing)
 **Evidence**:
 - GL.iNet: UCI interface binding assumed to work
-- UniQure: SAP field availability assumed accurate
+- Client-A: SAP field availability assumed accurate
 - CV Generator: Assumed all applications start with user
 **Lesson**: Test assumptions early; design for discovered reality
 
@@ -257,12 +257,12 @@
 |--------|---------|-------|--------|
 | Token reduction | Agentic | 51-59% | ~2.1M annual tokens saved |
 | **Prompt reduction** | **raspberrypi** | **65% (576→202 lines)** | **Best optimization result** |
-| False positive rate | UniQure | 43% | ~4 days saved per cycle |
+| False positive rate | Client-A | 43% | ~4 days saved per cycle |
 | Lines eliminated | Agentic | 725 (80%) | Maintenance burden reduced |
 | Test pass rate | Agentic | 100% | Quality maintained |
 | Calorie/EUR | Survival | Calculated per product | Optimized food budget |
 | Weight/category | Survival | ~70kg total | Validated cycling capacity |
-| Workflow steps | UniQure | 401 total | Comprehensive documentation |
+| Workflow steps | Client-A | 401 total | Comprehensive documentation |
 | **SOP line count** | **raspberrypi** | **3,619 lines (5 SOPs)** | **Most comprehensive procedures** |
 | **Validation items** | **raspberrypi** | **76 checklist items** | **Quality assurance coverage** |
 | **GitHub repos created** | **raspberrypi** | **5 role repositories** | **Architecture modularization** |
@@ -354,8 +354,8 @@ In non-interactive contexts (Ansible, CI/CD):
 
 ### Universal Failure Factors
 1. Equipment without procedures (Survival)
-2. Resource file drift (UniQure)
-3. Untested assumptions (GL.iNet, UniQure, CV Generator, **raspberrypi**)
+2. Resource file drift (Client-A)
+3. Untested assumptions (GL.iNet, Client-A, CV Generator, **raspberrypi**)
 4. Missing integration validation (Survival)
 5. Empty template sections (Multiple projects)
 6. **Version compatibility assumptions** (raspberrypi - Python/bleak)
@@ -366,7 +366,7 @@ In non-interactive contexts (Ansible, CI/CD):
 - **CV Generator**: Rapid iteration, same-day workflow fixes
 - **GL.iNet**: Defense-in-depth security patterns
 - **Survival**: 3-tier budget optimization
-- **UniQure**: False positive detection methodology
+- **Client-A**: False positive detection methodology
 - **raspberrypi**: SOP depth (3,619 lines), parallel documentation, architecture modularization
 
 ---
@@ -377,7 +377,7 @@ In non-interactive contexts (Ansible, CI/CD):
 | Pattern | Before | After | Change |
 |---------|--------|-------|--------|
 | Template Externalization | 2 projects (51-59%) | 3 projects (51-65%) | +1 project, wider range |
-| SOP Creation | 9 SOPs (UniQure) | 14 SOPs (2 projects) | +5 SOPs, +3,619 lines |
+| SOP Creation | 9 SOPs (Client-A) | 14 SOPs (2 projects) | +5 SOPs, +3,619 lines |
 | Documentation-as-you-code | Mentioned | Parallel systems pattern | Elevated to new pattern |
 
 ### New Patterns Discovered

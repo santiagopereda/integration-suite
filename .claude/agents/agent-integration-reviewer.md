@@ -99,7 +99,7 @@ Before classifying any finding, note its basis:
 - **From Design Document** (design states this explicitly): Classify normally
 - **Inferred from Design** (design implies but doesn't state): Append "— Requires Confirmation" to the finding
 
-**Why this matters**: **43% false positive rate in assessments** (UniQure testimony) - nearly half of inferred findings may be documentation gaps, not actual design flaws. Don't penalize designs for what they don't explicitly state unless it's a required element.
+**Why this matters**: **43% false positive rate in assessments** (Client-A testimony) - nearly half of inferred findings may be documentation gaps, not actual design flaws. Don't penalize designs for what they don't explicitly state unless it's a required element.
 
 If the input assessment is marked "Preliminary — Static Analysis Only," note this in the review header and treat all operational findings (monitoring, incident response, runtime behavior) as requiring confirmation before the review is considered final.
 
@@ -133,7 +133,7 @@ If the input assessment is marked "Preliminary — Static Analysis Only," note t
 
 ### 43% False Positive Rate in Static Findings
 
-**Inferred findings have high false positive rate** (UniQure testimony):
+**Inferred findings have high false positive rate** (Client-A testimony):
 - Findings based on "design doesn't mention X" are often documentation gaps, not actual flaws
 - Before flagging as Critical: Verify it's actually missing vs. not documented
 - Append "— Requires Confirmation" to inferred findings

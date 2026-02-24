@@ -12,7 +12,7 @@ Injected 9 lessons (4 universal + 5 specific) into agent-integration-analyzer wi
 
 **Key additions**:
 - T1: Stop when parsing fails repeatedly (boundary detection)
-- T3: Recipes are source of truth (UniQure VQL drift)
+- T3: Recipes are source of truth (Client-A VQL drift)
 - T5: Code shows WHAT, humans hold WHY (30-min walkthrough)
 - Best Practices section with testimony evidence
 
@@ -26,10 +26,10 @@ Injected 9 lessons (4 universal + 5 specific) into agent-integration-analyzer wi
 
 | Pattern | Location | Evidence |
 |---------|----------|----------|
-| **T1**: Stop when same error repeats | Critical Constraints | Vaxxinova OSGi bundles, custom components |
-| **T3**: Verify recipes over docs | Critical Constraints | UniQure VQL files drifted from recipes |
+| **T1**: Stop when same error repeats | Critical Constraints | Client-B OSGi bundles, custom components |
+| **T3**: Verify recipes over docs | Critical Constraints | Client-A VQL files drifted from recipes |
 | **T5**: Code shows WHAT, not WHY | Critical Constraints + Best Practices | 30-min walkthrough value |
-| **Source of Truth Hierarchy** | Best Practices | UniQure: Recipes > Configs > Resource files |
+| **Source of Truth Hierarchy** | Best Practices | Client-A: Recipes > Configs > Resource files |
 | **Parsing boundary detection** | Best Practices | Stop after 3 failed approaches |
 | **Code inference limitations** | Best Practices | Hardcoded values don't explain WHY |
 | **Static vs runtime gap** | Best Practices | Code structure != runtime behavior |
