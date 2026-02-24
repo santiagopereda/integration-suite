@@ -1,0 +1,17 @@
+{
+  "name": "integration-suite-marketplace",
+  "owner": {
+    "name": "Agentic Hub"
+  },
+  "metadata": {
+    "description": "Integration assessment, scoring, design, and review suite for Claude Code"
+  },
+  "plugins": [
+    {
+      "name": "integration-suite",
+      "source": ".",
+      "description": "5 agents + 5 commands + 19 templates for end-to-end integration maturity evaluation using the 8-Dimension Integration Maturity Framework.",
+      "version": "1.0.0"
+    }
+  ]
+}
