@@ -1,145 +1,142 @@
-# Agentic - Agent Repository Hub
+# Integration Suite Plugin
 
-A centralized hub for designing, creating, and maintaining reusable specialized Claude Code agents.
+Claude Code plugin for end-to-end integration maturity assessment. Provides 5 specialized agents, 5 commands, and 19 templates based on the 8-Dimension Integration Maturity Framework (Gartner-aligned).
 
-## Quick Start
+## What It Does
 
-### Use an Existing Agent
+Evaluate integrations from code analysis through customer-facing reports:
+
+```
+Code Export → Inventory → Assessment → Scorecard → Design/Roadmap → Review → Summary
+```
+
+Each step is handled by a dedicated agent with deep domain expertise and backed by structured templates.
+
+## Installation
+
+### From GitHub (plugin install)
 
 ```bash
-# Find available agents
-See: AGENTS_REGISTRY.md
-
-# Invoke an agent
-@agent-sap-businesspartner-integration: Create documentation for BusinessPartner creation
-@agent-git-manager: Help me commit my changes
+claude plugin install <org>/integration-suite
 ```
 
-### Create a New Agent
+### Local development
 
-1. Read `AGENTS_REPOSITORY_GUIDE.md` (7-phase workflow)
-2. Use `@agent-architect` for design help
-3. Create agent definition in `.claude/agents/`
-4. Add documentation in `agents/<agent-name>/`
-5. Register in `AGENTS_REGISTRY.md` and `CLAUDE.md`
-
----
-
-## Available Agents
-
-| Agent | Purpose | Status |
-|-------|---------|--------|
-| `agent-sap-businesspartner-integration` | SAP S/4HANA BusinessPartner OData API documentation | Production |
-| `agent-ansible-automation` | Ansible playbooks, roles, and automation | Production |
-| `agent-robotarm-tester` | Raspberry Pi robot arm testing via SSH | Production |
-| `agent-git-manager` | Secure git workflow with pre-commit scanning | Production |
-
-See `AGENTS_REGISTRY.md` for full details.
-
----
-
-## Project Structure
-
-```
-Agentic/
-├── .claude/agents/           # Agent definitions (Claude Code reads these)
-│   ├── agent-sap-businesspartner-integration.md
-│   ├── agent-ansible-automation.md
-│   ├── agent-robotarm-tester.md
-│   └── agent-git-manager.md
-│
-├── agents/                   # Agent documentation & test cases
-│   ├── agent-sap-businesspartner-integration/
-│   ├── agent-ansible-automation/
-│   ├── agent-robotarm-tester/
-│   └── agent-git-manager/
-│
-├── .agent/                   # Knowledge base for agents
-│   ├── tasks/               # PRDs & implementation plans
-│   ├── system/              # Schemas, APIs, integrations
-│   └── sops/                # Standard operating procedures
-│
-├── docs/                     # Generated documentation
-│
-├── README.md                 # This file
-├── CLAUDE.md                 # Claude Code configuration
-├── AGENTS_REGISTRY.md        # Central agent index
-└── AGENTS_REPOSITORY_GUIDE.md # How to create agents
+```bash
+claude --plugin-dir /path/to/plugins/integration-suite
 ```
 
----
+## Setup
 
-## Documentation
+Templates are auto-copied to your project on first session start via the `SessionStart` hook. The hook checks for `.agent/templates/integration/` and copies templates there if missing.
 
-| Document | Purpose |
-|----------|---------|
-| **CLAUDE.md** | Claude Code configuration, agent definitions, workflows |
-| **AGENTS_REGISTRY.md** | Central index of all agents with details |
-| **AGENTS_REPOSITORY_GUIDE.md** | 7-phase workflow for creating new agents |
-| **agents/*/README.md** | Agent-specific usage guides |
-| **.agent/README.md** | Knowledge base overview |
+**Manual setup** (if the hook didn't fire or you need to re-initialize):
 
----
+```bash
+/integration-suite:setup
+```
 
-## How to Use
+## Agents
 
-### For Agent Users
+| Agent | Purpose |
+|-------|---------|
+| `agent-integration-analyzer` | Parse iPaaS workspace exports (Workato, Talend, MuleSoft, Boomi) into structured inventories |
+| `agent-integration-assessor` | Conduct guided discovery interviews across 8 maturity dimensions |
+| `agent-integration-scorer` | Score maturity 1-5 per dimension with red flags, quick wins, benchmarks |
+| `agent-integration-designer` | Design new integration architecture or improvement roadmaps |
+| `agent-integration-reviewer` | Validate designs against best practices, security standards, 8-dimension framework |
 
-1. Check `AGENTS_REGISTRY.md` for available agents
-2. Read the agent's `README.md` in `agents/<agent-name>/`
-3. Invoke: `@agent-<id>: [your request]`
-4. Verify output before using in production
+## Commands
 
-### For Agent Creators
+| Command | Description |
+|---------|-------------|
+| `/integration-suite:analyze-integration` | Parse a code export into an inventory |
+| `/integration-suite:assess-integration` | Full assessment lifecycle (assess → score → design → review) |
+| `/integration-suite:score-integration` | Quick maturity scoring from description or existing assessment |
+| `/integration-suite:review-integration` | Design review with findings and approval status |
+| `/integration-suite:summarize-integration` | Customer-facing summary from assessment/scorecard data |
 
-1. Read `AGENTS_REPOSITORY_GUIDE.md` for the full workflow
-2. Use `@agent-architect` to help design your agent
-3. Follow the 7-phase creation process
-4. Test with comprehensive test cases
-5. Register in `AGENTS_REGISTRY.md` and `CLAUDE.md`
+## Templates
 
-### For Knowledge Contributors
+19 templates in `.agent/templates/integration/` provide structure for all outputs:
 
-1. Read `.agent/README.md` for structure
-2. Add PRDs to `.agent/tasks/`
-3. Add schemas/APIs to `.agent/system/`
-4. Add procedures to `.agent/sops/`
-5. Log additions in `.agent/injection-history.md`
+**Scoring & Assessment**
+- `scoring-rubric.md` — 8 dimensions x 5 levels with criteria
+- `scorecard-template.md` — Output structure with radar chart data
+- `assessment-questionnaire.md` — Interview structure
+- `assessment-document.md` — Assessment output structure
+- `industry-benchmarks.md` — Sector benchmarks for comparison
+- `red-flags-library.md` — Common integration anti-patterns
 
----
+**Design & Review**
+- `design-document.md` — New integration architecture template
+- `improvement-roadmap.md` — Existing integration improvement plan
+- `pattern-library.md` — Integration patterns reference
+- `design-quality-checklist.md` — Pre-delivery validation
+- `review-checklist.md` — Structured review framework
+- `review-report-template.md` — Review output structure
+- `security-review-checklist.md` — OWASP API Top 10, auth, encryption
+- `anti-patterns.md` — What to watch for
 
-## Quality Standards
+**Analysis**
+- `inventory-document.md` — Code analysis output structure
+- `extraction-guide.md` — Universal extraction checklist
+- `platform-parsers/talend.md` — Talend-specific parsing guide
+- `platform-parsers/workato.md` — Workato-specific parsing guide
 
-All agents meet these standards:
+**Summary**
+- `customer-summary-template.md` — Customer-facing report structure
 
-- **Accurate** - Never fabricates functionality
-- **Transparent** - Acknowledges uncertainties
-- **Complete** - Full scope coverage with examples
-- **Tested** - Comprehensive validation test cases
-- **Documented** - Usage guides and trigger conditions
+## Template Customization
 
----
+Templates are copied to your project's `.agent/templates/integration/` directory. You can edit them freely — the plugin won't overwrite existing files on subsequent sessions.
 
-## Contributing
+To reset a template to its default, delete it and restart your session (or run `/integration-suite:setup`).
 
-### Report Issues
+## Typical Workflows
 
-1. Document with specific examples
-2. Include: agent ID, request, actual vs expected output
-3. Report to Agent Architecture Team
+### Full Lifecycle (new integration)
 
-### Suggest New Agents
+```bash
+/integration-suite:assess-integration new Salesforce-SAP customer master data sync
+```
 
-1. Describe the problem to solve
-2. Define scope and requirements
-3. Identify use cases
-4. Submit to Agent Architecture Team
+Runs: Assessor (interview) → Scorer (scorecard) → Designer (architecture) → Reviewer (validation)
 
----
+### Code-First (existing integration)
 
-## Status
+```bash
+/integration-suite:analyze-integration /path/to/talend/export
+/integration-suite:assess-integration existing  # uses inventory as starting point
+```
 
-**Version**: 1.2.0
-**Agents**: 4 production
-**Last Updated**: 2026-01-18
-**Status**: Active
+### Quick Score
+
+```bash
+/integration-suite:score-integration MuleSoft integration for order processing
+```
+
+### Customer Report
+
+```bash
+/integration-suite:summarize-integration --from-file .agent/tasks/integration-sfdc-sap/scorecard.md
+```
+
+## Hub Maintenance
+
+The `scripts/sync-from-hub.sh` script syncs updates from the Agentic Hub to this plugin:
+
+```bash
+bash plugins/integration-suite/scripts/sync-from-hub.sh /path/to/agentic-hub
+```
+
+This:
+- Copies agent files (strips `model:` line)
+- Copies command files (skips `summarize-integration.md` which is manually maintained)
+- Rsyncs templates
+
+## Version
+
+- **Plugin**: 1.0.0
+- **Framework**: 8-Dimension Integration Maturity Framework (Gartner-aligned)
+- **Platforms**: Workato, Talend (supported); MuleSoft, Boomi, SAP CPI (planned)
