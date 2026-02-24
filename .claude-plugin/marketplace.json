@@ -9,7 +9,7 @@
   "plugins": [
     {
       "name": "integration-suite",
-      "source": ".",
+      "source": "./",
       "description": "5 agents + 5 commands + 19 templates for end-to-end integration maturity evaluation using the 8-Dimension Integration Maturity Framework.",
       "version": "1.0.0"
     }
