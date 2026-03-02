@@ -39,27 +39,39 @@ for agent in "${AGENTS[@]}"; do
   fi
 done
 
-# --- Commands: copy all except summarize-integration (manually maintained) ---
-COMMANDS=(
+# --- Skills: copy SKILL.md and companion files from hub skills directories ---
+SKILLS=(
   analyze-integration
   assess-integration
   score-integration
   review-integration
+  summarize-integration
+  integration-pipeline
 )
 
 echo ""
-echo "=== Commands ==="
-for cmd in "${COMMANDS[@]}"; do
-  src="${HUB_ROOT}/.claude/commands/${cmd}.md"
-  dest="${PLUGIN_DIR}/commands/${cmd}.md"
-  if [ -f "$src" ]; then
-    cp "$src" "$dest"
-    echo "  synced: ${cmd}.md"
+echo "=== Skills ==="
+for skill in "${SKILLS[@]}"; do
+  src_dir="${HUB_ROOT}/.claude/skills/${skill}"
+  dest_dir="${PLUGIN_DIR}/skills/${skill}"
+  mkdir -p "$dest_dir"
+
+  # Copy SKILL.md
+  if [ -f "$src_dir/SKILL.md" ]; then
+    cp "$src_dir/SKILL.md" "$dest_dir/SKILL.md"
+    echo "  synced: ${skill}/SKILL.md"
   else
-    echo "  SKIP:   ${src} not found"
+    echo "  SKIP:   ${src_dir}/SKILL.md not found"
   fi
+
+  # Copy companion scripts (*.sh)
+  for sh_file in "$src_dir"/*.sh; do
+    [ -f "$sh_file" ] || continue
+    cp "$sh_file" "$dest_dir/"
+    chmod +x "$dest_dir/$(basename "$sh_file")"
+    echo "  synced: ${skill}/$(basename "$sh_file")"
+  done
 done
-echo "  SKIP:   summarize-integration.md (manually maintained in plugin)"
 
 # --- Templates: rsync entire directory ---
 echo ""
