@@ -1,3 +1,12 @@
+---
+name: analyze-integration
+description: Parse integration platform code exports into structured inventory with data lineage
+allowed-tools:
+  - Read
+  - Grep
+  - Glob
+---
+
 # /analyze-integration - Parse Code Exports
 
 Analyze integration platform workspace exports to extract schemas, mappings, transformations, and data lineage.
@@ -22,23 +31,23 @@ Analyze integration platform workspace exports to extract schemas, mappings, tra
 
 ```
 Step 1: Platform Detection
-├── Glob scan for file patterns
-└── Auto-detect: Workato (JSON), Talend (XML), MuleSoft, Boomi
+- Glob scan for file patterns
+- Auto-detect: Workato (JSON), Talend (XML), MuleSoft, Boomi
 
 Step 2: Parse & Extract
-├── Read configuration and job/recipe files
-├── Extract: connections, schemas, mappings, transformations
-├── Trace: inter-job/recipe calls (tRunJob, Call recipe)
-└── Build: dependency graph
+- Read configuration and job/recipe files
+- Extract: connections, schemas, mappings, transformations
+- Trace: inter-job/recipe calls (tRunJob, Call recipe)
+- Build: dependency graph
 
 Step 3: Map Data Journey
-├── Identify entry points (root jobs/recipes)
-├── Trace data flow through entire chain
-├── Document context/variable passing between steps
-└── Flag observations and red flags
+- Identify entry points (root jobs/recipes)
+- Trace data flow through entire chain
+- Document context/variable passing between steps
+- Flag observations and red flags
 
 Step 4: Generate Inventory
-└── Produces: Structured inventory document
+- Produces: Structured inventory document
 ```
 
 ## Options

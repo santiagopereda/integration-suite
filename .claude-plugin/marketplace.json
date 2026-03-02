@@ -10,8 +10,8 @@
     {
       "name": "integration-suite",
       "source": "./",
-      "description": "5 agents + 5 commands + 19 templates for end-to-end integration maturity evaluation using the 8-Dimension Integration Maturity Framework.",
-      "version": "1.0.0"
+      "description": "5 agents + 6 skills + 19 templates for end-to-end integration maturity evaluation using the 8-Dimension Integration Maturity Framework.",
+      "version": "1.1.0"
     }
   ]
 }

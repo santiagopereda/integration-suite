@@ -1,3 +1,8 @@
+---
+name: assess-integration
+description: Full integration assessment lifecycle from discovery through review
+---
+
 # /assess-integration - Full Integration Assessment
 
 Run a complete integration assessment lifecycle from discovery through review.
@@ -6,7 +11,7 @@ Run a complete integration assessment lifecycle from discovery through review.
 
 | Aspect | Details |
 |--------|---------|
-| **Invocation** | `/assess-integration [new\|existing] [description]` |
+| **Invocation** | `/assess-integration [new|existing] [description]` |
 | **Agents Used** | agent-integration-assessor, agent-integration-scorer, agent-integration-designer, agent-integration-reviewer |
 | **Output** | Assessment + Scorecard + Design/Roadmap + Review Report |
 
@@ -35,24 +40,24 @@ Run a complete integration assessment lifecycle from discovery through review.
 
 ```
 Step 1: agent-integration-assessor
-├── Guided interview across 8 dimensions
-├── Produces: Assessment document
-└── Saved to: .agent/tasks/integration-{name}/assessment.md
+- Guided interview across 8 dimensions
+- Produces: Assessment document
+- Saved to: .agent/tasks/integration-{name}/assessment.md
 
 Step 2: agent-integration-scorer
-├── Applies scoring rubric to assessment
-├── Produces: Maturity scorecard with red flags and quick wins
-└── Saved to: .agent/tasks/integration-{name}/scorecard.md
+- Applies scoring rubric to assessment
+- Produces: Maturity scorecard with red flags and quick wins
+- Saved to: .agent/tasks/integration-{name}/scorecard.md
 
 Step 3: agent-integration-designer (skipped with --quick)
-├── For new: Creates architecture design
-├── For existing: Creates improvement roadmap
-└── Saved to: .agent/tasks/integration-{name}/design.md
+- For new: Creates architecture design
+- For existing: Creates improvement roadmap
+- Saved to: .agent/tasks/integration-{name}/design.md
 
 Step 4: agent-integration-reviewer (skipped with --quick)
-├── Validates design against best practices
-├── Security deep-dive if --security flag
-└── Saved to: .agent/tasks/integration-{name}/review-report.md
+- Validates design against best practices
+- Security deep-dive if --security flag
+- Saved to: .agent/tasks/integration-{name}/review-report.md
 ```
 
 ## Options

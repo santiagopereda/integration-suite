@@ -1,3 +1,8 @@
+---
+name: review-integration
+description: Review integration design against best practices and the 8-dimension framework
+---
+
 # /review-integration - Design Review
 
 Review an integration design against best practices and the 8-dimension framework.
@@ -22,12 +27,12 @@ Review an integration design against best practices and the 8-dimension framewor
 
 ```
 agent-integration-reviewer
-├── Loads review checklist
-├── Validates 8-dimension coverage
-├── Checks for anti-patterns
-├── Security deep-dive (if --security)
-├── Classifies findings (Critical/High/Medium/Low)
-└── Produces: Review report with approval status
+- Loads review checklist
+- Validates 8-dimension coverage
+- Checks for anti-patterns
+- Security deep-dive (if --security)
+- Classifies findings (Critical/High/Medium/Low)
+- Produces: Review report with approval status
 ```
 
 ## Options

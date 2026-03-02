@@ -35,6 +35,7 @@ Guided interview structure for evaluating integrations. Adapt questions based on
 ## Section 4: Operational Excellence
 
 - What monitoring exists? (Logs, metrics, traces, dashboards)
+- Is runtime monitoring data available for this assessment? (Execution logs, error rates, latency metrics)
 - Are correlation IDs used for tracing?
 - How are errors detected and reported?
 - What alerting rules are configured? (Who gets notified, when)
@@ -89,7 +90,15 @@ Guided interview structure for evaluating integrations. Adapt questions based on
 - Are there alternative platforms being considered?
 - What is the team's skill level with this platform?
 
-## Section 10: For Existing Integrations Only
+## Section 10: Data Source Reliability
+
+- Has API documentation been validated against actual production behavior?
+- Are there known API quirks or undocumented behaviors? (Expect 8-12 per integration)
+- Which findings are based on direct evidence (runtime logs, tested behaviors) vs inference (code review, documentation)?
+- Has a developer/domain owner walkthrough been conducted?
+- Are there platform-specific capabilities that may already address flagged concerns?
+
+## Section 11: For Existing Integrations Only
 
 - How long has this integration been running?
 - What are the most common issues/incidents?

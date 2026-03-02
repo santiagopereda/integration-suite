@@ -1,3 +1,8 @@
+---
+name: score-integration
+description: Quick integration maturity scoring with red flags and quick wins
+---
+
 # /score-integration - Quick Maturity Scoring
 
 Quick integration maturity assessment and scoring.
@@ -21,13 +26,13 @@ Quick integration maturity assessment and scoring.
 
 ```
 Step 1: agent-integration-assessor (Brief Mode)
-├── Quick discovery (key dimensions only)
-└── Produces: Brief assessment
+- Quick discovery (key dimensions only)
+- Produces: Brief assessment
 
 Step 2: agent-integration-scorer
-├── Applies scoring rubric
-├── Identifies top red flags and quick wins
-└── Produces: Maturity scorecard with radar chart data
+- Applies scoring rubric
+- Identifies top red flags and quick wins
+- Produces: Maturity scorecard with radar chart data
 ```
 
 ## Options

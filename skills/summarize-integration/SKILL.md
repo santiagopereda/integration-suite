@@ -1,3 +1,8 @@
+---
+name: summarize-integration
+description: Generate customer-facing summary from integration assessment and scorecard data
+---
+
 # /summarize-integration - Customer-Facing Summary
 
 Generate a professional, customer-facing summary from integration assessment and scorecard data.
@@ -7,7 +12,7 @@ Generate a professional, customer-facing summary from integration assessment and
 | Aspect | Details |
 |--------|---------|
 | **Invocation** | `/summarize-integration [reference to assessment/scorecard]` |
-| **Agent Used** | Works standalone (no external agent dependency) |
+| **Agent Used** | documentation-specialist (existing agent) |
 | **Template** | `.agent/templates/integration/customer-summary-template.md` |
 | **Output** | Professional customer report |
 
@@ -24,16 +29,16 @@ Generate a professional, customer-facing summary from integration assessment and
 
 ```
 Step 1: Load assessment and scorecard data
-├── From conversation context or --from-file
+- From conversation context or --from-file
 
 Step 2: Load customer summary template
-├── .agent/templates/integration/customer-summary-template.md
+- .agent/templates/integration/customer-summary-template.md
 
-Step 3: Generate customer report
-├── Translate scores to customer-friendly language
-├── Present findings as opportunities
-├── Structure as executive summary + findings + recommendations + roadmap
-└── Exclude internal notes and raw technical details
+Step 3: documentation-specialist generates customer report
+- Translates scores to customer-friendly language
+- Presents findings as opportunities
+- Structures as executive summary + findings + recommendations + roadmap
+- Excludes internal notes and raw technical details
 ```
 
 ## Options
