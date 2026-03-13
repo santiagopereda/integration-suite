@@ -555,9 +555,44 @@ You are running Phase 1 (Analyze) of an integration assessment pipeline.
 
 **Integration**: $INTEGRATION_NAME
 **Working Directory**: $OUTPUT_DIR
-**Template**: Read $TEMPLATE_DIR/inventory-document.md for the expected output structure.
 
-**Task**: Parse the code export at $EXPORT_PATH. Auto-detect the platform (Workato, Talend, MuleSoft, Boomi, or other). Extract all connections, schemas, field mappings, transformations, and job/recipe dependencies. Build a dependency graph and data journey map. Flag observations and potential red flags.
+**Templates to load** (Read these before parsing):
+- $TEMPLATE_DIR/extraction-guide.md (universal extraction checklist)
+- $TEMPLATE_DIR/inventory-document.md (expected output structure)
+- After detecting the platform, also read: $TEMPLATE_DIR/platform-parsers/[platform].md
+
+**Task**: Parse the code export at $EXPORT_PATH using this workflow:
+
+1. **Detect Platform** - Glob scan for file patterns:
+   - Workato: .json files with "adapter" and "action" keys
+   - Talend: .item files, talend.properties, /process/ directory
+   - MuleSoft: mule-artifact.json, .xml with <mule> root, .dwl files
+   - Boomi: Component XML with <bns:Component> namespace
+
+2. **Scan & Parse** - Glob all relevant files, Read each to extract:
+   - Connections (source/target systems, connectors, auth type)
+   - Schemas (input/output field definitions with types)
+   - Field mappings (field-to-field with transformation type)
+   - Error handling (try-catch, retry, DLQ config)
+   - Sub-job/recipe calls with parameters
+
+3. **Build Call Graph** - Grep for inter-job/recipe references:
+   - Workato: "call_recipe" / "recipe_function"
+   - Talend: "tRunJob" componentName in .item files
+
+4. **Trace Data Journey** - Follow call graph depth-first from entry points, track fields through transformations
+
+5. **Flag Issues** - Hardcoded values, missing error handling/logging, circular dependencies
+
+6. **Classify Confidence** - HIGH (code confirms), MEDIUM (code implies), LOW (runtime only)
+
+**Critical constraints**:
+- Never fabricate field mappings or schemas - only document what's in the code
+- Code shows WHAT, not WHY - flag as "Code shows [X], intent unclear"
+- If 2-3 parsing approaches fail for a file type, flag as "Requires manual review" and move on
+- Recipes/jobs are source of truth over config files (configs may be stale)
+
+Add this note before the summary: "This inventory reflects static analysis only. Findings marked MEDIUM or LOW confidence should be verified with runtime data and a domain owner walkthrough before scoring."
 
 **Output**: Write your complete output to $OUTPUT_DIR/inventory.md
 
@@ -597,6 +632,11 @@ PROMPT
 }
 
 build_prompt_phase3() {
+  local inventory_context=""
+  if [[ -f "$OUTPUT_DIR/inventory.md" ]]; then
+    inventory_context="- $OUTPUT_DIR/inventory.md (code analysis inventory from Phase 1)"
+  fi
+
   cat <<PROMPT
 You are running Phase 3 (Score) of an integration assessment pipeline.
 
@@ -607,8 +647,31 @@ You are running Phase 3 (Score) of an integration assessment pipeline.
 
 **Input files** (read these first):
 - $OUTPUT_DIR/assessment.md (assessment from Phase 2)
+$inventory_context
 
-**Task**: Apply the scoring rubric to the assessment. Score all 8 dimensions on the 1-5 maturity scale. Calculate an overall maturity score. Identify the top red flags with remediation guidance. Identify quick wins with effort estimates. Generate radar chart data if the template calls for it.
+**Task**: Score this integration using this workflow:
+
+1. **Classify Input Quality** - Determine what evidence is available and add classification as the FIRST line of the scorecard:
+   - Description only (no assessment/inventory): "PRELIMINARY - Description Only" (LOW confidence cap)
+   - Assessment from interview (no code/runtime): "ASSESSMENT-BASED" (MEDIUM max confidence)
+   - Assessment + code inventory (no runtime): "STATIC ANALYSIS" (HIGH for code-confirmed)
+   - Assessment + runtime data (logs, metrics): "RUNTIME-VALIDATED" (HIGH on all supported)
+
+2. **Score Each Dimension** - Apply the rubric to score all 8 dimensions 1-5. For each:
+   - Score based on evidence, not potential or intentions
+   - Use the lowest applicable score when criteria span multiple levels
+   - Document the specific evidence supporting each score
+   - Mark confidence: HIGH (direct evidence), MEDIUM (inferred), LOW (assumed/unknown)
+
+3. **Calculate Overall Score** using weighted average:
+   Overall = (Arch*2 + Data*2 + OpEx*3 + Reliability*3 + Security*3 + Business*1.5 + Maintain*1.5 + Platform*1) / 17
+
+4. **Map to Maturity Level**:
+   4.5-5.0 = Augmented, 3.5-4.4 = Balanced, 2.5-3.4 = Centralized, 1.5-2.4 = Enlightened, 1.0-1.4 = Ad hoc
+
+5. **Identify Red Flags** (any dimension 1.0-1.5 AND weighted CRITICAL/HIGH) and **Quick Wins** (improvements <1 day that raise a dimension by 0.5+)
+
+6. **Runtime Validation Required Table** - List which dimensions and scores would change with runtime data, expected direction, and what data is needed. This is critical because static analysis scores can swing 10%+ after runtime enrichment.
 
 **Output**: Write your complete output to $OUTPUT_DIR/scorecard.md
 
@@ -620,11 +683,24 @@ PROMPT
 }
 
 build_prompt_phase4() {
-  local design_task
+  local design_type design_template design_approach
   if [[ "$MODE" == "new" ]]; then
-    design_task="Create an architecture design with pattern selection, data flow specifications, and error handling strategy."
+    design_type="New Architecture"
+    design_template="$TEMPLATE_DIR/design-document.md"
+    design_approach="1. Analyze requirements from assessment
+2. Select pattern from pattern library (justify choice, state alternatives rejected)
+3. Design data model (canonical, mappings, validation)
+4. Design flows (normal + error paths)
+5. Define NFRs (error handling, monitoring, security, resilience)
+6. Phase the implementation (MVP -> hardening -> optimization)"
   else
-    design_task="Create an improvement roadmap based on the scorecard gaps, with phased recommendations and priority ordering."
+    design_type="Improvement Roadmap"
+    design_template="$TEMPLATE_DIR/improvement-roadmap.md"
+    design_approach="1. Analyze gaps from scorecard (dimensions below target)
+2. Prioritize: Critical (security, reliability) -> High (ops, data) -> Medium (maintainability)
+3. Phase: Critical fixes (1-2 weeks) -> Quick wins (2-6 weeks) -> Strategic (1-3 months) -> Optimization (ongoing)
+4. Define migration strategy (zero-downtime where possible)
+5. Set milestones and success criteria per phase"
   fi
 
   cat <<PROMPT
@@ -632,13 +708,37 @@ You are running Phase 4 (Design) of an integration assessment pipeline.
 
 **Integration**: $INTEGRATION_NAME
 **Working Directory**: $OUTPUT_DIR
-**Template**: Read $TEMPLATE_DIR/design-document.md for the expected output structure.
+**Design Type**: $design_type
+
+**Templates to load** (Read these before designing):
+- $design_template (output structure)
+- $TEMPLATE_DIR/pattern-library.md (pattern selection reference)
+- $TEMPLATE_DIR/design-quality-checklist.md (validation before delivery)
 
 **Input files** (read these first):
 - $OUTPUT_DIR/assessment.md (assessment from Phase 2)
 - $OUTPUT_DIR/scorecard.md (scorecard from Phase 3)
 
-**Task**: $design_task Cover all 8 dimensions from the assessment. Include concrete data flow specifications and error handling design.
+**Design Approach**:
+$design_approach
+
+**Action Item Classification** - Every recommendation must be classified:
+- SOLO: Implementable directly from the design document and existing code/documentation alone
+- PAIR: Requires domain owner present - undocumented runtime behavior, live system state, business rules not in code
+- Why: PAIR items attempted as SOLO have a 43% false positive rate. A 30-minute walkthrough prevents days of rework. When uncertain, default to PAIR.
+- Format: [Phase X.Y] Action title - [SOLO|PAIR] - Verify: [specific check]
+
+**Quality Validation** before writing output:
+- All 8 dimensions from assessment are addressed
+- Security findings are phased as feature work (Phase 1 critical tier), not "later enhancements"
+- Each phase has clear exit criteria
+- Check against design-quality-checklist.md
+
+**Critical constraints**:
+- Lead with complete approach (pattern choice, phases, trade-offs) before diving into details
+- Design for actual requirements, not theoretical ideals - acknowledge budget/timeline/skills constraints
+- Never fabricate platform capabilities - if uncertain: "Verify with [Platform] documentation"
+- Provide patterns and approaches, not platform-specific implementation code
 
 **Output**: Write your complete output to $OUTPUT_DIR/design.md
 
@@ -697,7 +797,23 @@ You are running Phase 6 (Summarize) of an integration assessment pipeline.
 **Input files** (read these first):
 $(echo -e "$input_files")
 
-**Task**: Generate a customer-facing summary document. Translate technical scores into business-friendly language. Present findings as improvement opportunities rather than criticisms. Structure the document as an executive summary followed by key findings and a recommended roadmap. Exclude raw technical details and internal scoring notes.
+**Task**: Generate a customer-facing summary document.
+
+**Score Translation Table** - Use these prescribed labels when translating scores:
+| Score Range | Internal Label | Customer-Facing Label |
+|-------------|---------------|----------------------|
+| 4.5 - 5.0 | Augmented | Industry-Leading |
+| 3.5 - 4.4 | Balanced | Well-Established |
+| 2.5 - 3.4 | Centralized | Progressing |
+| 1.5 - 2.4 | Enlightened | Early-Stage |
+| 1.0 - 1.4 | Ad hoc | Foundation-Building |
+
+**Guidelines**:
+- Present findings as improvement opportunities, not criticisms
+- List strengths before recommendations
+- Structure as: Executive Summary -> Key Findings -> Recommended Next Steps
+- Exclude internal scoring notes and raw technical details
+- Use business language throughout (no jargon without explanation)
 
 **Output**: Write your complete output to $OUTPUT_DIR/customer-summary.md
 

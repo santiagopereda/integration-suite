@@ -11,6 +11,8 @@ allowed-tools:
 
 Analyze integration platform workspace exports to extract schemas, mappings, transformations, and data lineage.
 
+> **Note**: If you're running the full pipeline (`/integration-pipeline --mode code-first`), analysis is built into Phase 1 - you don't need this skill separately. Use `/analyze-integration` only for standalone analysis outside the pipeline.
+
 ## Quick Reference
 
 | Aspect | Details |

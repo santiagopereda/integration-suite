@@ -13,7 +13,7 @@ Orchestrate the full 6-phase integration assessment pipeline from code analysis 
 | Aspect | Details |
 |--------|---------|
 | **Invocation** | `/integration-pipeline [options] <integration-name>` |
-| **Agents Used** | analyzer, assessor, scorer, designer, reviewer, documentation-specialist |
+| **Agents Used** | assessor, scorer, reviewer, documentation-specialist |
 | **Output** | Complete assessment package in `.agent/tasks/integration-{name}/` |
 
 ## Modes
@@ -26,19 +26,38 @@ Orchestrate the full 6-phase integration assessment pipeline from code analysis 
 
 **Auto-detection**: If a path argument is provided, defaults to `code-first`. Otherwise defaults to `new`.
 
+### Mode-Phase Matrix
+
+Which phases run for each mode (before applying `--quick`):
+
+| Phase | code-first | new | existing |
+|-------|-----------|-----|----------|
+| 1. Analyze | RUN | SKIP | SKIP |
+| 2. Assess | RUN | RUN | RUN |
+| 3. Score | RUN | RUN | RUN |
+| 4. Design | RUN | RUN | RUN |
+| 5. Review | RUN | RUN | RUN |
+| 6. Summarize | RUN | RUN | RUN |
+
+Phase 1 only runs in `code-first` mode. Adding `--quick` additionally skips Phases 4 and 5 regardless of mode.
+
 ## Usage
 
 ```bash
 # Full pipeline from code export
+# Output: .agent/tasks/integration-customer-sync/
 /integration-pipeline --mode code-first /path/to/export customer-sync
 
 # New integration assessment (skip code analysis)
+# Output: .agent/tasks/integration-salesforce-sap-sync/
 /integration-pipeline --mode new salesforce-sap-sync
 
 # Quick pipeline (skip design + review phases)
+# Output: .agent/tasks/integration-order-processing/
 /integration-pipeline --quick --mode existing order-processing
 
 # With security deep-dive in review phase
+# Output: .agent/tasks/integration-pii-data-integration/
 /integration-pipeline --security --mode new pii-data-integration
 ```
 
@@ -60,23 +79,69 @@ ANALYZE -> ASSESS    -> SCORE   -> DESIGN  -> REVIEW  -> SUMMARIZE
   v          v           v          v          v           v
 inventory  assessment  scorecard  design    review     customer
   .md        .md         .md       .md      report.md  summary.md
-                                   [skip]   [skip]
-                                   --quick  --quick
+[SKIP]                            [SKIP]   [SKIP]
+new/existing                      --quick  --quick
 ```
+
+Phase 1 is skipped for `new` and `existing` modes (no code export to analyze). Phases 4-5 are skipped when `--quick` is set.
 
 ### Phase 1: Analyze (code-first mode only)
 
-**Agent**: agent-integration-analyzer
+**Runs inline** (no agent delegation - uses Read, Grep, Glob directly)
 **Input**: Path to code export
 **Output**: `inventory.md`
 
-```
-- Auto-detect platform (Workato, Talend, MuleSoft, Boomi)
-- Parse configuration, jobs/recipes, connections
-- Extract schemas, mappings, transformations
-- Build dependency graph and data journey map
-- Flag observations and red flags
-```
+#### Step-by-step workflow
+
+1. **Detect Platform** - Glob scan for file patterns, auto-detect:
+   - **Workato**: `.json` files with `"adapter"` and `"action"` keys
+   - **Talend**: `.item` files, `talend.properties`, `/process/` directory
+   - **MuleSoft**: `mule-artifact.json`, `.xml` with `<mule>` root, `.dwl` files
+   - **Boomi**: Component XML with `<bns:Component>` namespace
+
+2. **Load Templates** - Read these before parsing:
+   - `.agent/templates/integration/extraction-guide.md` (universal checklist)
+   - `.agent/templates/integration/platform-parsers/[platform].md` (platform-specific)
+   - `.agent/templates/integration/inventory-document.md` (output structure)
+
+3. **Scan & Parse** - Glob to find all relevant files, Read to parse each:
+   - Connections: source/target systems, connectors, auth type
+   - Schemas: input/output field definitions with types
+   - Mappings: field-to-field with transformation type
+   - Error handling: try-catch, retry, DLQ config
+   - Sub-job/recipe calls with parameters passed
+
+4. **Build Call Graph** - Grep for inter-job/recipe references:
+   - Workato: `"call_recipe"` / `"recipe_function"` across recipes
+   - Talend: `"tRunJob"` componentName across `.item` files
+   - Result: dependency graph (parent -> [children])
+
+5. **Trace Data Journey** - Follow call graph depth-first from entry points:
+   - Track data fields through each transformation step
+   - Track context/variables passed between jobs
+   - Map complete source-to-target data flow
+
+6. **Flag Issues** - Check for:
+   - Hardcoded endpoints, credentials, magic numbers
+   - Missing error handling, logging, idempotency
+   - Complex transformations without documentation
+   - Circular dependencies
+
+7. **Classify Confidence** - For each finding:
+   - **HIGH**: Code directly confirms (hardcoded value, missing component)
+   - **MEDIUM**: Code implies but cannot confirm (structural intent)
+   - **LOW**: Cannot determine from code alone (scheduling, error rates, runtime routing)
+
+#### Critical constraints
+- **Never fabricate** field mappings or schemas - only document what's in the code
+- **Code shows WHAT, not WHY** - flag findings as "Code shows [X], intent unclear"
+- **Stop when parsing fails repeatedly** - if 2-3 approaches fail, flag as "Requires manual review"
+- **Recipes/jobs are source of truth** over config files (configs may be stale)
+
+#### Output structure
+Write `inventory.md` with sections: Connections, Schemas, Field Mappings, Transformations, Dependency Graph, Data Journey Map, Observations/Red Flags, Runtime Validation Required table.
+
+Add this note before the summary: "This inventory reflects static analysis only. Findings marked MEDIUM or LOW confidence should be verified with runtime data and a domain owner walkthrough before scoring."
 
 **Gate**: Verify `inventory.md` exists and contains sections: Connections, Schemas, Mappings.
 
@@ -100,31 +165,120 @@ inventory  assessment  scorecard  design    review     customer
 ### Phase 3: Score
 
 **Agent**: agent-integration-scorer
-**Input**: `assessment.md`
+**Input**: `assessment.md` (+ `inventory.md` if Phase 1 ran)
 **Output**: `scorecard.md`
 
+#### Step 1: Classify Input Quality
+
+Before scoring, determine what evidence is available and label the scorecard accordingly:
+
+| Input Available | Classification | Confidence Cap |
+|----------------|---------------|----------------|
+| Description only (no assessment/inventory) | `PRELIMINARY - Description Only` | LOW on all dimensions |
+| Assessment from interview (no code/runtime) | `ASSESSMENT-BASED` | MEDIUM max, HIGH if specific evidence cited |
+| Assessment + code inventory (no runtime) | `STATIC ANALYSIS` | HIGH for code-confirmed, MEDIUM for inferred |
+| Assessment + runtime data (logs, metrics) | `RUNTIME-VALIDATED` | HIGH on all evidence-supported dimensions |
+
+Add the classification as the first line of the scorecard, before any scores.
+
+#### Step 2: Score Each Dimension
+
+Apply the scoring rubric from `.agent/templates/integration/scoring-rubric.md`. For each dimension:
+- Score based on **evidence**, not potential or intentions
+- Use the **lowest applicable score** when criteria span multiple levels
+- Document the specific evidence supporting each score
+- Mark confidence: HIGH (direct evidence), MEDIUM (inferred from context), LOW (assumed/unknown)
+
+#### Step 3: Calculate Overall Score
+
+Weighted average (CRITICAL dimensions weighted 3x, HIGH 2x, MEDIUM 1.5x, LOW 1x):
+
 ```
-- Apply 8-dimension scoring rubric
-- Calculate overall maturity score (1-5, Gartner-aligned)
-- Identify top red flags with remediation
-- Identify quick wins with effort estimates
-- Generate radar chart JSON data
+Overall = (Arch*2 + Data*2 + OpEx*3 + Reliability*3 + Security*3 + Business*1.5 + Maintain*1.5 + Platform*1) / 17
 ```
+
+#### Step 4: Map to Maturity Level
+
+| Score Range | Level | Label |
+|-------------|-------|-------|
+| 4.5 - 5.0 | 5 | Augmented |
+| 3.5 - 4.4 | 4 | Balanced |
+| 2.5 - 3.4 | 3 | Centralized |
+| 1.5 - 2.4 | 2 | Enlightened |
+| 1.0 - 1.4 | 1 | Ad hoc |
+
+#### Step 5: Identify Red Flags and Quick Wins
+
+- Red flags: any dimension scoring 1.0-1.5 AND weighted CRITICAL or HIGH
+- Quick wins: improvements achievable in <1 day that raise a dimension by 0.5+
+- For each, include: severity, affected dimension, remediation, effort estimate
+
+#### Step 6: Runtime Validation Required Table
+
+Add a table listing which dimensions and scores would change with runtime data. This is critical because static analysis scores can swing 10%+ after runtime enrichment (proven across multiple engagements).
+
+| Dimension | Current Score | Confidence | Would Change With | Expected Direction |
+|-----------|--------------|------------|-------------------|-------------------|
+| (example) | 2.0 | MEDIUM | Execution logs showing actual retry behavior | Could increase to 3.0 if retries are configured at platform level |
 
 **Gate**: Verify `scorecard.md` exists and contains: Overall Score, Per-Dimension Scores, Red Flags, Quick Wins.
 
 ### Phase 4: Design (skipped with --quick)
 
-**Agent**: agent-integration-designer
+**Runs inline** (no agent delegation)
 **Input**: `assessment.md` + `scorecard.md`
 **Output**: `design.md`
 
-```
-- For new: Create architecture design with pattern selection
-- For existing: Create improvement roadmap from scorecard gaps
-- Cover all 8 dimensions
-- Include data flow specifications
-```
+#### Step 1: Determine Design Type
+
+| Input Context | Design Type | Template |
+|--------------|-------------|----------|
+| Mode = `new` or scorecard shows no existing system | New Architecture | `.agent/templates/integration/design-document.md` |
+| Mode = `existing` or `code-first` with scorecard gaps | Improvement Roadmap | `.agent/templates/integration/improvement-roadmap.md` |
+
+Always also load: `.agent/templates/integration/pattern-library.md`
+
+#### Step 2: Design Approach
+
+**For New Integrations**:
+1. Analyze requirements from assessment
+2. Select pattern from pattern library (justify choice, state alternatives rejected)
+3. Design data model (canonical, mappings, validation)
+4. Design flows (normal + error paths)
+5. Define NFRs (error handling, monitoring, security, resilience)
+6. Phase the implementation (MVP -> hardening -> optimization)
+
+**For Improvement Roadmaps**:
+1. Analyze gaps from scorecard (dimensions below target)
+2. Prioritize: Critical (security, reliability) -> High (ops, data) -> Medium (maintainability)
+3. Phase: Critical fixes (1-2 weeks) -> Quick wins (2-6 weeks) -> Strategic (1-3 months) -> Optimization (ongoing)
+4. Define migration strategy (zero-downtime where possible)
+5. Set milestones and success criteria per phase
+
+#### Step 3: Classify Action Items (SOLO/PAIR)
+
+Every recommendation or action item must be classified:
+
+- **SOLO**: Implementable directly from the design document and existing code/documentation alone
+- **PAIR**: Requires domain owner present - undocumented runtime behavior, live system state, business rules not in code
+
+**Why**: PAIR items attempted as SOLO have a 43% false positive rate - teams build the wrong thing. A 30-minute walkthrough prevents days of rework. When uncertain, default to PAIR.
+
+Format: `[Phase X.Y] Action title - [SOLO|PAIR] - Verify: [specific check]`
+
+#### Step 4: Quality Validation
+
+Before writing output, validate:
+- All 8 dimensions from assessment are addressed
+- Security findings are phased as feature work (Phase 1 critical tier), not "later enhancements"
+- Each phase has clear exit criteria
+- Load `.agent/templates/integration/design-quality-checklist.md` and check against it
+
+#### Critical constraints
+- **Lead with complete approach** (pattern choice, phases, trade-offs) before diving into details
+- **Design for actual requirements**, not theoretical ideals - acknowledge budget/timeline/skills constraints
+- **Never fabricate platform capabilities** - if uncertain: "Verify with [Platform] documentation"
+- Provide patterns and approaches, not platform-specific implementation code
 
 **Gate**: Verify `design.md` exists and contains: Architecture/Roadmap, Data Flows, Error Handling.
 
@@ -150,13 +304,25 @@ inventory  assessment  scorecard  design    review     customer
 **Input**: `assessment.md` + `scorecard.md` + `design.md` (if exists) + `review-report.md` (if exists)
 **Output**: `customer-summary.md`
 
-```
-- Load customer summary template
-- Translate scores to customer-friendly language
-- Present findings as opportunities
-- Structure as executive summary + findings + roadmap
-- Exclude internal notes and raw technical details
-```
+#### Score Translation Table
+
+Use these prescribed labels when translating scores to customer-friendly language:
+
+| Score Range | Internal Label | Customer-Facing Label |
+|-------------|---------------|----------------------|
+| 4.5 - 5.0 | Augmented | Industry-Leading |
+| 3.5 - 4.4 | Balanced | Well-Established |
+| 2.5 - 3.4 | Centralized | Progressing |
+| 1.5 - 2.4 | Enlightened | Early-Stage |
+| 1.0 - 1.4 | Ad hoc | Foundation-Building |
+
+#### Guidelines
+- Load `.agent/templates/integration/customer-summary-template.md`
+- Present findings as improvement opportunities, not criticisms
+- List strengths before recommendations
+- Structure as: Executive Summary -> Key Findings -> Recommended Next Steps
+- Exclude internal scoring notes and raw technical details
+- Use business language throughout (no jargon without explanation)
 
 **Gate**: Verify `customer-summary.md` exists.
 
@@ -313,5 +479,5 @@ These flags are specific to headless mode and are not available in the interacti
 
 ---
 
-**Version**: 1.1.0
+**Version**: 1.4.0
 **Status**: Active
