@@ -1,6 +1,6 @@
 # Integration Suite Plugin
 
-Claude Code plugin for end-to-end integration maturity assessment. Provides 5 specialized agents, 5 commands, and 19 templates based on the 8-Dimension Integration Maturity Framework (Gartner-aligned).
+Claude Code plugin for end-to-end integration maturity assessment. Provides 3 specialized agents, 5 commands, and 19 templates based on the 8-Dimension Integration Maturity Framework (Gartner-aligned).
 
 ## What It Does
 
@@ -40,10 +40,8 @@ Templates are auto-copied to your project on first session start via the `Sessio
 
 | Agent | Purpose |
 |-------|---------|
-| `agent-integration-analyzer` | Parse iPaaS workspace exports (Workato, Talend, MuleSoft, Boomi) into structured inventories |
 | `agent-integration-assessor` | Conduct guided discovery interviews across 8 maturity dimensions |
 | `agent-integration-scorer` | Score maturity 1-5 per dimension with red flags, quick wins, benchmarks |
-| `agent-integration-designer` | Design new integration architecture or improvement roadmaps |
 | `agent-integration-reviewer` | Validate designs against best practices, security standards, 8-dimension framework |
 
 ## Commands
@@ -101,7 +99,7 @@ To reset a template to its default, delete it and restart your session (or run `
 /integration-suite:assess-integration new Salesforce-SAP customer master data sync
 ```
 
-Runs: Assessor (interview) → Scorer (scorecard) → Designer (architecture) → Reviewer (validation)
+Runs: Assessor (interview) → Scorer (scorecard) → Design (inline) → Reviewer (validation)
 
 ### Code-First (existing integration)
 

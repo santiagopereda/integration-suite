@@ -18,7 +18,7 @@ Analyze integration platform workspace exports to extract schemas, mappings, tra
 | Aspect | Details |
 |--------|---------|
 | **Invocation** | `/analyze-integration <path-to-export>` |
-| **Agent Used** | agent-integration-analyzer |
+| **Agent Used** | Runs inline (Read, Grep, Glob) |
 | **Output** | Integration inventory with data journey map |
 
 ## Usage

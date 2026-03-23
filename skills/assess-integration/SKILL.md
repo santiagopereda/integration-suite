@@ -12,7 +12,7 @@ Run a complete integration assessment lifecycle from discovery through review.
 | Aspect | Details |
 |--------|---------|
 | **Invocation** | `/assess-integration [new|existing] [description]` |
-| **Agents Used** | agent-integration-assessor, agent-integration-scorer, agent-integration-designer, agent-integration-reviewer |
+| **Agents Used** | agent-integration-assessor, agent-integration-scorer, agent-integration-reviewer |
 | **Output** | Assessment + Scorecard + Design/Roadmap + Review Report |
 
 ## Usage
@@ -49,7 +49,7 @@ Step 2: agent-integration-scorer
 - Produces: Maturity scorecard with red flags and quick wins
 - Saved to: .agent/tasks/integration-{name}/scorecard.md
 
-Step 3: agent-integration-designer (skipped with --quick)
+Step 3: Design phase - runs inline (skipped with --quick)
 - For new: Creates architecture design
 - For existing: Creates improvement roadmap
 - Saved to: .agent/tasks/integration-{name}/design.md

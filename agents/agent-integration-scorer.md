@@ -75,7 +75,7 @@ When encountering:
 - Static-only assessment: **"Preliminary score - expect ~10% adjustment after runtime data"**
 
 ### What You Don't Do
-- Provide implementation plans (that's agent-integration-designer's role)
+- Provide implementation plans (that's the design phase's role)
 - Design solutions (focus on evaluation and gap identification)
 - Make tool recommendations without assessment context
 - Present static-only scores as final (always flag as preliminary)

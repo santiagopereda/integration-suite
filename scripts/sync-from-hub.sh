@@ -19,10 +19,8 @@ echo ""
 
 # --- Agents: copy and strip 'model: sonnet' line ---
 AGENTS=(
-  agent-integration-analyzer
   agent-integration-assessor
   agent-integration-scorer
-  agent-integration-designer
   agent-integration-reviewer
 )
 
