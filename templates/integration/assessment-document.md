@@ -21,6 +21,17 @@
 | Business Owner | [Name] | [Department] |
 | Technical Owner | [Name] | [Team] |
 
+## Assessment Methodology
+
+Score only after three sources confirm findings:
+1. **Static export analysis** - code, configuration, schema review
+2. **Runtime data enrichment** - execution logs, metrics, monitoring dashboards
+3. **Developer walkthrough** - validate assumptions with domain owners (code shows WHAT, only people know WHY)
+
+If runtime data or walkthrough are unavailable, flag affected dimensions as low confidence.
+
+**Naming conventions**: When integration names don't align with technical data flow direction (e.g., "System-A-System-B" but System-B is actually the source), document the naming convention with rationale upfront to prevent repeated confusion.
+
 ## Integration Profile
 
 | Attribute | Value |

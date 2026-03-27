@@ -134,6 +134,24 @@ Entry Point: [Root Job/Recipe]
 - [ ] Missing timeout configuration
 - [ ] Credentials in plaintext
 
+## Confidence Classification
+
+For each major finding, classify confidence level:
+
+| Confidence | Definition | Example |
+|------------|-----------|---------|
+| **HIGH** | Code directly confirms this finding | Hardcoded value present, missing component, explicit mapping |
+| **MEDIUM** | Code implies but cannot confirm | Structural intent visible, behavior may differ at runtime |
+| **LOW** | Cannot determine from code alone | Scheduling, error rates, incident history, runtime routing |
+
+## Runtime Validation Required
+
+| Finding | Code Shows | Runtime Evidence Needed | Confidence |
+|---------|-----------|------------------------|------------|
+| | [what static analysis confirms] | [what data would change this] | HIGH/MED/LOW |
+
+**Note**: This inventory reflects static analysis only. Findings marked MEDIUM or LOW confidence should be verified with runtime data and a domain owner walkthrough before scoring.
+
 ## File Manifest
 
 | File | Type | Size | Description |

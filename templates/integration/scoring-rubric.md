@@ -19,6 +19,36 @@ Score each dimension 1-5 based on evidence from the assessment.
 - If evidence is insufficient, mark as "Needs Assessment" (N/A)
 - Use the **lowest applicable score** when criteria span multiple levels
 - Document evidence for each score
+- Manually verify weighted average calculations - check rounding at each step and confirm weight application order matches the formula below
+- Verify that recommendations match the target artifact's lifecycle model - do not recommend capabilities for artifact types that don't support them
+- Dimensions D3, D4, D7, D8 require runtime data for accurate scoring - mark as low confidence without it
+
+## Confidence Levels by Dimension Type
+
+When scoring without runtime data, confidence varies predictably by dimension:
+
+| Dimension | Type | Expected Confidence | Rationale |
+|-----------|------|-------------------|-----------|
+| D1 Architecture & Design | Structural | HIGH | Directly visible in code/config |
+| D2 Data Quality & Governance | Structural | HIGH | Schemas, mappings visible in code |
+| D3 Operational Excellence | Operational | LOW | Monitoring, alerting require runtime data |
+| D4 Reliability & Resilience | Operational | LOW | Retry behavior, circuit breakers need runtime verification |
+| D5 Security & Compliance | Mixed | MEDIUM | Auth patterns visible, actual behavior not |
+| D6 Business Impact | Business | LOW | Cost/criticality data not in code |
+| D7 Maintainability & Scalability | Mixed | MEDIUM | Test coverage visible, scaling behavior not |
+| D8 Tool & Platform | Assessment | LOW | Platform fit requires team context |
+
+## Preliminary Scoring Protocol
+
+When the assessment is marked "Preliminary - Static Analysis Only":
+
+1. Flag scorecard header: **"Preliminary Score - Static Analysis Only"**
+2. Append `(INFERRED)` to dimension scores based on code structure vs runtime confirmation
+3. Present overall as **"Preliminary Overall: X.X/5.0 (expect ~10% adjustment after runtime validation)"**
+4. List "Runtime Validation Required" section with dimensions needing verification
+5. **Never present static scores as final** to stakeholders
+
+Expected score swing after runtime enrichment: ~10% (based on production data where 4 of 8 dimensions changed after runtime data was added).
 
 ---
 

@@ -244,3 +244,34 @@
 | # | Question | Owner | Due | Status |
 |---|----------|-------|-----|--------|
 | 1 | [Question] | [Who] | [When] | [Open/Resolved] |
+
+---
+
+## Methodology Notes
+
+### Security as Feature Work
+
+Security gaps (missing OAuth, unencrypted channels, exposed credentials) are Phase 1 CRITICAL requirements, not "later enhancements". Treat security with the same rigor as functional requirements - full tests, documentation, proper implementation. Security findings must block approval if unresolved.
+
+### SOLO/PAIR Classification
+
+Every action item in this design must be classified for implementability:
+
+- **SOLO**: Implementable directly from this document and existing code/documentation alone
+- **PAIR**: Requires a domain owner present - undocumented runtime behavior, live system state dependencies, business rules not in code
+
+Format each action item as: `[Phase X.Y] Action title - [SOLO|PAIR] - Verify: [specific check before implementing]`
+
+When uncertain if an action is SOLO or PAIR, default to PAIR. PAIR items attempted as SOLO have a 43% false positive rate - a 30-minute walkthrough prevents days of rework.
+
+### Front-Load the Model (T6)
+
+Lead with the complete approach (pattern choice, phases, trade-offs) before diving into implementation details. Present alternatives considered and why they were rejected upfront. This prevents mid-design pivots and enables informed stakeholder feedback early.
+
+Structure: Overview -> Pattern Choice -> Phases -> Details (not Details -> Pattern -> Overview)
+
+---
+
+**Design Principles**:
+- Prefer dynamic path/entity inputs over hardcoded endpoints for connector actions - generic designs enable reuse without modification
+- Include enough implementation detail (component inventories, variable specs, code snippets) that this document can serve as a standalone build reference after a time gap

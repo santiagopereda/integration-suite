@@ -155,3 +155,39 @@
 | [Phase 1 end] | [X.X] | [Level] | After critical fixes |
 | [Phase 2 end] | [X.X] | [Level] | After quick wins |
 | [Phase 3 end] | [X.X] | [Level] | Target achieved |
+
+---
+
+## Methodology Notes
+
+### SOLO/PAIR Classification
+
+Every improvement action in this roadmap must be classified for implementability:
+
+- **SOLO**: Implementable directly from this roadmap and existing code/documentation alone
+- **PAIR**: Requires a domain owner present - undocumented runtime behavior, live system state dependencies, business rules not in code
+
+Format each action item as: `[Phase X.Y] Action title - [SOLO|PAIR] - Verify: [specific check before implementing]`
+
+When uncertain, default to PAIR. PAIR items attempted as SOLO have a 43% false positive rate.
+
+### Verification-Before-Implementation Gate
+
+Before implementing any improvement action classified as MEDIUM or LOW confidence from the assessment:
+
+1. Verify the finding against actual runtime behavior (not just code/docs)
+2. Confirm with domain owner that the gap is real, not a documentation gap
+3. If verification changes the finding, update both the roadmap and the scorecard
+
+This gate exists because 43% of static analysis findings are false positives. Implementing "fixes" for non-issues wastes effort and can introduce regressions.
+
+### Security as Feature Work
+
+Security gaps are CRITICAL tier improvements, not strategic or optimization items:
+- Missing OAuth, unencrypted channels, exposed credentials = Phase 1 (1-2 weeks)
+- Never phase security as "later enhancements" - build it into the critical fixes phase
+- Security improvements must block approval if unresolved after Phase 1
+
+---
+
+**Usage**: This roadmap is a living document. Update scores, status, and remediation progress as fixes land. Include sprint/phase assignments so it serves as both a plan and a tracking tool throughout the engagement.

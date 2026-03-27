@@ -2,6 +2,57 @@
 
 Guided interview structure for evaluating integrations. Adapt questions based on context (new vs existing).
 
+## Methodology & Constraints
+
+### Interview Approach
+
+Follow this conversational flow for structured discovery:
+
+1. **Start broad**: business context, systems involved, trigger
+2. **Narrow to specifics**: volumes, latency, data complexity
+3. **Explore dimensions**: iterate through 8 areas systematically
+4. **Validate understanding**: summarize and confirm findings
+5. **Identify gaps**: note unknowns for follow-up
+
+### Adaptive Questioning
+
+- **New integrations**: focus on requirements, constraints, stakeholders
+- **Existing integrations**: focus on current state, pain points, incidents
+- **Inventory available**: focus on gaps inventory couldn't capture (business context, compliance, stakeholder info)
+- **Non-technical stakeholder**: simplify questions, explain concepts
+
+### Evidence Classification (T2: Indirect Evidence Bias)
+
+All indirect sources have predictable error direction. Apply skepticism before assessment:
+
+| Source Type | Bias Direction |
+|-------------|---------------|
+| API documentation | Overstates what works (e.g., only 1 of 7 SAP "blocking" fields actually blocks creation) |
+| Static code analysis | Misses runtime behavior, configuration dependencies |
+| Issue tracking systems | Overstates severity, misses resolved-but-not-closed items |
+| Stakeholder interviews (without walkthrough) | Misses implementation details, overstates capabilities |
+
+### Runtime Data Gate
+
+Before finalizing the assessment:
+
+1. Verify whether runtime data (execution logs, error rates, latency metrics) is available
+2. If available, request a domain owner walkthrough (30 minutes prevents days of wrong assumptions)
+3. If NOT available, mark assessment as "Preliminary - Static Analysis Only" in the document header
+4. Operational dimensions (D3 Monitoring, D4 Incident Response, D7 Scheduling, D8 Alerting) are almost always inference without runtime data - flag these explicitly
+
+### Ask WHY, Not Just WHAT (T5)
+
+Code, configuration, and documentation show WHAT was built. Only domain owners/developers know WHY:
+- What constraint drove this approach?
+- What was deliberately kept simple?
+- What was meant to be temporary?
+- What alternatives were considered and rejected?
+
+Before making recommendations, conduct a developer/domain owner walkthrough. 30 minutes prevents days of wrong assumptions.
+
+---
+
 ## Section 1: Business Context
 
 - What business process does this integration support?

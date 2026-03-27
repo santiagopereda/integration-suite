@@ -143,4 +143,8 @@ Lessons from production Workato integration projects. Check these during assessm
 
 **High False Positive Rate in Static Analysis**: 43% of issues identified in a Workato assessment Phase 0 validation (6/14) were false positives. Platform security features (AES-256, concurrency controls) and API design (self-terminating pagination) already handled flagged concerns. Always verify findings against actual platform capabilities before recommending fixes.
 
-**Recipes Are Source of Truth, Not Resource Files**: VQL/resource files can drift from actual recipe implementations. When conflicting information exists, always verify against the actual recipe JSON exports.
+**Recipes Are Source of Truth, Not Resource Files**: VQL/resource files can drift from actual recipe implementations. Recipes reflect the currently deployed logic; VQL may reflect older versions or abandoned configurations. When conflicting information exists, always verify against the actual recipe JSON exports. Never base assessment findings on VQL alone - cross-reference with the recipe definition.
+
+### Data Format Awareness
+
+**API Response Format Differences**: Different API endpoints (e.g., OData vs proprietary API) for the same system may return the same logical field with different encoding, escaping, or formatting. When recipes interact with multiple endpoints for the same backend, flag potential data format mismatches in the inventory.

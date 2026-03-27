@@ -98,6 +98,22 @@
 
 *This assessment was conducted using the 8-Dimension Integration Maturity Framework aligned with industry standards (Gartner, TOGAF). Scores are evidence-based and benchmarked against [sector] industry averages.*
 
+## Frequently Asked Questions
+
+| Question | Answer |
+|----------|--------|
+| [Why was this architecture chosen?] | [Rationale focusing on business drivers] |
+| [Why not [alternative]?] | [Trade-offs explained in business terms] |
+| [What happens if we don't act on recommendation X?] | [Risk in business impact terms] |
+
+Focus FAQ on "why" questions that address common confusion about design decisions.
+
+---
+
+**Structural Guide**:
+- Reference assessment artifacts by name and section - never copy findings into this summary (prevents drift during remediation)
+- If scores were corrected during the assessment, show before/after values transparently with explanation
+
 **Tone Guide for Populating**:
 - Replace "Ad hoc" with "Significant opportunity for improvement"
 - Replace "Red flag" with "Priority recommendation"

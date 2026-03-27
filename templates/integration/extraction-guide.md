@@ -77,6 +77,19 @@ Auto-detect platform from file structure:
 | **Boomi** | `*.xml` with `<bns:Component>`, `/process/` with Boomi schemas |
 | **SAP CPI** | `META-INF/MANIFEST.MF` with `SAP`, `*.iflw` files |
 
+## Config Export Baseline (Day 1)
+
+Before diving into code analysis, export and review platform configuration:
+
+1. **Platform config**: Connection configurations, runtime settings, environment definitions
+2. **Connection configs**: Authentication methods, endpoint URLs, credential storage approach
+3. **Environment variables**: Context groups, environment-specific overrides
+4. **Deployment descriptors**: Runtime container config, JVM settings, wrapper files
+
+This reveals architectural constraints not visible in code exports. For example, dual-JVM Karaf architecture in Talend ESB is only visible in `wrapper.conf` files, not in job/route definitions. Connection configs show whether credentials use vault integration or plain context variables.
+
+**Why Day 1**: These artifacts frame the entire assessment. A code export alone may lead to incorrect assumptions about the runtime environment (e.g., assuming single-JVM when the platform runs two separate JVMs).
+
 ## Analysis Strategy
 
 1. **Glob first**: Find all relevant files by extension and naming pattern
