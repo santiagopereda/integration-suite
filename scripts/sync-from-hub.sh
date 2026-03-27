@@ -17,37 +17,11 @@ echo "Syncing from hub: ${HUB_ROOT}"
 echo "Plugin target:    ${PLUGIN_DIR}"
 echo ""
 
-# --- Agents: copy and strip 'model: sonnet' line ---
-AGENTS=(
-  agent-integration-assessor
-  agent-integration-scorer
-  agent-integration-reviewer
-)
-
-echo "=== Agents ==="
-for agent in "${AGENTS[@]}"; do
-  src="${HUB_ROOT}/.claude/agents/${agent}.md"
-  dest="${PLUGIN_DIR}/agents/${agent}.md"
-  if [ -f "$src" ]; then
-    # Remove the 'model: sonnet' line from frontmatter
-    sed '/^model: sonnet$/d' "$src" > "$dest"
-    echo "  synced: ${agent}.md (model line stripped)"
-  else
-    echo "  SKIP:   ${src} not found"
-  fi
-done
-
 # --- Skills: copy SKILL.md and companion files from hub skills directories ---
 SKILLS=(
-  analyze-integration
-  assess-integration
-  score-integration
-  review-integration
-  summarize-integration
   integration-pipeline
 )
 
-echo ""
 echo "=== Skills ==="
 for skill in "${SKILLS[@]}"; do
   src_dir="${HUB_ROOT}/.claude/skills/${skill}"

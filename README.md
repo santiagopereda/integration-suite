@@ -1,16 +1,16 @@
 # Integration Suite Plugin
 
-Claude Code plugin for end-to-end integration maturity assessment. Provides 3 specialized agents, 5 commands, and 19 templates based on the 8-Dimension Integration Maturity Framework (Gartner-aligned).
+Claude Code plugin for end-to-end integration maturity assessment. Provides a single pipeline skill and 19 templates based on the 8-Dimension Integration Maturity Framework (Gartner-aligned).
 
 ## What It Does
 
 Evaluate integrations from code analysis through customer-facing reports:
 
 ```
-Code Export → Inventory → Assessment → Scorecard → Design/Roadmap → Review → Summary
+Code Export -> Inventory -> Assessment -> Scorecard -> Design/Roadmap -> Review -> Summary
 ```
 
-Each step is handled by a dedicated agent with deep domain expertise and backed by structured templates.
+All 6 phases are handled by the `/integration-pipeline` skill, which embeds domain expertise directly in its prompts and references structured templates for each output.
 
 ## Installation
 
@@ -30,95 +30,86 @@ claude --plugin-dir /path/to/plugins/integration-suite
 
 Templates are auto-copied to your project on first session start via the `SessionStart` hook. The hook checks for `.agent/templates/integration/` and copies templates there if missing.
 
-**Manual setup** (if the hook didn't fire or you need to re-initialize):
+## Usage
+
+### Full Pipeline (code-first)
 
 ```bash
-/integration-suite:setup
+/integration-suite:integration-pipeline code-first /path/to/export customer-sync
 ```
 
-## Agents
+Runs all 6 phases: Analyze -> Assess -> Score -> Design -> Review -> Summarize
 
-| Agent | Purpose |
-|-------|---------|
-| `agent-integration-assessor` | Conduct guided discovery interviews across 8 maturity dimensions |
-| `agent-integration-scorer` | Score maturity 1-5 per dimension with red flags, quick wins, benchmarks |
-| `agent-integration-reviewer` | Validate designs against best practices, security standards, 8-dimension framework |
+### Full Pipeline (new integration)
 
-## Commands
+```bash
+/integration-suite:integration-pipeline new "Salesforce-SAP customer master data sync" salesforce-sap
+```
 
-| Command | Description |
-|---------|-------------|
-| `/integration-suite:analyze-integration` | Parse a code export into an inventory |
-| `/integration-suite:assess-integration` | Full assessment lifecycle (assess → score → design → review) |
-| `/integration-suite:score-integration` | Quick maturity scoring from description or existing assessment |
-| `/integration-suite:review-integration` | Design review with findings and approval status |
-| `/integration-suite:summarize-integration` | Customer-facing summary from assessment/scorecard data |
+### Quick Score (skip design + review)
+
+```bash
+/integration-suite:integration-pipeline new --quick "MuleSoft order processing" order-sync
+```
+
+### Standalone Phases
+
+Run individual phases with `--phase`:
+
+```bash
+# Score an existing assessment
+/integration-suite:integration-pipeline --phase score --from-file assessment.md my-integration
+
+# Review a design with security deep-dive
+/integration-suite:integration-pipeline --phase review --from-file design.md --security my-integration
+
+# Generate customer summary
+/integration-suite:integration-pipeline --phase summarize --from-file scorecard.md my-integration
+```
+
+### Headless Mode (CI/scripts)
+
+```bash
+./skills/integration-pipeline/run-pipeline.sh --mode code-first --export /path/to/export customer-sync
+./skills/integration-pipeline/run-pipeline.sh --mode new --brief "Description" --quick my-integration
+./skills/integration-pipeline/run-pipeline.sh --phase score --from-file assessment.md my-integration
+```
 
 ## Templates
 
 19 templates in `.agent/templates/integration/` provide structure for all outputs:
 
 **Scoring & Assessment**
-- `scoring-rubric.md` — 8 dimensions x 5 levels with criteria
-- `scorecard-template.md` — Output structure with radar chart data
-- `assessment-questionnaire.md` — Interview structure
-- `assessment-document.md` — Assessment output structure
-- `industry-benchmarks.md` — Sector benchmarks for comparison
-- `red-flags-library.md` — Common integration anti-patterns
+- `scoring-rubric.md` - 8 dimensions x 5 levels with criteria and confidence guidance
+- `scorecard-template.md` - Output structure with radar chart data
+- `assessment-questionnaire.md` - Interview structure with methodology section
+- `assessment-document.md` - Assessment output structure
+- `industry-benchmarks.md` - Sector benchmarks for comparison
+- `red-flags-library.md` - Common integration anti-patterns
 
 **Design & Review**
-- `design-document.md` — New integration architecture template
-- `improvement-roadmap.md` — Existing integration improvement plan
-- `pattern-library.md` — Integration patterns reference
-- `design-quality-checklist.md` — Pre-delivery validation
-- `review-checklist.md` — Structured review framework
-- `review-report-template.md` — Review output structure
-- `security-review-checklist.md` — OWASP API Top 10, auth, encryption
-- `anti-patterns.md` — What to watch for
+- `design-document.md` - New integration architecture template
+- `improvement-roadmap.md` - Existing integration improvement plan
+- `pattern-library.md` - Integration patterns reference
+- `validation-checklist.md` - Pre-delivery and peer review validation
+- `review-report-template.md` - Review output structure
+- `security-review-checklist.md` - OWASP API Top 10, auth, encryption
+- `anti-patterns.md` - What to watch for
 
 **Analysis**
-- `inventory-document.md` — Code analysis output structure
-- `extraction-guide.md` — Universal extraction checklist
-- `platform-parsers/talend.md` — Talend-specific parsing guide
-- `platform-parsers/workato.md` — Workato-specific parsing guide
+- `inventory-document.md` - Code analysis output structure with confidence classification
+- `extraction-guide.md` - Universal extraction checklist with config baseline
+- `platform-parsers/talend.md` - Talend core workspace parsing
+- `platform-parsers/talend-jobs.md` - Talend DI job parsing (t* components)
+- `platform-parsers/talend-routes.md` - Talend ESB route parsing (c* components)
+- `platform-parsers/workato.md` - Workato recipe parsing
 
 **Summary**
-- `customer-summary-template.md` — Customer-facing report structure
+- `customer-summary-template.md` - Customer-facing report structure
 
 ## Template Customization
 
-Templates are copied to your project's `.agent/templates/integration/` directory. You can edit them freely — the plugin won't overwrite existing files on subsequent sessions.
-
-To reset a template to its default, delete it and restart your session (or run `/integration-suite:setup`).
-
-## Typical Workflows
-
-### Full Lifecycle (new integration)
-
-```bash
-/integration-suite:assess-integration new Salesforce-SAP customer master data sync
-```
-
-Runs: Assessor (interview) → Scorer (scorecard) → Design (inline) → Reviewer (validation)
-
-### Code-First (existing integration)
-
-```bash
-/integration-suite:analyze-integration /path/to/talend/export
-/integration-suite:assess-integration existing  # uses inventory as starting point
-```
-
-### Quick Score
-
-```bash
-/integration-suite:score-integration MuleSoft integration for order processing
-```
-
-### Customer Report
-
-```bash
-/integration-suite:summarize-integration --from-file .agent/tasks/integration-sfdc-sap/scorecard.md
-```
+Templates are copied to your project's `.agent/templates/integration/` directory. You can edit them freely - the plugin won't overwrite existing files on subsequent sessions.
 
 ## Hub Maintenance
 
@@ -128,13 +119,10 @@ The `scripts/sync-from-hub.sh` script syncs updates from the Agentic Hub to this
 bash plugins/integration-suite/scripts/sync-from-hub.sh /path/to/agentic-hub
 ```
 
-This:
-- Copies agent files (strips `model:` line)
-- Copies command files (skips `summarize-integration.md` which is manually maintained)
-- Rsyncs templates
+This copies the pipeline skill files and rsyncs all templates.
 
 ## Version
 
-- **Plugin**: 1.0.0
+- **Plugin**: 2.0.0
 - **Framework**: 8-Dimension Integration Maturity Framework (Gartner-aligned)
 - **Platforms**: Workato, Talend (supported); MuleSoft, Boomi, SAP CPI (planned)

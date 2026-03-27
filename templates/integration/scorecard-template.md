@@ -111,4 +111,4 @@
 
 - **For Designer**: Key gaps requiring architectural decisions: [list]
 - **For Reviewer**: Focus areas for design review: [list]
-- **For Customer**: Summary ready for `/summarize-integration`
+- **For Customer**: Summary ready for `/integration-pipeline --phase summarize`
