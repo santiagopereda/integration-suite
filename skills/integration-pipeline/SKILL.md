@@ -1,20 +1,20 @@
 ---
 name: integration-pipeline
-description: End-to-end integration assessment pipeline orchestrating all 6 phases from analysis to customer summary
+description: End-to-end integration assessment pipeline - single entry point for all integration work. Run the full 6-phase pipeline or target individual phases with --phase.
 disable-model-invocation: true
 ---
 
-# /integration-pipeline - End-to-End Integration Assessment
+# /integration-pipeline - Integration Assessment Pipeline
 
-Orchestrate the full 6-phase integration assessment pipeline from code analysis through customer-facing summary.
+Single entry point for all integration assessment work. Run the full 6-phase pipeline or target individual phases.
 
 ## Quick Reference
 
 | Aspect | Details |
 |--------|---------|
 | **Invocation** | `/integration-pipeline [options] <integration-name>` |
-| **Agents Used** | assessor, scorer, reviewer, documentation-specialist |
 | **Output** | Complete assessment package in `.agent/tasks/integration-{name}/` |
+| **Phases** | Analyze, Assess, Score, Design, Review, Summarize |
 
 ## Modes
 
@@ -27,8 +27,6 @@ Orchestrate the full 6-phase integration assessment pipeline from code analysis 
 **Auto-detection**: If a path argument is provided, defaults to `code-first`. Otherwise defaults to `new`.
 
 ### Mode-Phase Matrix
-
-Which phases run for each mode (before applying `--quick`):
 
 | Phase | code-first | new | existing |
 |-------|-----------|-----|----------|
@@ -45,20 +43,34 @@ Phase 1 only runs in `code-first` mode. Adding `--quick` additionally skips Phas
 
 ```bash
 # Full pipeline from code export
-# Output: .agent/tasks/integration-customer-sync/
 /integration-pipeline --mode code-first /path/to/export customer-sync
 
 # New integration assessment (skip code analysis)
-# Output: .agent/tasks/integration-salesforce-sap-sync/
 /integration-pipeline --mode new salesforce-sap-sync
 
 # Quick pipeline (skip design + review phases)
-# Output: .agent/tasks/integration-order-processing/
 /integration-pipeline --quick --mode existing order-processing
 
 # With security deep-dive in review phase
-# Output: .agent/tasks/integration-pii-data-integration/
 /integration-pipeline --security --mode new pii-data-integration
+```
+
+### Standalone Phase Usage
+
+Run individual phases with `--phase` for targeted work:
+
+```bash
+# Analyze only
+/integration-pipeline --phase analyze /path/to/export
+
+# Score from an existing assessment
+/integration-pipeline --phase score --from-file assessment.md
+
+# Review with security deep-dive
+/integration-pipeline --phase review --from-file design.md --security
+
+# Generate customer summary
+/integration-pipeline --phase summarize --from-file scorecard.md
 ```
 
 ## Flags
@@ -66,6 +78,8 @@ Phase 1 only runs in `code-first` mode. Adding `--quick` additionally skips Phas
 | Flag | Description |
 |------|-------------|
 | `--mode <mode>` | Override auto-detection: `code-first`, `new`, `existing` |
+| `--phase <phase>` | Run a single phase: `analyze`, `assess`, `score`, `design`, `review`, `summarize` |
+| `--from-file <path>` | Input file for standalone phase (previous phase output) |
 | `--quick` | Skip Phase 4 (Design) and Phase 5 (Review) |
 | `--security` | Add security deep-dive in Phase 5 (Review) |
 | `--output <dir>` | Override output directory (default: `.agent/tasks/integration-{name}/`) |
@@ -83,8 +97,6 @@ inventory  assessment  scorecard  design    review     customer
 new/existing                      --quick  --quick
 ```
 
-Phase 1 is skipped for `new` and `existing` modes (no code export to analyze). Phases 4-5 are skipped when `--quick` is set.
-
 ### Phase 1: Analyze (code-first mode only)
 
 **Runs inline** (no agent delegation - uses Read, Grep, Glob directly)
@@ -101,8 +113,12 @@ Phase 1 is skipped for `new` and `existing` modes (no code export to analyze). P
 
 2. **Load Templates** - Read these before parsing:
    - `.agent/templates/integration/extraction-guide.md` (universal checklist)
-   - `.agent/templates/integration/platform-parsers/[platform].md` (platform-specific)
    - `.agent/templates/integration/inventory-document.md` (output structure)
+   - Platform-specific parser guide(s):
+     - **Talend DI**: `platform-parsers/talend.md` + `platform-parsers/talend-jobs.md`
+     - **Talend ESB**: `platform-parsers/talend.md` + `platform-parsers/talend-jobs.md` + `platform-parsers/talend-routes.md`
+     - **Workato**: `platform-parsers/workato.md`
+   - Detect workspace type for Talend: check for `routes/` directory to determine DI vs ESB
 
 3. **Scan & Parse** - Glob to find all relevant files, Read to parse each:
    - Connections: source/target systems, connectors, auth type
@@ -113,7 +129,7 @@ Phase 1 is skipped for `new` and `existing` modes (no code export to analyze). P
 
 4. **Build Call Graph** - Grep for inter-job/recipe references:
    - Workato: `"call_recipe"` / `"recipe_function"` across recipes
-   - Talend: `"tRunJob"` componentName across `.item` files
+   - Talend: `"tRunJob"` componentName across `.item` files; for ESB also `"cTalendJob"` in routes
    - Result: dependency graph (parent -> [children])
 
 5. **Trace Data Journey** - Follow call graph depth-first from entry points:
@@ -132,6 +148,12 @@ Phase 1 is skipped for `new` and `existing` modes (no code export to analyze). P
    - **MEDIUM**: Code implies but cannot confirm (structural intent)
    - **LOW**: Cannot determine from code alone (scheduling, error rates, runtime routing)
 
+#### Output modes
+
+- **Brief** (~500-1,000 words): Connections, schemas, key mappings, top-level observations. Trigger: "quick analysis", "what connectors", "summary"
+- **Standard** (~2,000-4,000 words): Full inventory with all sections and data journey map. DEFAULT.
+- **Detailed** (~4,000-8,000 words): Full inventory + all sub-flows + every transformation + file manifest.
+
 #### Critical constraints
 - **Never fabricate** field mappings or schemas - only document what's in the code
 - **Code shows WHAT, not WHY** - flag findings as "Code shows [X], intent unclear"
@@ -139,7 +161,7 @@ Phase 1 is skipped for `new` and `existing` modes (no code export to analyze). P
 - **Recipes/jobs are source of truth** over config files (configs may be stale)
 
 #### Output structure
-Write `inventory.md` with sections: Connections, Schemas, Field Mappings, Transformations, Dependency Graph, Data Journey Map, Observations/Red Flags, Runtime Validation Required table.
+Write `inventory.md` with sections: Connections, Schemas, Field Mappings, Transformations, Dependency Graph, Data Journey Map, Observations/Red Flags, Confidence Classification, Runtime Validation Required table.
 
 Add this note before the summary: "This inventory reflects static analysis only. Findings marked MEDIUM or LOW confidence should be verified with runtime data and a domain owner walkthrough before scoring."
 
@@ -147,16 +169,28 @@ Add this note before the summary: "This inventory reflects static analysis only.
 
 ### Phase 2: Assess (INTERACTIVE)
 
-**Agent**: agent-integration-assessor
+**Runs inline** - for interactive mode, spawn a general-purpose subagent with the assessment methodology. For headless mode (run-pipeline.sh), generate assessment inline.
 **Input**: Inventory (if Phase 1 ran) + user context
 **Output**: `assessment.md`
 
-```
-- Guided interview across 8 dimensions
-- For code-first: pre-populate dimensions from inventory
-- For new/existing: full discovery interview
-- Produces structured assessment document
-```
+#### Interactive mode
+
+Spawn a **general-purpose subagent** with this prompt:
+
+> You are conducting an integration assessment interview. Read `.agent/templates/integration/assessment-questionnaire.md` for the methodology and interview structure, and `.agent/templates/integration/assessment-document.md` for the output format. Follow the Methodology & Constraints section: use the 5-step conversational flow, apply adaptive questioning based on context (new/existing/inventory-available), classify evidence using the T2 bias table, and apply the runtime data gate before finalizing. Ask WHY, not just WHAT. Write the completed assessment to `{output_dir}/assessment.md`.
+
+The subagent conducts a conversational interview with the user.
+
+#### Headless mode (--brief)
+
+Generate assessment inline from the brief description and any inventory data. For dimensions where information is insufficient, mark as "UNKNOWN - requires further discovery".
+
+#### Domain Owner Verification Gate
+
+Before finalizing:
+- Distinguish findings from direct evidence vs inference
+- If no domain owner walkthrough has occurred: mark as "Preliminary - Static Analysis Only"
+- Operational dimensions (D3, D4, D7, D8) are almost always inference without runtime data - flag explicitly
 
 **Gate**: Verify `assessment.md` exists and contains all 8 dimension sections.
 
@@ -164,7 +198,7 @@ Add this note before the summary: "This inventory reflects static analysis only.
 
 ### Phase 3: Score
 
-**Agent**: agent-integration-scorer
+**Runs inline** (no agent delegation)
 **Input**: `assessment.md` (+ `inventory.md` if Phase 1 ran)
 **Output**: `scorecard.md`
 
@@ -183,11 +217,12 @@ Add the classification as the first line of the scorecard, before any scores.
 
 #### Step 2: Score Each Dimension
 
-Apply the scoring rubric from `.agent/templates/integration/scoring-rubric.md`. For each dimension:
+Read `.agent/templates/integration/scoring-rubric.md` for criteria. Apply the Confidence Levels by Dimension Type table from the rubric. For each dimension:
 - Score based on **evidence**, not potential or intentions
 - Use the **lowest applicable score** when criteria span multiple levels
 - Document the specific evidence supporting each score
 - Mark confidence: HIGH (direct evidence), MEDIUM (inferred from context), LOW (assumed/unknown)
+- Append `(INFERRED)` to dimension scores based on code structure vs runtime confirmation when assessment is static-only
 
 #### Step 3: Calculate Overall Score
 
@@ -213,9 +248,19 @@ Overall = (Arch*2 + Data*2 + OpEx*3 + Reliability*3 + Security*3 + Business*1.5 
 - Quick wins: improvements achievable in <1 day that raise a dimension by 0.5+
 - For each, include: severity, affected dimension, remediation, effort estimate
 
-#### Step 6: Runtime Validation Required Table
+#### Step 6: Score Revision Log
 
-Add a table listing which dimensions and scores would change with runtime data. This is critical because static analysis scores can swing 10%+ after runtime enrichment (proven across multiple engagements).
+When any score is revised from a previous version, record the change:
+
+| Date | Dimension | Score Before | Score After | Reason |
+|------|-----------|-------------|-------------|--------|
+| [date] | [dimension] | [X.X] | [X.X] | [what new evidence changed the score] |
+
+Never silently update scores. **Never present static scores as final** to stakeholders.
+
+#### Step 7: Runtime Validation Required Table
+
+Add a table listing which dimensions and scores would change with runtime data. Critical because static analysis scores can swing 10%+ after runtime enrichment.
 
 | Dimension | Current Score | Confidence | Would Change With | Expected Direction |
 |-----------|--------------|------------|-------------------|-------------------|
@@ -238,7 +283,13 @@ Add a table listing which dimensions and scores would change with runtime data. 
 
 Always also load: `.agent/templates/integration/pattern-library.md`
 
-#### Step 2: Design Approach
+#### Step 2: Front-Load the Model (T6)
+
+Lead with the complete approach (pattern choice, phases, trade-offs) before diving into details. Present alternatives considered and why they were rejected. State assumptions and dependencies upfront.
+
+Structure: Overview -> Pattern Choice -> Phases -> Details (not Details -> Pattern -> Overview)
+
+#### Step 3: Design Approach
 
 **For New Integrations**:
 1. Analyze requirements from assessment
@@ -255,7 +306,7 @@ Always also load: `.agent/templates/integration/pattern-library.md`
 4. Define migration strategy (zero-downtime where possible)
 5. Set milestones and success criteria per phase
 
-#### Step 3: Classify Action Items (SOLO/PAIR)
+#### Step 4: Classify Action Items (SOLO/PAIR)
 
 Every recommendation or action item must be classified:
 
@@ -266,13 +317,12 @@ Every recommendation or action item must be classified:
 
 Format: `[Phase X.Y] Action title - [SOLO|PAIR] - Verify: [specific check]`
 
-#### Step 4: Quality Validation
+#### Step 5: Quality Validation
 
-Before writing output, validate:
+Before writing output, validate against `.agent/templates/integration/validation-checklist.md` Section A:
 - All 8 dimensions from assessment are addressed
 - Security findings are phased as feature work (Phase 1 critical tier), not "later enhancements"
 - Each phase has clear exit criteria
-- Load `.agent/templates/integration/design-quality-checklist.md` and check against it
 
 #### Critical constraints
 - **Lead with complete approach** (pattern choice, phases, trade-offs) before diving into details
@@ -284,23 +334,62 @@ Before writing output, validate:
 
 ### Phase 5: Review (skipped with --quick)
 
-**Agent**: agent-integration-reviewer
+**Runs inline** (no agent delegation)
 **Input**: `design.md` + `assessment.md`
 **Output**: `review-report.md`
 
-```
-- Validate design against best practices
-- Check 8-dimension coverage
-- Classify findings (Critical/High/Medium/Low)
-- If --security: OWASP API Top 10, encryption, auth deep-dive
-- Produce approval status
-```
+#### Step 1: Load Review Framework
+
+Read `.agent/templates/integration/validation-checklist.md` Section B for the structured review checklist. Also read `.agent/templates/integration/review-report-template.md` for the output structure.
+
+If `--security` flag is set, also load `.agent/templates/integration/security-review-checklist.md` for OWASP API Top 10 analysis and `.agent/templates/integration/anti-patterns.md` for pattern validation.
+
+#### Step 2: Validate Design
+
+- Parse design document: extract architecture, patterns, data flows, NFRs
+- Validate 8-dimension coverage using checklist
+- Check for architectural anti-patterns (distributed monolith, cascading failures, chatty interfaces)
+- Note strengths alongside gaps
+
+#### Step 3: Classify Findings
+
+| Severity | Definition | Action |
+|----------|-----------|--------|
+| **Critical** | Security vulnerability, data loss risk, SPOF with no DR | Must fix before implementation |
+| **High** | Missing resilience pattern, inadequate monitoring, no retry | Should fix before implementation |
+| **Medium** | Suboptimal pattern, documentation gap, optimization opportunity | Improve after MVP |
+| **Low** | Enhancement, additional testing, nice-to-have | Backlog |
+
+#### Step 4: Static vs Verified Findings (T3)
+
+Before classifying any finding, note its basis:
+- **From Design Document** (design states this explicitly): Classify normally
+- **Inferred from Design** (design implies but doesn't state): Append "- Requires Confirmation" to the finding
+
+**43% false positive rate in assessments** - nearly half of inferred findings may be documentation gaps, not actual design flaws. Don't penalize designs for what they don't explicitly state unless it's a required element.
+
+If the input assessment is marked "Preliminary - Static Analysis Only," note this in the review header and treat all operational findings as requiring confirmation.
+
+#### Step 5: Determine Approval
+
+| Status | Criteria |
+|--------|----------|
+| **Approved** | No critical or high findings. Design is implementation-ready. |
+| **Approved with Conditions** | Has high findings that must be resolved. Can start implementation in parallel with fixes. |
+| **Revisions Required** | Has critical findings. Must re-design and re-review before implementation. |
+
+Security gaps (missing OAuth, unencrypted channels, exposed credentials) must be classified as CRITICAL, not Medium. Security findings must block approval.
+
+#### Critical constraints
+- **Constructive over critical**: Focus on risks and improvements, not just flaws. Suggest alternatives when flagging issues.
+- **Accuracy over fabrication**: Never fabricate security vulnerabilities. Base findings on evidence in the design.
+- **Acknowledge limitations**: Platform-specific details = "validate with platform expert"; performance claims = "requires load testing"
 
 **Gate**: Verify `review-report.md` exists and contains: Findings, Approval Status.
 
 ### Phase 6: Summarize
 
-**Agent**: documentation-specialist
+**Runs inline** (no agent delegation)
 **Input**: `assessment.md` + `scorecard.md` + `design.md` (if exists) + `review-report.md` (if exists)
 **Output**: `customer-summary.md`
 
@@ -377,7 +466,7 @@ After 2 retries, the pipeline pauses and asks the user whether to continue or ab
 
 | Error | Action |
 |-------|--------|
-| Agent invocation fails | Retry once, then pause for user |
+| Phase execution fails | Retry once, then pause for user |
 | Gate validation fails | Retry phase (max 2), then pause |
 | User cancels during Phase 2 | Save partial assessment, exit cleanly |
 | Output directory not writable | Error with recovery instructions |
@@ -408,6 +497,14 @@ Runs Phases 2-3 and 6 only (Assess -> Score -> Summarize). Produces assessment, 
 
 Runs Phases 2-6 with security deep-dive in Phase 5 review.
 
+### Single Phase: Score from Existing Assessment
+
+```bash
+/integration-pipeline --phase score --from-file .agent/tasks/integration-sfdc/assessment.md
+```
+
+Runs only Phase 3 (Score) using the provided assessment file.
+
 ## Headless Mode
 
 For long pipelines or CI/CD contexts, use the companion shell script `run-pipeline.sh` to orchestrate the pipeline outside of an interactive Claude Code session. Each phase runs as an independent `claude -p` invocation with gate validation and automatic retry between phases.
@@ -436,6 +533,9 @@ bash .claude/skills/integration-pipeline/run-pipeline.sh --help
 
 # Quick pipeline (skip Design + Review)
 ./run-pipeline.sh --quick --mode new --brief "Quick score needed" my-integration
+
+# Single phase
+./run-pipeline.sh --phase score --from-file assessment.md my-integration
 
 # Resume after interruption
 ./run-pipeline.sh --resume customer-sync
@@ -479,5 +579,5 @@ These flags are specific to headless mode and are not available in the interacti
 
 ---
 
-**Version**: 1.4.0
+**Version**: 2.0.0
 **Status**: Active

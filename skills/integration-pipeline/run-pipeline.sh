@@ -12,7 +12,7 @@ set -euo pipefail
 # ---------------------------------------------------------------------------
 # Constants
 # ---------------------------------------------------------------------------
-readonly VERSION="1.0.0"
+readonly VERSION="2.0.0"
 readonly MAX_RETRIES=2
 readonly MIN_FILE_BYTES=100
 readonly SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
@@ -73,6 +73,8 @@ MODE=""
 EXPORT_PATH=""
 BRIEF=""
 FROM_ASSESSMENT=""
+FROM_FILE=""
+PHASE=""
 QUICK=false
 SECURITY=false
 OUTPUT_DIR=""
@@ -151,11 +153,14 @@ validation and retry logic between phases.
 
 Flags:
   --mode <mode>             Pipeline mode: code-first, new, existing
-                            (required unless --resume)
+                            (required unless --resume or --phase)
   --export <path>           Code export path (required for code-first)
   --brief <text>            Brief description for headless assessment
                             (required for new/existing without --from-assessment)
   --from-assessment <path>  Use existing assessment file, skip Phase 2
+  --phase <name>            Run a single phase: analyze, assess, score,
+                            design, review, summarize
+  --from-file <path>        Input file for standalone phase (use with --phase)
   --quick                   Skip Phase 4 (Design) and Phase 5 (Review)
   --security                Security deep-dive in Phase 5 (Review)
   --output <dir>            Override output directory
@@ -185,6 +190,12 @@ Examples:
   # Resume after interruption
   ./run-pipeline.sh --resume customer-sync
 
+  # Standalone phase: score an existing assessment
+  ./run-pipeline.sh --phase score --from-file assessment.md my-integration
+
+  # Standalone phase: review a design with security deep-dive
+  ./run-pipeline.sh --phase review --from-file design.md --security my-integration
+
   # Dry run to preview phases
   ./run-pipeline.sh --dry-run --mode new --brief "Test" test-run
 USAGE
@@ -204,6 +215,10 @@ parse_args() {
         BRIEF="$2"; shift 2 ;;
       --from-assessment)
         FROM_ASSESSMENT="$2"; shift 2 ;;
+      --from-file)
+        FROM_FILE="$2"; shift 2 ;;
+      --phase)
+        PHASE="$2"; shift 2 ;;
       --quick)
         QUICK=true; shift ;;
       --security)
@@ -288,6 +303,31 @@ validate_args() {
     return
   fi
 
+  # --phase mode: only mode is optional
+  if [[ -n "$PHASE" ]]; then
+    local phase_map="analyze:1 assess:2 score:3 design:4 review:5 summarize:6"
+    local phase_num=""
+    for entry in $phase_map; do
+      local name="${entry%%:*}"
+      local num="${entry##*:}"
+      if [[ "$name" == "$PHASE" ]]; then
+        phase_num="$num"
+        break
+      fi
+    done
+    if [[ -z "$phase_num" ]]; then
+      echo "Error: Invalid phase '$PHASE'. Must be: analyze, assess, score, design, review, summarize." >&2
+      exit 1
+    fi
+    if [[ -n "$FROM_FILE" && ! -f "$FROM_FILE" ]]; then
+      echo "Error: --from-file path not found: $FROM_FILE" >&2
+      exit 1
+    fi
+    # Default mode to 'existing' for standalone phases
+    MODE="${MODE:-existing}"
+    return
+  fi
+
   # Mode is required when not resuming
   if [[ -z "$MODE" ]]; then
     echo "Error: --mode is required (code-first, new, or existing)." >&2
@@ -354,6 +394,19 @@ ACTIVE_PHASES=()
 
 determine_phases() {
   ACTIVE_PHASES=()
+
+  # --phase overrides: run only the specified phase
+  if [[ -n "$PHASE" ]]; then
+    local phase_map="analyze:1 assess:2 score:3 design:4 review:5 summarize:6"
+    for entry in $phase_map; do
+      local name="${entry%%:*}"
+      local num="${entry##*:}"
+      if [[ "$name" == "$PHASE" ]]; then
+        ACTIVE_PHASES=("$num")
+        return
+      fi
+    done
+  fi
 
   case "$MODE" in
     code-first) ACTIVE_PHASES+=(1) ;;
@@ -621,7 +674,14 @@ $inventory_context
 
 **Integration Brief**: $BRIEF
 
-**Task**: Generate a headless assessment based on available context. Use the integration brief and any inventory data to populate the 8 integration dimensions as completely as possible. For any dimensions where information is insufficient, explicitly mark them as "UNKNOWN - requires further discovery" rather than guessing. Produce a structured assessment document.
+**Task**: Generate a headless assessment based on available context. Read $TEMPLATE_DIR/assessment-questionnaire.md for the methodology section (evidence classification, runtime data gate, ask-WHY-not-WHAT). Use the integration brief and any inventory data to populate the 8 integration dimensions as completely as possible. For any dimensions where information is insufficient, explicitly mark them as "UNKNOWN - requires further discovery" rather than guessing.
+
+**Methodology constraints**:
+- Distinguish direct evidence from inference explicitly
+- All indirect sources have predictable bias: API docs overstate capabilities, static code misses runtime behavior, stakeholder interviews overstate capabilities
+- If no runtime data available, mark assessment as "Preliminary - Static Analysis Only"
+- Operational dimensions (D3 Monitoring, D4 Incident Response, D7 Scheduling, D8 Alerting) are almost always inference without runtime data - flag explicitly
+- Produce a structured assessment document
 
 **Output**: Write your complete output to $OUTPUT_DIR/assessment.md
 
@@ -643,7 +703,7 @@ You are running Phase 3 (Score) of an integration assessment pipeline.
 **Integration**: $INTEGRATION_NAME
 **Working Directory**: $OUTPUT_DIR
 **Template**: Read $TEMPLATE_DIR/scorecard-template.md for the expected output structure.
-**Rubric**: Read $TEMPLATE_DIR/scoring-rubric.md for the scoring criteria.
+**Rubric**: Read $TEMPLATE_DIR/scoring-rubric.md for the scoring criteria, including the "Confidence Levels by Dimension Type" and "Preliminary Scoring Protocol" sections.
 
 **Input files** (read these first):
 - $OUTPUT_DIR/assessment.md (assessment from Phase 2)
@@ -651,17 +711,19 @@ $inventory_context
 
 **Task**: Score this integration using this workflow:
 
-1. **Classify Input Quality** - Determine what evidence is available and add classification as the FIRST line of the scorecard:
+1. **Pre-Scoring Check** - Before scoring, classify the input quality and add classification as the FIRST line of the scorecard:
    - Description only (no assessment/inventory): "PRELIMINARY - Description Only" (LOW confidence cap)
    - Assessment from interview (no code/runtime): "ASSESSMENT-BASED" (MEDIUM max confidence)
    - Assessment + code inventory (no runtime): "STATIC ANALYSIS" (HIGH for code-confirmed)
    - Assessment + runtime data (logs, metrics): "RUNTIME-VALIDATED" (HIGH on all supported)
+   If input is PRELIMINARY or ASSESSMENT-BASED, add a header flag: "**WARNING: This scorecard is preliminary. Scores may shift 10%+ after runtime data enrichment.**"
 
 2. **Score Each Dimension** - Apply the rubric to score all 8 dimensions 1-5. For each:
    - Score based on evidence, not potential or intentions
    - Use the lowest applicable score when criteria span multiple levels
    - Document the specific evidence supporting each score
-   - Mark confidence: HIGH (direct evidence), MEDIUM (inferred), LOW (assumed/unknown)
+   - Use confidence-by-dimension guidance from rubric: D1 Architecture, D2 Data Quality = HIGH from code; D3 Operational Excellence, D4 Reliability, D7 Maintainability, D8 Platform = LOW without runtime; D5 Security = MEDIUM; D6 Business Impact = LOW
+   - For scores based on inference rather than direct evidence, mark with INFERRED tag
 
 3. **Calculate Overall Score** using weighted average:
    Overall = (Arch*2 + Data*2 + OpEx*3 + Reliability*3 + Security*3 + Business*1.5 + Maintain*1.5 + Platform*1) / 17
@@ -671,7 +733,12 @@ $inventory_context
 
 5. **Identify Red Flags** (any dimension 1.0-1.5 AND weighted CRITICAL/HIGH) and **Quick Wins** (improvements <1 day that raise a dimension by 0.5+)
 
-6. **Runtime Validation Required Table** - List which dimensions and scores would change with runtime data, expected direction, and what data is needed. This is critical because static analysis scores can swing 10%+ after runtime enrichment.
+6. **Score Revision Log** - Add a section listing any dimensions where the score was adjusted from initial assessment, with reason. Include a "Runtime Validation Required" table listing which dimensions and scores would likely change with runtime data, expected direction, and what data is needed.
+
+**Critical constraints**:
+- Never present static-only scores as final. Always include the input quality classification and confidence levels.
+- Scores without runtime data are hypotheses, not measurements. Label them accordingly.
+- If assessment is marked "Preliminary", cap all operational dimension scores at MEDIUM confidence regardless of other evidence.
 
 **Output**: Write your complete output to $OUTPUT_DIR/scorecard.md
 
@@ -713,7 +780,7 @@ You are running Phase 4 (Design) of an integration assessment pipeline.
 **Templates to load** (Read these before designing):
 - $design_template (output structure)
 - $TEMPLATE_DIR/pattern-library.md (pattern selection reference)
-- $TEMPLATE_DIR/design-quality-checklist.md (validation before delivery)
+- $TEMPLATE_DIR/validation-checklist.md (validation before delivery - use Section A: Pre-Delivery)
 
 **Input files** (read these first):
 - $OUTPUT_DIR/assessment.md (assessment from Phase 2)
@@ -732,7 +799,7 @@ $design_approach
 - All 8 dimensions from assessment are addressed
 - Security findings are phased as feature work (Phase 1 critical tier), not "later enhancements"
 - Each phase has clear exit criteria
-- Check against design-quality-checklist.md
+- Check against validation-checklist.md Section A
 
 **Critical constraints**:
 - Lead with complete approach (pattern choice, phases, trade-offs) before diving into details
@@ -761,14 +828,37 @@ You are running Phase 5 (Review) of an integration assessment pipeline.
 **Integration**: $INTEGRATION_NAME
 **Working Directory**: $OUTPUT_DIR
 **Template**: Read $TEMPLATE_DIR/review-report-template.md for the expected output structure.
+**Validation Checklist**: Read $TEMPLATE_DIR/validation-checklist.md Section B (Peer Review Validation) and validate the design against each category.
 
 **Input files** (read these first):
 - $OUTPUT_DIR/design.md (design from Phase 4)
 - $OUTPUT_DIR/assessment.md (assessment from Phase 2)
+- $OUTPUT_DIR/scorecard.md (scorecard from Phase 3)
 
 $security_context
 
-**Task**: Validate the design against best practices and the 8-dimension integration framework. Classify findings as Critical, High, Medium, or Low severity. Check for architectural anti-patterns, security gaps, and missing error handling. Produce a clear approval status (Approved, Conditionally Approved, or Not Approved).
+**Task**: Validate the design against best practices and the 8-dimension integration framework.
+
+**Finding Classification** - Classify each finding by severity:
+- **Critical**: Blocks deployment. Security vulnerabilities, data loss risks, architectural flaws that cannot be remediated post-deployment.
+- **High**: Must be resolved before production. Missing error handling for known failure modes, inadequate monitoring for SLA-bound flows, no retry logic for transient failures.
+- **Medium**: Should be resolved, can be phased. Suboptimal patterns, missing documentation, hardcoded values that should be configurable.
+- **Low**: Improvement opportunity. Code style, naming conventions, minor optimizations.
+
+**Static vs Verified Findings** - For each finding, classify:
+- **Verified**: Directly confirmed from code, configuration, or design document
+- **Inferred**: Implied by code structure but not directly confirmed - may be false positive
+- Flag inferred findings explicitly. 43% of static analysis findings are false positives.
+
+**Approval Recommendations** - Conclude with one of:
+- **Approved**: No critical or high findings. Design meets all 8-dimension requirements.
+- **Approved with Conditions**: No critical findings. High findings have clear remediation path and timeline. Design is fundamentally sound.
+- **Revisions Required**: Critical findings present, OR high findings with no clear remediation. Design needs structural changes before implementation.
+
+**Critical constraints**:
+- Review the actual design document, not what you think it should contain
+- Security gaps are CRITICAL findings, not "nice to have" improvements
+- Check all SOLO/PAIR classifications - flag any PAIR items that lack domain owner verification plan
 
 **Output**: Write your complete output to $OUTPUT_DIR/review-report.md
 
