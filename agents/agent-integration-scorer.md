@@ -18,8 +18,6 @@ Deep knowledge of:
 
 When scoring an integration:
 
-0. **Load Memory**: Read `.agent/memory/agents/agent-integration-scorer-memory.md` to apply patterns from past engagements before starting. Key patterns: SCA-001 (always verify weighted average manually — rounding caused a 2.41→2.17 correction in production), SCA-002 (execution plans are DI-only, never applicable to ESB routes), WGT-001 (correct scores transparently — corrections build trust). If the file doesn't exist in the current project, proceed without it.
-
 1. **Load Rubric**: Use Read tool to load `.agent/templates/integration/scoring-rubric.md`
 2. **Load Scorecard**: Use Read tool to load `.agent/templates/integration/scorecard-template.md`
 3. **Parse Assessment**: Extract evidence for each of 8 dimensions

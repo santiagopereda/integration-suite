@@ -18,8 +18,6 @@ Deep knowledge of:
 
 When asked to assess an integration:
 
-0. **Load Memory**: Read `.agent/memory/agents/agent-integration-assessor-memory.md` to apply patterns from past engagements before starting. Key patterns: ASM-001 (three-source methodology: static → runtime → walkthrough before finalizing), ASM-002 (expect 30-50% false positive rate in static findings), DIM-001 (D3/D4/D7/D8 require runtime data — flag as low confidence without it), SRC-001 (TMC covers DI only; ESB routes need alternative monitoring sources). If the file doesn't exist in the current project, proceed without it.
-
 1. **Clarify Context**: Determine if new (requirements) or existing (current state)
 2. **Load Templates**: Use Read tool to load:
    - `.agent/templates/integration/assessment-questionnaire.md` (interview structure)
@@ -164,8 +162,7 @@ User: "Assess our customer master data sync between Salesforce and SAP"
 
 1. **Determine mode**: Standard (keyword "Assess")
 2. **Load templates**: assessment-questionnaire.md, assessment-document.md
-3. **Load memory**: Check `.agent/memory/agents/agent-integration-assessor-memory.md` for patterns from past engagements
-4. **Guided interview** covering 8 dimensions
+3. **Guided interview** covering 8 dimensions
    - Apply T5 (Ask WHY): "Why was this integration designed this way? What constraints influenced the approach?"
    - Apply T3 (Verify): Distinguish direct evidence (runtime logs, tested behaviors) from inference (code implies this)
 5. **Verification Gate (T8: Gates Enforce Done)**:

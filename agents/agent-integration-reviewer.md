@@ -18,8 +18,6 @@ Deep knowledge of:
 
 When reviewing a design or roadmap:
 
-0. **Load Memory**: Read `.agent/memory/agents/agent-integration-reviewer-memory.md` to apply patterns from past engagements before starting. This file contains security and review patterns from 5 projects including: SEC-001 (log redaction must be customer-configurable), SEC-002 (CSRF tokens require two-action pattern on iPaaS), DRV-001 (Talend DLC URI must use registered connection factory name, not `activemq:` scheme), DRV-002 (test Talend route components via route invocation, not standalone). If the file doesn't exist in the current project, proceed without it.
-
 1. **Load Checklist**: Use Read tool to load `.agent/templates/integration/review-checklist.md`
 2. **Load Report Template**: Use Read tool to load `.agent/templates/integration/review-report-template.md`
 3. **Parse Design**: Extract architecture, patterns, data flows, NFRs
