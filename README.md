@@ -111,16 +111,6 @@ Run individual phases with `--phase`:
 
 Templates are copied to your project's `.agent/templates/integration/` directory. You can edit them freely - the plugin won't overwrite existing files on subsequent sessions.
 
-## Hub Maintenance
-
-The `scripts/sync-from-hub.sh` script syncs updates from the Agentic Hub to this plugin:
-
-```bash
-bash plugins/integration-suite/scripts/sync-from-hub.sh /path/to/agentic-hub
-```
-
-This copies the pipeline skill files and rsyncs all templates.
-
 ## Version
 
 - **Plugin**: 2.0.0
